@@ -5,6 +5,7 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
+    'name' => '中车操作日志管理系统',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'timeZone' => 'Asia/Chongqing', //时区
@@ -74,13 +75,13 @@ $config = [
 
     ],
     'params' => $params,
+
     /**
      * 后台模块
      */
     'modules' => [
         'admin' => [
-            'class' => 'mdm\admin\Module',
-            'layout' => 'left-menu',
+            'class' => 'app\modules\admin\Module',
         ]
     ],
 

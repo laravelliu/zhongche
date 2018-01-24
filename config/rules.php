@@ -8,5 +8,5 @@
  */
 
 return [
-
+    'login' => '/site/login'
 ];
