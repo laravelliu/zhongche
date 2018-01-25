@@ -1,47 +1,98 @@
 <?php
+/**
+ * Created by liuFangShuo.
+ * User: lfs
+ * Date: 2018/1/25
+ * Time: 09:12
+ */
 
-/* @var $this yii\web\View */
-/* @var $form yii\bootstrap\ActiveForm */
-/* @var $model app\models\LoginForm */
-
+use app\assets\PublicAsset;
+use app\widgets\JsBlock;
 use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
+use yii\widgets\ActiveForm;
 
-$this->title = 'Login';
-$this->params['breadcrumbs'][] = $this->title;
+PublicAsset::register($this);
 ?>
-<div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>Please fill out the following fields to login:</p>
+<?php $this->beginPage() ?>
+<!DOCTYPE html>
+<html lang="<?= Yii::$app->language ?>">
+<head>
+    <meta charset="<?= Yii::$app->charset ?>">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <?= Html::csrfMetaTags() ?>
+    <title><?= Html::encode($this->title) ?></title>
 
-    <?php $form = ActiveForm::begin([
-        'id' => 'login-form',
-        'layout' => 'horizontal',
-        'fieldConfig' => [
-            'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
-            'labelOptions' => ['class' => 'col-lg-1 control-label'],
-        ],
-    ]); ?>
+    <!-- Tell the browser to be responsive to screen width -->
+    <?php $this->head() ?>
 
-        <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+    <!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
 
-        <?= $form->field($model, 'password')->passwordInput() ?>
+<body class="hold-transition login-page">
+<?php $this->beginBody() ?>
+<div class="login-box">
+    <div class="login-logo">
+        <a href="../../index2.html"><?=Yii::$app->name?></a>
+    </div>
+    <!-- /.login-logo -->
+    <div class="login-box-body">
+        <p class="login-box-msg">登录页面</p>
 
-        <?= $form->field($model, 'rememberMe')->checkbox([
-            'template' => "<div class=\"col-lg-offset-1 col-lg-3\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
+        <?php $form = ActiveForm::begin([
+            'id' => 'login-form',
+            'fieldConfig' => [
+                'options' => [
+                    'class' => 'form-group has-feedback'
+                ]
+            ],
         ]) ?>
+        <?= $form->field($model,'username', ['template' => "{input}<span class=\"glyphicon glyphicon-envelope form-control-feedback\"></span>{error}"])->textInput(['placeholder' => '邮箱'])->label(false);?>
+        <?= $form->field($model,'password', ['template' => "{input}<span class=\"glyphicon glyphicon-lock form-control-feedback\"></span>{error}"])->textInput(['placeholder' => '密码'])->label(false);?>
+        <div class="row">
+            <div class="col-xs-8">
+                <?= $form->field($model, 'rememberMe',['options' => ['class' => 'checkbox icheck']])->checkbox(['label'=>'记住我'])->label(false) ?>
+            </div>
 
-        <div class="form-group">
-            <div class="col-lg-offset-1 col-lg-11">
-                <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+            <div class="col-xs-4">
+                <?= Html::submitButton('登录',['class' => 'btn btn-primary btn-block btn-flat'])?>
             </div>
         </div>
 
-    <?php ActiveForm::end(); ?>
+        <?php ActiveForm::end()?>
 
-    <div class="col-lg-offset-1" style="color:#999;">
-        You may login with <strong>admin/admin</strong> or <strong>demo/demo</strong>.<br>
-        To modify the username/password, please check out the code <code>app\models\User::$users</code>.
+        <div class="social-auth-links text-center">
+            <p>- OR -</p>
+            <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using
+                Facebook</a>
+            <a href="#" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign in using
+                Google+</a>
+        </div>
+        <!-- /.social-auth-links -->
+
+        <a href="#">I forgot my password</a><br>
+        <a href="register.html" class="text-center">Register a new membership</a>
+
     </div>
+    <!-- /.login-box-body -->
 </div>
+<!-- /.login-box -->
+
+<?php JsBlock::begin()?>
+<script>
+    $(function () {
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' // optional
+        });
+    });
+</script>
+<?php JsBlock::end()?>
+
+<?php $this->endBody() ?>
+</body>
+</html>
+<?php $this->endPage() ?>

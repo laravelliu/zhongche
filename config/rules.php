@@ -8,5 +8,6 @@
  */
 
 return [
-    'login' => '/site/login'
+    'login' => '/site/login',
+    'logout' => '/site/logout'
 ];

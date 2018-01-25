@@ -4,11 +4,11 @@ namespace app\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
-use app\models\ContactForm;
 
 class SiteController extends Controller
 {
@@ -44,9 +44,9 @@ class SiteController extends Controller
     public function actions()
     {
         return [
-            'error' => [
+            /*'error' => [
                 'class' => 'yii\web\ErrorAction',
-            ],
+            ],*/
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
@@ -77,9 +77,16 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            $re = Yii::$app->request->get('re', null);
+
+            if (!empty($re)) {
+                return $this->redirect(Url::to($re));
+            }
+
+            return $this->redirect(Url::to(['/admin']));
         }
-        return $this->render('login', [
+
+        return $this->renderPartial('login', [
             'model' => $model,
         ]);
     }
@@ -96,4 +103,36 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
+    /**
+     * 错误页面
+     * @author: liuFangShuo
+     */
+    public function actionError()
+    {
+        $exception = Yii::$app->errorHandler->exception;
+
+        if ($exception instanceof Exception) {
+            $name = $exception->getName();
+        } else {
+            $name = Yii::t('yii', '出错了，出错了 :(');
+        }
+
+        //$code = 0;
+
+        if ($exception) {
+            $message = Yii::t('yii', '肯定是哪个程序猿偷懒了。');
+            //$code = $exception->statusCode;
+        } else {
+            $message = Yii::t('yii','测试');
+        }
+        /*if(in_array($code,['404','500'])){
+            return $this->render($code);
+        }*/
+
+        return $this->renderPartial('error', [
+            'name' => $name,
+            'message' => $message,
+            'exception' => $exception,
+        ]);
+    }
 }

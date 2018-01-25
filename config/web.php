@@ -5,7 +5,8 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
-    'name' => '中车操作日志管理系统',
+    'name' => '操作日志管理系统',
+    'version' => '1.0.0',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'timeZone' => 'Asia/Chongqing', //时区
@@ -14,6 +15,7 @@ $config = [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
+        '@adminlte' => '@vendor/almasaeed2010/adminlte',
     ],
     'components' => [
         'request' => [
@@ -72,6 +74,24 @@ $config = [
             'rules' => require(__DIR__ . '/rules.php'),
         ],
 
+        'assetManager' => [
+            'appendTimestamp' => true,
+            'bundles' => [
+                'yii\web\JqueryAsset' => [
+                    'sourcePath' => '@bower/jquery/dist',
+                    'js' => [YII_ENV_DEV ? 'jquery.js': 'jquery.min.js']
+                ],
+                'yii\bootstrap\BootstrapAsset' => [
+                    'sourcePath' => '@bower/bootstrap/dist',
+                    'css' => [YII_ENV_DEV ? 'css/bootstrap.css' : 'css/bootstrap.min.css'],
+                ],
+                'yii\bootstrap\BootstrapPluginAsset' => [
+                    'sourcePath' => '@bower/bootstrap/dist',
+                    'js' => [YII_ENV_DEV ? 'js/bootstrap.js' : 'js/bootstrap.min.js']
+                ]
+            ],
+        ],
+
 
     ],
     'params' => $params,
@@ -89,13 +109,16 @@ $config = [
 ];
 
 if (YII_ENV_DEV) {
-    // configuration adjustments for 'dev' environment
-    $config['bootstrap'][] = 'debug';
-    $config['modules']['debug'] = [
-        'class' => 'yii\debug\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
-    ];
+
+    if (YII_DEBUG) {
+        // configuration adjustments for 'dev' environment
+        $config['bootstrap'][] = 'debug';
+        $config['modules']['debug'] = [
+            'class' => 'yii\debug\Module',
+            // uncomment the following to add your IP if you are not connecting from localhost.
+            //'allowedIPs' => ['127.0.0.1', '::1'],
+        ];
+    }
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
