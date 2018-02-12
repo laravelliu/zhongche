@@ -3,6 +3,7 @@
 namespace app\models\ar;
 
 use Yii;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "zc_user".
@@ -12,13 +13,17 @@ use Yii;
  * @property string $password_hash 密码
  * @property string $name 员工名称
  * @property string $phone 电话
+ * @property string $access_token token
+ * @property string $auth_key
+ * @property string $password_reset_token 重置token
+ * @property int $department_id 部门id
+ * @property int $group_id 0为不存在工作组，其他为有工作组的概念
+ * @property int $is_admin 是否能登录后台
  * @property int $is_deleted 是否删除
  * @property int $create_time 创建时间
  * @property int $update_time 更新时间
- * @property string $auth_key
- * @property string $password_reset_token
  */
-class UserAR extends \app\models\ar\BaseAr implements \yii\web\IdentityInterface
+class UserAR extends BaseAr implements IdentityInterface
 {
     /**
      * @inheritdoc
@@ -34,9 +39,10 @@ class UserAR extends \app\models\ar\BaseAr implements \yii\web\IdentityInterface
     public function rules()
     {
         return [
-            [['is_deleted', 'create_time', 'update_time'], 'integer'],
+            [['department_id'], 'required'],
+            [['department_id', 'group_id', 'is_admin', 'is_deleted', 'create_time', 'update_time'], 'integer'],
             [['username'], 'string', 'max' => 128],
-            [['password_hash', 'auth_key'], 'string', 'max' => 32],
+            [['password_hash', 'access_token', 'auth_key'], 'string', 'max' => 32],
             [['name'], 'string', 'max' => 16],
             [['phone'], 'string', 'max' => 12],
             [['password_reset_token'], 'string', 'max' => 255],
@@ -54,11 +60,15 @@ class UserAR extends \app\models\ar\BaseAr implements \yii\web\IdentityInterface
             'password_hash' => 'Password Hash',
             'name' => 'Name',
             'phone' => 'Phone',
+            'access_token' => 'Access Token',
+            'auth_key' => 'Auth Key',
+            'password_reset_token' => 'Password Reset Token',
+            'department_id' => 'Department ID',
+            'group_id' => 'Group ID',
+            'is_admin' => 'Is Admin',
             'is_deleted' => 'Is Deleted',
             'create_time' => 'Create Time',
             'update_time' => 'Update Time',
-            'auth_key' => 'Auth Key',
-            'password_reset_token' => 'Password Reset Token',
         ];
     }
 
@@ -68,7 +78,6 @@ class UserAR extends \app\models\ar\BaseAr implements \yii\web\IdentityInterface
     public static function findIdentity($id)
     {
         return UserAR::findOne(['id'=>$id, 'is_deleted' => STATUS_FALSE]);
-        //return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
     }
 
     /**
@@ -78,13 +87,6 @@ class UserAR extends \app\models\ar\BaseAr implements \yii\web\IdentityInterface
     {
         return UserAR::findOne(['access_token'=>$token, 'is_deleted' => STATUS_FALSE]);
 
-        /*foreach (self::$users as $user) {
-            if ($user['accessToken'] === $token) {
-                return new static($user);
-            }
-        }
-
-        return null;*/
     }
 
     /**
@@ -95,15 +97,6 @@ class UserAR extends \app\models\ar\BaseAr implements \yii\web\IdentityInterface
     public static function findByUsername($username)
     {
         return UserAR::findOne(['username' => $username, 'is_deleted' => STATUS_FALSE]);
-
-
-        /*foreach (self::$users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
-                return new static($user);
-            }
-        }
-
-        return null;*/
     }
 
     /**

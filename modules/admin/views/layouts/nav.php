@@ -7,12 +7,13 @@
  */
 
 use yii\helpers\Url;
+$userInfo = $this->params['userInfo'];
 
 ?>
 
 <header class="main-header">
     <!-- Logo -->
-    <a href="../../index2.html" class="logo">
+    <a href="<?=Url::to(['/admin'])?>" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini"><b>中车</b></span>
         <!-- logo for regular state and mobile devices -->
@@ -78,7 +79,7 @@ use yii\helpers\Url;
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <img src="/images/admin/user2-160x160.jpg" class="user-image" title="用户头像">
-                        <span class="hidden-xs">刘方硕</span>
+                        <span class="hidden-xs"><?=$userInfo->name?></span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
@@ -86,7 +87,7 @@ use yii\helpers\Url;
                             <img src="/images/admin/user2-160x160.jpg" class="img-circle" title="用户头像">
 
                             <p>
-                                Alexander Pierce - Web Developer
+                                <?=$userInfo->name?> - Web Developer
                                 <small>Member since Nov. 2012</small>
                             </p>
                         </li>

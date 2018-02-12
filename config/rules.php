@@ -8,6 +8,7 @@
  */
 
 return [
+    //'admin' => '/admin/admin/index',
     'login' => '/site/login',
     'logout' => '/site/logout'
 ];

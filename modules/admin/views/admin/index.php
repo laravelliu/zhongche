@@ -1,12 +1,10 @@
 <?php
-$this->title = '404';
+$this->title = '404 错误页面';
 ?>
 
 <!-- Content Header (Page header) -->
 <section class="content-header">
-    <h1>
-        404 Error Page
-    </h1>
+    <h1><?=$this->title?></h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li><a href="#">Examples</a></li>

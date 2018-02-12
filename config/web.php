@@ -19,6 +19,7 @@ $config = [
     ],
     'components' => [
         'request' => [
+            'enableCookieValidation' => false,
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'XnStWhTTkO_yfiDFJHze-XoQI3ypNS6o',
         ],
@@ -71,6 +72,7 @@ $config = [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
+            //'enableStrictParsing' => true,(严格模式要求必须在路由中)
             'rules' => require(__DIR__ . '/rules.php'),
         ],
 

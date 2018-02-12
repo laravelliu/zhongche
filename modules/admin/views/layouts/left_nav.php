@@ -5,6 +5,11 @@
  * Date: 2018/1/25
  * Time: 16:32
  */
+
+use yii\helpers\Url;
+
+$user = $this->params['userInfo'];
+
 ?>
 
 <!-- Left side column. contains the logo and sidebar -->
@@ -17,8 +22,8 @@
                 <img src="/images/admin/user2-160x160.jpg" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-                <p>Alexander Pierce</p>
-                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                <p><?=$user->name?></p>
+                <a href="javascript:void(0);"><i class="fa fa-circle text-success"></i>在线</a>
             </div>
         </div>
 
@@ -26,58 +31,102 @@
         <ul class="sidebar-menu" data-widget="tree">
             <li class="treeview">
                 <a href="#">
-                    <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                    <i class="fa fa-dashboard"></i>
+                    <span>人员管理</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="../../index.html"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>
-                    <li><a href="../../index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
+                    <li class="treeview">
+                        <a href="#"><i class="fa fa-circle-o"></i>员工管理
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="<?=Url::to(['staff/index'])?>"><i class="fa fa-circle-o"></i>员工列表</a></li>
+                            <li><a href="<?=Url::to(['staff/staff-group'])?>"><i class="fa fa-circle-o"></i>员工组管理</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="<?=Url::to(['admin/index'])?>"><i class="fa fa-circle-o"></i>管理员列表</a></li>
+
+                    <li class="treeview">
+                        <a href="#"><i class="fa fa-circle-o"></i>其他管理
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="<?=Url::to(['department/index'])?>"><i class="fa fa-circle-o"></i>部门管理</a></li>
+                            <li><a href="<?=Url::to(['role/index'])?>"><i class="fa fa-circle-o"></i>角色管理</a></li>
+                            <li><a href="<?=Url::to(['permission/index'])?>"><i class="fa fa-circle-o"></i>权限管理</a></li>
+                            <li><a href="<?=Url::to(['role/distribution'])?>"><i class="fa fa-circle-o"></i>分配权限</a></li>
+                        </ul>
+                    </li>
+
                 </ul>
             </li>
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-files-o"></i>
-                    <span>Layout Options</span>
-                    <span class="pull-right-container">
-                        <span class="label label-primary pull-right">4</span>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="../layout/top-nav.html"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
-                    <li><a href="../layout/boxed.html"><i class="fa fa-circle-o"></i> Boxed</a></li>
-                    <li><a href="../layout/fixed.html"><i class="fa fa-circle-o"></i> Fixed</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="../widgets.html">
-                    <i class="fa fa-th"></i> <span>Widgets</span>
-                    <span class="pull-right-container">
-                        <small class="label pull-right bg-green">new</small>
-                    </span>
-                </a>
-            </li>
+
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-pie-chart"></i>
-                    <span>Charts</span>
+                    <span>厂房管理</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="../charts/chartjs.html"><i class="fa fa-circle-o"></i> ChartJS</a></li>
-                    <li><a href="../charts/morris.html"><i class="fa fa-circle-o"></i> Morris</a></li>
-                    <li><a href="../charts/flot.html"><i class="fa fa-circle-o"></i> Flot</a></li>
-                    <li><a href="../charts/inline.html"><i class="fa fa-circle-o"></i> Inline charts</a></li>
-                    <li><a href="../layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i> Collapsed Sidebar</a></li>
+                    <li><a href="<?=Url::to(['workshop/workshop'])?>"><i class="fa fa-circle-o"></i>车间管理</a></li>
+                    <li><a href="<?=Url::to(['workshop/work-area'])?>"><i class="fa fa-circle-o"></i>产线管理</a></li>
+                    <li><a href="<?=Url::to(['workshop/station'])?>"><i class="fa fa-circle-o"></i>工位管理</a></li>
                 </ul>
             </li>
             <li class="treeview">
                 <a href="#">
+                    <i class="fa fa-edit"></i>
+                    <span>流程管理</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="<?=Url::to(['workshop/station'])?>"><i class="fa fa-circle-o"></i>质检流程管理</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-table"></i> <span>质检管理</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="../tables/simple.html"><i class="fa fa-circle-o"></i>质检类别管理</a></li>
+                    <li><a href="../tables/simple.html"><i class="fa fa-circle-o"></i>质检项组管理</a></li>
+                    <li><a href="../tables/data.html"><i class="fa fa-circle-o"></i>工位质检项组管理</a></li>
+                    <li><a href="../tables/data.html"><i class="fa fa-circle-o"></i>质检项管理</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-table"></i><span>配置管理</span>
+                    <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="#"><i class="fa fa-circle-o"></i>配置质检类别拥有产线</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview">
+                <a href="#">
                     <i class="fa fa-laptop"></i>
-                    <span>UI Elements</span>
+                    <span>质检统计</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
@@ -91,60 +140,19 @@
                     <li><a href="../UI/modals.html"><i class="fa fa-circle-o"></i> Modals</a></li>
                 </ul>
             </li>
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-edit"></i> <span>Forms</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="../forms/general.html"><i class="fa fa-circle-o"></i> General Elements</a></li>
-                    <li><a href="../forms/advanced.html"><i class="fa fa-circle-o"></i> Advanced Elements</a></li>
-                    <li><a href="../forms/editors.html"><i class="fa fa-circle-o"></i> Editors</a></li>
-                </ul>
-            </li>
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-table"></i> <span>Tables</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="../tables/simple.html"><i class="fa fa-circle-o"></i> Simple tables</a></li>
-                    <li><a href="../tables/data.html"><i class="fa fa-circle-o"></i> Data tables</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="../calendar.html">
-                    <i class="fa fa-calendar"></i> <span>Calendar</span>
-                    <span class="pull-right-container">
-                        <small class="label pull-right bg-red">3</small>
-                        <small class="label pull-right bg-blue">17</small>
-                    </span>
-                </a>
-            </li>
-            <li>
-                <a href="../mailbox/mailbox.html">
-                    <i class="fa fa-envelope"></i> <span>Mailbox</span>
-                    <span class="pull-right-container">
-                        <small class="label pull-right bg-yellow">12</small>
-                        <small class="label pull-right bg-green">16</small>
-                        <small class="label pull-right bg-red">5</small>
-                    </span>
-                </a>
-            </li>
+
+
+
             <li class="treeview active">
                 <a href="#">
-                    <i class="fa fa-folder"></i> <span>Examples</span>
+                    <i class="fa fa-folder"></i> <span>参数管理</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="invoice.html"><i class="fa fa-circle-o"></i> Invoice</a></li>
-                    <li><a href="profile.html"><i class="fa fa-circle-o"></i> Profile</a></li>
+                    <li><a href="invoice.html"><i class="fa fa-circle-o"></i>质检参数</a></li>
+                    <li><a href="profile.html"><i class="fa fa-circle-o"></i>车辆参数</a></li>
                     <li><a href="login.html"><i class="fa fa-circle-o"></i> Login</a></li>
                     <li><a href="register.html"><i class="fa fa-circle-o"></i> Register</a></li>
                     <li><a href="lockscreen.html"><i class="fa fa-circle-o"></i> Lockscreen</a></li>
@@ -154,6 +162,7 @@
                     <li><a href="pace.html"><i class="fa fa-circle-o"></i> Pace Page</a></li>
                 </ul>
             </li>
+
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-share"></i> <span>Multilevel</span>
@@ -189,11 +198,6 @@
                     </li>
                 </ul>
             </li>
-            <li><a href="https://adminlte.io/docs"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
-            <li class="header">LABELS</li>
-            <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
-            <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
-            <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>
         </ul>
     </section>
     <!-- /.sidebar -->

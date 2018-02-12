@@ -1,5 +1,6 @@
 <?php
 /**
+ * 登录等外部页面使用
  * Created by liuFangShuo.
  * User: lfs
  * Date: 2018/1/25

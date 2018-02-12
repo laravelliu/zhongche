@@ -7,6 +7,8 @@
  */
 
 use app\assets\AdminAsset;
+use yii\helpers\Url;
+use yii\widgets\Breadcrumbs;
 
 AdminAsset::register($this);
 ?>
@@ -17,7 +19,7 @@ AdminAsset::register($this);
 
 <?= $this->render('head');?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
 <?php $this->beginBody() ?>
 
 <div class="wrapper">
@@ -27,6 +29,26 @@ AdminAsset::register($this);
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
+
+        <?php if(isset($this->params['breadcrumbs'])):?>
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1><?=$this->title?></h1>
+
+            <?= Breadcrumbs::widget([
+                'tag' => 'ol',
+                'homeLink'=>['label' => '主页','url' => Url::to(['/admin'])],
+                'links' =>$this->params['breadcrumbs']
+            ]) ?>
+
+            <!-- <ol class="breadcrumb">
+                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                 <li><a href="#">Examples</a></li>
+                 <li class="active">404 error</li>
+             </ol>-->
+        </section>
+        <?php endif;?>
+
        <?= $content ?>
     </div>
 

@@ -16,4 +16,9 @@ class AdminController extends BaseController
     {
         return $this->render('index');
     }
+
+    public function actionUserList()
+    {
+        return $this->render('test');
+    }
 }

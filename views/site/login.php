@@ -9,6 +9,7 @@
 use app\assets\PublicAsset;
 use app\widgets\JsBlock;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 PublicAsset::register($this);
@@ -35,7 +36,7 @@ PublicAsset::register($this);
 <?php $this->beginBody() ?>
 <div class="login-box">
     <div class="login-logo">
-        <a href="../../index2.html"><?=Yii::$app->name?></a>
+        <a href="<?=Url::to(Url::home())?>"><?=Yii::$app->name?></a>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
