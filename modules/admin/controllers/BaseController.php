@@ -4,9 +4,11 @@ namespace app\modules\admin\controllers;
 
 use app\common\filters\LoginFilter;
 use Yii;
+use yii\web\Response;
 
 class BaseController extends \yii\web\Controller
 {
+    public $enableCsrfValidation = false;
     protected $_user;
 
     public function init()
@@ -48,5 +50,20 @@ class BaseController extends \yii\web\Controller
     public function appendBehaviors()
     {
         return [];
+    }
+
+    protected function ajaxReturn($data = array(), $code = 0, $message = '')
+    {
+        $data = array(
+            'data' => $data,
+            'code' => $code,
+            'message' => $message
+        );
+
+        return \Yii::createObject([
+            'class' => 'yii\web\Response',
+            'format' => Response::FORMAT_JSON,
+            'data' => $data
+        ]);
     }
 }

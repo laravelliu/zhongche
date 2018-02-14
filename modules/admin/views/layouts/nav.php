@@ -15,7 +15,7 @@ $userInfo = $this->params['userInfo'];
     <!-- Logo -->
     <a href="<?=Url::to(['/admin'])?>" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>中车</b></span>
+        <span class="logo-mini"><b>啦</b></span>
         <!-- logo for regular state and mobile devices -->
         <span class="logo-lg"><b><?=Yii::$app->name?></b></span>
     </a>

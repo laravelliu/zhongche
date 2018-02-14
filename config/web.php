@@ -5,7 +5,7 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
-    'name' => '操作日志管理系统',
+    'name' => '***',
     'version' => '1.0.0',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
@@ -19,7 +19,6 @@ $config = [
     ],
     'components' => [
         'request' => [
-            'enableCookieValidation' => false,
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'XnStWhTTkO_yfiDFJHze-XoQI3ypNS6o',
         ],
