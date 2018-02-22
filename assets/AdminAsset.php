@@ -58,10 +58,11 @@ class AdminAsset extends AssetBundle
 
         switch ($requestPath)
         {
-           case '/admin/admin/user-list':
-               $js = ['bower_components/jquery-slimscroll/jquery.slimscroll.min.js'];
-               break;
+            case '/admin/admin/user-list':
+                $js = ['bower_components/jquery-slimscroll/jquery.slimscroll.min.js'];
+                break;
             case '/admin/workshop/workshop':
+            case '/admin/workshop/work-area':
                 $css = ['bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css'];
                 $js = [
                     'bower_components/datatables.net/js/jquery.dataTables.min.js',
@@ -69,7 +70,7 @@ class AdminAsset extends AssetBundle
                     'bower_components/jquery-slimscroll/jquery.slimscroll.min.js'
                     ];
                 break;
-           default:
+            default:
                 break;
 
         }

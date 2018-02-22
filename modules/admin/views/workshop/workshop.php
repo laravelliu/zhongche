@@ -15,13 +15,12 @@ $this->params['breadcrumbs'][] = '厂房管理';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
-
 <!-- Main content -->
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
-            <div class="box">
-                <div class="box-header">
+            <div class="box box-info">
+                <div class="box-header with-border">
                     <h3 class="box-title"></h3>
                     <div class="box-tools">
                         <a href="<?=Url::to(['workshop/add-workshop'])?>" class="btn btn-default btn-sm">
@@ -37,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <th>id</th>
                             <th>名称</th>
-                            <th>编码</th>
+                            <th>编号</th>
                             <th>上一级车间</th>
                             <th>所处位置</th>
                             <th>创建时间</th>
@@ -66,9 +65,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'ordering'    : true,
         'info'        : true,
         "scrollX"     : false,
-        "scrollY"     : false,
         "aaSorting"   : [[ 0, "asc" ], [6, "desc"]],
-        'autoWidth'   : true,
+        'autoWidth'   : false,
         "bLengthChange": true,
         ajax: {
             url: "<?=Url::to(['workshop/get-workshop'])?>",
