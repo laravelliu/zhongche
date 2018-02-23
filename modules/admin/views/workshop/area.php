@@ -24,8 +24,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-header with-border">
                     <h3 class="box-title"></h3>
                     <div class="box-tools">
-                        <a href="<?=Url::to(['workshop/add-workshop'])?>" class="btn btn-default btn-sm">
-                            <i class="fa fa-play"></i>添加车间
+                        <a href="<?=Url::to(['workshop/add-work-area'])?>" class="btn btn-default btn-sm">
+                            <i class="fa fa-play"></i>添加产线
                         </a>
 
                     </div>
@@ -38,8 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <th>id</th>
                             <th>名称</th>
                             <th>编号</th>
-                            <th>上一级车间</th>
-                            <th>所处位置</th>
+                            <th>所属车间</th>
                             <th>创建时间</th>
                             <th>更新时间</th>
                             <th>操作</th>
@@ -66,11 +65,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'ordering'    : true,
         'info'        : true,
         "scrollX"     : false,
-        "aaSorting"   : [[ 0, "asc" ], [6, "desc"]],
+        "aaSorting"   : [[ 0, "asc" ], [5, "desc"]],
         'autoWidth'   : false,
         "bLengthChange": true,
         ajax: {
-            url: "<?=Url::to(['workshop/get-workshop'])?>",
+            url: "<?=Url::to(['workshop/get-work-area'])?>",
             type: "post",
             dataType : "json"
         },
@@ -84,7 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
             "sInfoPostFix": "",
             "sSearch": "搜索:",
             "sUrl": "",
-            "sEmptyTable": "暂无车间信息",
+            "sEmptyTable": "暂无产线信息",
             "sLoadingRecords": "载入中...",
             "sInfoThousands": ",",
             "oPaginate": {
@@ -103,28 +102,13 @@ $this->params['breadcrumbs'][] = $this->title;
             {data: "id"},
             {data: "name"},
             {data: "code"},
-            {data: "pid", render: function (data,type,full) {
-                if(data == 0){
-                    return '无';
-                }
-
-                var dataList = $('#workshop-table').DataTable().data();
-                for(var wp in dataList){
-                    if(dataList[wp]['id'] == data){
-                        return dataList[wp]['name']
-                    }
-                }
-
-                return '车间不存在';
-
-            }},
-            {data: "sort"},
+            {data: "workshop"},
             {data: "create_time"},
             {data: "update_time"},
             {
                 render:function (data,type,full) {
                     console.log(full);
-                    return '<a href="edit-workshop?wsId=' + full['id'] + '">编辑</a>';
+                    return '<a href="edit-work-area?waId=' + full['id'] + '">编辑</a>';
                 }
             }
         ]
