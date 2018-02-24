@@ -40,8 +40,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 ])?>
                 <div class="box-body">
 
-                    <?=$form->field($model,'name')->textInput(['placeholder' => '请出入产线名称：产线001'])->label('产线名称：');?>
-                    <?=$form->field($model,'code')->textInput(['placeholder' => '请出入产线编号：123'])->label('产线编号：');?>
+                    <?=$form->field($model,'name')->textInput(['placeholder' => '请输入产线名称：产线001'])->label('产线名称：');?>
+                    <?=$form->field($model,'code')->textInput(['placeholder' => '请输入产线编号：123'])->label('产线编号：');?>
                     <?=$form->field($model,'workshop_id')->dropDownList($workshop, ['placeholder' => '请选择车间'])->label('所属车间：');?>
 
                 </div>

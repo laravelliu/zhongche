@@ -123,7 +123,7 @@ $this->params['breadcrumbs'][] = $this->title;
             {
                 render:function (data,type,full) {
                     console.log(full);
-                    return '<a href="edit-workshop?wsId=' + full['id'] + '">编辑</a>';
+                    return '<a href="edit-workshop?wsId=' + full['id'] + '">编辑</a>' + '&nbsp<a href="add-work-area?wsId=' + full['id'] + '">添加产线</a>';
                 }
             }
         ]

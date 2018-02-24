@@ -96,13 +96,17 @@ class WorkshopAR extends \app\models\ar\BaseAR
             $model->create_time = time();
         }
 
-        //查找一下上一级车间
-        $pws = static::findOne(['id' => $this->pid, 'is_deleted' => STATUS_FALSE]);
+        if(!empty($this->pid)){
+            //查找一下上一级车间
+            $pws = static::findOne(['id' => $this->pid, 'is_deleted' => STATUS_FALSE]);
+            $model->sort = $pws->sort + 1;
+        } else {
+            $model->sort = 1;
+        }
 
         $model->name = $this->name;
         $model->code = $this->code;
         $model->pid = $this->pid;
-        $model->sort = $pws->sort + 1;
         $model->update_time = time();
 
         if(!$model->save(false)){

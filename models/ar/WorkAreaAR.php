@@ -100,6 +100,8 @@ class WorkAreaAR extends \app\models\ar\BaseAR
         $model->workshop_id = $this->workshop_id;
         $model->update_time = time();
 
+        //todo::触发修改对应产线下面的车间信息
+
         if(!$model->save(false)){
             $this->addError('code', '网络问题，稍后重试');
             return false;

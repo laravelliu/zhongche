@@ -39,9 +39,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 ])?>
                 <div class="box-body">
 
-                    <?=$form->field($model,'name')->textInput(['placeholder' => '请出入车间名称：除锈车间'])->label('车间名称：');?>
-                    <?=$form->field($model,'code')->textInput(['placeholder' => '请出入车间编号：ba123'])->label('车间编号：');?>
-                    <?=$form->field($model,'pid')->dropDownList($workshop, ['placeholder' => '请出入车间名称：除锈车间'])->label('上一车间：');?>
+                    <?=$form->field($model,'name')->textInput(['placeholder' => '请输入车间名称：除锈车间'])->label('车间名称：');?>
+                    <?=$form->field($model,'code')->textInput(['placeholder' => '请输入车间编号：ba123'])->label('车间编号：');?>
+                    <?=$form->field($model,'pid')->dropDownList($workshop, ['placeholder' => '请输入车间名称：除锈车间'])->label('上一车间：');?>
 
                 </div>
                 <div class="box-footer">

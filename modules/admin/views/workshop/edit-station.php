@@ -2,15 +2,15 @@
 /**
  * Created by liuFangShuo.
  * User: lfs
- * Date: 2018/2/14
- * Time: 10:51
+ * Date: 2018/2/23
+ * Time: 21:03
  */
 
+use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
-use yii\helpers\Html;
 
-$this->title = '编辑车间';
+$this->title = '编辑工位';
 
 //面包屑
 $this->params['breadcrumbs'][] = '厂房管理';
@@ -25,8 +25,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-header with-border">
                     <h3 class="box-title"></h3>
                     <div class="box-tools">
-                        <a href="<?=Url::to(['workshop/workshop'])?>" class="btn btn-default btn-sm">
-                            <i class="fa fa-play"></i>车间列表
+                        <a href="<?=Url::to(['workshop/station'])?>" class="btn btn-default btn-sm">
+                            <i class="fa fa-play"></i>工位列表
                         </a>
                     </div>
                 </div>
@@ -40,15 +40,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 ])?>
                 <div class="box-body">
 
-                    <?=$form->field($model,'name')->textInput(['placeholder' => '请输入车间名称：除锈车间'])->label('车间名称：');?>
-                    <?=$form->field($model,'code')->textInput(['placeholder' => '请输入车间编号：ba123', 'disabled' =>'disabled' ])->label('车间编号：');?>
-                    <?=$form->field($model,'pid')->dropDownList($workshop,['placeholder' => '请输入车间名称：除锈车间'])->label('上一车间：');?>
+                    <?=$form->field($model,'name')->textInput(['placeholder' => '请输入工位名称：除锈车间'])->label('工位名称：');?>
+                    <?=$form->field($model,'code')->textInput(['placeholder' => '请输入工位编号：ba123','disabled' => 'disabled'])->label('工位编号：');?>
+                    <?=$form->field($model,'workshop_id')->dropDownList($wsModel->getWorkshop(),['prompt' =>'--请选择车间--', 'disabled' => 'disabled'])->label('所属车间：');?>
+                    <?=$form->field($model,'work_area_id')->dropDownList($wsModel->getWorkArea($model->workshop_id),['prompt' =>'--请选择产线--', 'disabled' => 'disabled'])->label('所属产线：');?>
+                    <?=$form->field($model,'pid')->dropDownList($stationList,['prompt' =>'--请选择上一工位--'])->label('上一工位：');?>
 
                 </div>
                 <div class="box-footer">
                     <div class="col-xs-3 col-sm-2 text-right"></div>
                     <div class="col-xs-9 col-sm-7">
-                        <?=Html::submitButton('修改',['class' => 'btn btn-info'])?>
+                        <?=Html::submitButton('更改',['class' => 'btn btn-info'])?>
                     </div>
                 </div>
                 <?php ActiveForm::end();?>
