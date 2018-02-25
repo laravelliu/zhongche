@@ -107,7 +107,7 @@ $user = $this->params['userInfo'];
                     <li><a href="../tables/simple.html"><i class="fa fa-circle-o"></i>质检类别管理</a></li>
                     <li><a href="../tables/simple.html"><i class="fa fa-circle-o"></i>质检项组管理</a></li>
                     <li><a href="../tables/data.html"><i class="fa fa-circle-o"></i>工位质检项组管理</a></li>
-                    <li><a href="../tables/data.html"><i class="fa fa-circle-o"></i>质检项管理</a></li>
+                    <li><a href="<?=Url::to(['quality/index'])?>"><i class="fa fa-circle-o"></i>质检项管理</a></li>
                 </ul>
             </li>
 

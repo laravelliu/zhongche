@@ -9,7 +9,6 @@ use app\models\WorkshopModel;
 use yii\helpers\ArrayHelper;
 use Yii;
 use yii\helpers\Url;
-use yii\web\NotFoundHttpException;
 
 class WorkshopController extends BaseController
 {
@@ -31,12 +30,13 @@ class WorkshopController extends BaseController
     {
         $model = new WorkshopModel();
         $workshopListInfo = $model->getWorkshopList();
+        $workshops = ArrayHelper::map($workshopListInfo, 'id', 'name');
         $workshopList = [];
 
         foreach ($workshopListInfo as $workshop){
             $workshop['create_time'] = date('Y-m-d H:i:s', $workshop['create_time']);
             $workshop['update_time'] = date('Y-m-d H:i:s', $workshop['update_time']);
-            $workshop['pWorkshop'] = date('Y-m-d H:i:s', $workshop['update_time']);
+            $workshop['pWorkshop'] = $workshops[$workshop['id']];
             $workshopList[] = $workshop;
         }
 
