@@ -96,6 +96,10 @@ class QualityInspectionItemAR extends \app\models\ar\BaseAR
         //是否为多条件
         if (!empty($this->standard)) {
             $standard = explode(';', $this->standard);
+            if(empty($standard[count($standard)-1])){
+                unset($standard[count($standard)-1]);
+            }
+
             $model->standard = json_encode($standard);
         }
 

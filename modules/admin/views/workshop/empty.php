@@ -15,7 +15,7 @@
             <h2 class="headline text-yellow"><i class="fa fa-warning text-yellow"></i><?=$data['title']?></h2>
 
             <p>
-                <?=$data['content']?>
+                <?=$data['content']?><br>
                 <a href="<?=$data['url']?>"><?=$data['button']?></a>
             </p>
 

@@ -96,12 +96,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 {data: "id"},
                 {data: "title"},
                 {data: "standard",render:function (data,type,full) {
-                    if(data == null){
+                    if (data == null) {
                         return '无';
                     }
 
                     var $str = '';
-                    for(var wp in data){
+                    for (var wp in data) {
                         $str += data[wp] + '<br>'
                     }
 
@@ -112,7 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 {data: "update_time"},
                 {
                     render:function (data,type,full) {
-                        return '<a href="edit-workshop?wsId=' + full['id'] + '">编辑</a>';
+                        return '<a href="edit-quality-item?id=' + full['id'] + '">编辑</a>';
                     }
                 }
             ]
