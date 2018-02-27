@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                    <table id="workshop-table" class="table table-bordered table-striped">
+                    <table id="station-table" class="table table-bordered table-striped">
                         <thead>
                         <tr>
                             <th>id</th>
@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php JsBlock::begin()?>
 <script>
-    $('#workshop-table').DataTable({
+    $('#station-table').DataTable({
         'paging'      : true,
         'lengthChange': false,
         'searching'   : true,
