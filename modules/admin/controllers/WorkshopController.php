@@ -80,11 +80,12 @@ class WorkshopController extends BaseController
     public function actionEditWorkshop()
     {
         $id = Yii::$app->request->get('wsId', null);
-        if(empty($id)){
-           return $this->redirect(Url::to(['workshop/workshop']));
+        $model = WorkshopAR::findOne(['id' => $id, 'is_deleted' => STATUS_FALSE]);
+
+        if(empty($id) || empty($model)){
+            return $this->redirect(Url::to(['workshop/workshop']));
         }
 
-        $model = WorkshopAR::findOne(['id' => $id, 'is_deleted' => STATUS_FALSE]);
         $model->setScenario('update');
 
         //编辑成功
@@ -205,11 +206,13 @@ class WorkshopController extends BaseController
     public function actionEditWorkArea()
     {
         $id = Yii::$app->request->get('waId', null);
-        if(empty($id)){
+        $model = WorkAreaAR::findOne(['id' => $id, 'is_deleted' => STATUS_FALSE]);
+
+        if(empty($id) || empty($model)){
             return $this->redirect(Url::to(['workshop/work-area']));
         }
 
-        $model = WorkAreaAR::findOne(['id' => $id, 'is_deleted' => STATUS_FALSE]);
+
         $model->setScenario('update');
 
         //编辑成功
@@ -332,11 +335,12 @@ class WorkshopController extends BaseController
     public function actionEditStation()
     {
         $id = Yii::$app->request->get('id', null);
-        if(empty($id)){
-           return $this->redirect(Url::to(['workshop/station']));
+        $model = StationAR::findOne(['id' => $id, 'is_deleted' => STATUS_FALSE]);
+
+        if(empty($id) || empty($model)){
+            return $this->redirect(Url::to(['workshop/station']));
         }
 
-        $model = StationAR::findOne(['id' => $id, 'is_deleted' => STATUS_FALSE]);
         $model->setScenario('update');
 
         if (Yii::$app->request->isPost) {

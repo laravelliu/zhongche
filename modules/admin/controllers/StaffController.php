@@ -32,7 +32,7 @@ class StaffController extends BaseController
     }
 
     /**
-     * 获取员工列表
+     * 获取员工组列表
      * @return object
      * @author: liuFangShuo
      */
@@ -102,7 +102,7 @@ class StaffController extends BaseController
             }
         }
 
-        return $this->render('ad-staff-group',['model' => $model, 'station' => $station]);
+        return $this->render('add-staff-group',['model' => $model, 'station' => $station]);
     }
 
     /**
@@ -112,6 +112,26 @@ class StaffController extends BaseController
     public function actionEditStaffGroup()
     {
         $id = Yii::$app->request->get('id',null);
+        $model = UserGroupAR::findOne(['is_deleted' => STATUS_FALSE, 'id' => $id]);
+
+        if(empty($id) || empty($model)){
+            return $this->redirect(Url::to(['staff/staff-group']));
+        }
+        $model->setScenario('update');
+
+        if (Yii::$app->request->isPost) {
+            if($model->load($post = Yii::$app->request->post()) && $model->validate()){
+                if ($model->saveStaffGroup()) {
+                    //成功跳转
+                    return $this->redirect(Url::to(['staff/staff-group']));
+                }
+            }
+
+            $model->getErrors();
+        }
+
+
+        return $this->render('edit-staff-group',['model' => $model]);
     }
 }
 
