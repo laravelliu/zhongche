@@ -2,9 +2,12 @@
 
 namespace app\modules\admin\controllers;
 
+use app\models\ar\UserGroupAR;
 use app\models\StaffModel;
 use app\models\WorkshopModel;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
+use Yii;
 
 class StaffController extends BaseController
 {
@@ -33,7 +36,7 @@ class StaffController extends BaseController
      * @return object
      * @author: liuFangShuo
      */
-    public function actionStaffList()
+    public function actionGroupList()
     {
         $model = new StaffModel();
         $staffGroupList = $model->getStaffGroup();
@@ -52,28 +55,63 @@ class StaffController extends BaseController
             }
         }
 
-
-        return $this->ajaxReturn(['data' => $staffGroupList]);
+        return $this->ajaxReturn($staffGroupList);
     }
 
     /**
-     * 添加
-     * @author: liuFangShuo添加工位组
+     * 添加工位组
+     * @author: liuFangShuo
      */
     public function actionAddGroup()
     {
-        $model = new StaffModel();
-        $staffGroupList = $model->getStaffGroup();
+        $workshopModel = new WorkshopModel();
+        $stationList = $workshopModel->getStationList();
 
-        return $this->render('ad-staff-group');
+        if(empty($stationList)){
+            $data = [
+                'title' => '缺少工位信息',
+                'content' => '没有工位信息，员工组需要工位信息作为前置条件，请添加员工组信息。',
+                'button' => '添加工位',
+                'url' => Url::to(['workshop/add-station'])
+            ];
+
+            return $this->render('workshop/empty',['data' => $data]);
+        }
+
+        $model = new UserGroupAR();
+        $model->setScenario('create');
+        $station = ArrayHelper::map($stationList,'id','name');
+
+        $sId = Yii::$app->request->get('id', null);
+        if(!empty($sId) && isset($station[$sId])){
+            $model->station_id = $sId;
+        }
+
+        if (Yii::$app->request->isPost) {
+            if(Yii::$app->request->isPost){
+
+                if($model->load($post = Yii::$app->request->post()) && $model->validate()){
+                    if ($model->saveStaffGroup()) {
+                        //成功跳转
+                        return $this->redirect(Url::to(['staff/staff-group']));
+                    }
+                }
+
+                $model->getErrors();
+
+            }
+        }
+
+        return $this->render('ad-staff-group',['model' => $model, 'station' => $station]);
     }
 
     /**
-     * @author: liuFangShuo编辑工位组
+     * 编辑工位组
+     * @author: liuFangShuo
      */
     public function actionEditStaffGroup()
     {
-        $id = \Yii::$app->request->get('id',null);
+        $id = Yii::$app->request->get('id',null);
     }
 }
 

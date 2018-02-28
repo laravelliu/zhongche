@@ -10,6 +10,7 @@ namespace app\models;
 
 
 use app\models\ar\DepartmentAR;
+use app\models\ar\UserGroupAR;
 use yii\base\Model;
 
 class StaffModel extends Model
@@ -30,7 +31,8 @@ class StaffModel extends Model
      */
     public function getStaffGroup()
     {
-
+        $staffGroup = UserGroupAR::find()->where(['is_deleted' => STATUS_FALSE])->asArray()->all();
+        return $staffGroup;
     }
 
 }

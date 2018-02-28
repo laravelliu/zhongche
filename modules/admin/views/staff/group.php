@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <h3 class="box-title"></h3>
                     <div class="box-tools">
                         <a href="<?=Url::to(['staff/add-group'])?>" class="btn btn-default btn-sm">
-                            <i class="fa fa-play"></i>添加车间
+                            <i class="fa fa-play"></i>添加员工组
                         </a>
 
                     </div>
@@ -68,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'autoWidth'   : false,
         "bLengthChange": true,
         ajax: {
-            url: "<?=Url::to(['staff/staff-list'])?>",
+            url: "<?=Url::to(['staff/group-list'])?>",
             type: "post",
             dataType : "json"
         },
@@ -100,7 +100,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns': [
             {data: "id"},
             {data: "name"},
-            {data: "code"},
             {data: "station"},
             {data: "create_time"},
             {data: "update_time"},
