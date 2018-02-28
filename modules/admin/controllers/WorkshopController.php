@@ -120,21 +120,6 @@ class WorkshopController extends BaseController
      */
     public function actionWorkArea()
     {
-        //获取车间信息
-        $wsModel = new WorkshopModel();
-        $workshopList = $wsModel->getWorkshopList();
-
-        if (empty($workshopList)) {
-            $data = [
-                'title' => '缺少车间信息',
-                'content' => '没有车间信息，产线需要车间信息作为前置条件，请添加车间信息。',
-                'button' => '添加车间',
-                'url' => Url::to(['workshop/add-workshop'])
-                ];
-            return $this->render('empty', ['data' => $data]);
-        }
-
-
         return $this->render('area');
     }
 
@@ -172,6 +157,20 @@ class WorkshopController extends BaseController
     public function actionAddWorkArea()
     {
 
+        //获取车间信息
+        $wsModel = new WorkshopModel();
+        $workshopList = $wsModel->getWorkshopList();
+
+        if (empty($workshopList)) {
+            $data = [
+                'title' => '缺少车间信息',
+                'content' => '没有车间信息，产线需要车间信息作为前置条件，请添加车间信息。',
+                'button' => '添加车间',
+                'url' => Url::to(['workshop/add-workshop'])
+            ];
+            return $this->render('empty', ['data' => $data]);
+        }
+
         $model = new WorkAreaAR();
         $model->setScenario('create');
 
@@ -193,8 +192,7 @@ class WorkshopController extends BaseController
             $model->workshop_id = $wsId;
         }
 
-        //获取车间列表
-        $wsModel = new WorkshopModel();
+
         $workshop = $wsModel->getWorkshop();
 
         return $this->render('add-area', ['model' => $model,'workshop' => $workshop]);
@@ -239,22 +237,6 @@ class WorkshopController extends BaseController
      */
     public function actionStation()
     {
-        //获取产线
-        $model = new WorkshopModel();
-
-        //获取产线列表
-        $workAreaListInfo = $model->getWorkAreaList();
-
-        if (empty($workAreaListInfo)) {
-            $data = [
-                'title' => '缺少产线信息',
-                'content' => '没有产线信息，工位需要产线信息作为前置条件，请添加产线信息。',
-                'button' => '添加产线',
-                'url' => Url::to(['workshop/add-work-area'])
-            ];
-            return $this->render('empty', ['data' => $data]);
-        }
-
         return $this->render('station');
     }
 
@@ -298,6 +280,20 @@ class WorkshopController extends BaseController
      */
     public function actionAddStation()
     {
+        //获取产线
+        $wsModel = new WorkshopModel();
+        $workAreaList = $wsModel->getWorkAreaList();
+
+        if (empty($workAreaList)) {
+            $data = [
+                'title' => '缺少产线信息',
+                'content' => '没有产线信息，工位需要产线信息作为前置条件，请添加产线信息。',
+                'button' => '添加产线',
+                'url' => Url::to(['workshop/add-work-area'])
+            ];
+            return $this->render('empty', ['data' => $data]);
+        }
+
         $model = new StationAR();
         $model->setScenario('create');
 
@@ -314,14 +310,10 @@ class WorkshopController extends BaseController
 
         }
 
-        //获取车间列表
-        $wsModel = new WorkshopModel();
 
-        //获取产线列表
-        $workAreaList = $wsModel->getWorkAreaList();
         $workAreaShop = ArrayHelper::map($workAreaList,'id','workshop_id');
-
         $workAreaId = Yii::$app->request->get('waId',0);
+
         if (!empty($workAreaId)) {
             $model->workshop_id = $workAreaShop[$workAreaId];
             $model->work_area_id = $workAreaId;

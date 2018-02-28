@@ -3,7 +3,7 @@
 namespace app\modules\admin\controllers;
 
 use app\models\ar\DepartmentAR;
-use app\models\UserInfo;
+use app\models\StaffModel;
 use Yii;
 use yii\helpers\Url;
 
@@ -25,7 +25,7 @@ class DepartmentController extends BaseController
      */
     public function actionDepartmentList()
     {
-        $model = new UserInfo();
+        $model = new StaffModel();
         $departmentList = $model->getDepartmentList();
 
         foreach ($departmentList as $k => $department){
@@ -66,7 +66,25 @@ class DepartmentController extends BaseController
      */
     public function actionEditDepartment()
     {
+        $id = Yii::$app->request->get('deId');
+        $model = DepartmentAR::findOne(['id' => $id, 'is_deleted' => STATUS_FALSE]);
 
+        if(empty($id) || empty($model)){
+            return $this->redirect(Url::to(['department/index']));
+        }
+
+        if (Yii::$app->request->isPost) {
+            if($model->load($post = Yii::$app->request->post()) && $model->validate()){
+                if ($model->saveDepartment()) {
+                    //成功跳转
+                    return $this->redirect(Url::to(['department/index']));
+                }
+            }
+
+            $model->getErrors();
+        }
+
+        return $this->render('edit-department', ['model' => $model]);
     }
 
 }

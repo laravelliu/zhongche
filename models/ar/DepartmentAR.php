@@ -70,6 +70,30 @@ class DepartmentAR extends \app\models\ar\BaseAR
      */
     public function saveDepartment()
     {
+        //查找一下
+        if ($this->getScenario() == 'create') {
+            $model = new static();
+            $model->create_time = time();
+        }
 
+        if($this->getScenario() == 'update') {
+            $model = static::findOne(['id' => $this->id, 'is_deleted' => STATUS_FALSE]);
+
+            if (empty($model)) {
+                $this->addError('title','不存在此id');
+                return false;
+            }
+        }
+
+        $model->name = $this->name;
+        $model->code = $this->code;
+        $model->update_time = time();
+
+        if(!$model->save(false)){
+            $this->addError('code', '网络问题，稍后重试');
+            return false;
+        } else {
+            return true;
+        }
     }
 }

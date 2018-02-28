@@ -12,7 +12,7 @@ namespace app\models;
 use app\models\ar\DepartmentAR;
 use yii\base\Model;
 
-class UserInfo extends Model
+class StaffModel extends Model
 {
     /**
      * 获取部门信息
@@ -22,6 +22,15 @@ class UserInfo extends Model
     {
         $department = DepartmentAR::find()->where(['is_deleted' => STATUS_FALSE])->asArray()->all();
         return $department;
+    }
+
+    /**
+     * 获取员工组
+     * @author: liuFangShuo
+     */
+    public function getStaffGroup()
+    {
+
     }
 
 }

@@ -100,7 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 {data: "update_time"},
                 {
                     render:function (data,type,full) {
-                        return '<a href="edit-department?deId=' + full['id'] + '">编辑</a>' + '&nbsp<a href="add-work-area?wsId=' + full['id'] + '">添加产线</a>';
+                        return '<a href="edit-department?deId=' + full['id'] + '">编辑</a>';
                     }
                 }
             ]

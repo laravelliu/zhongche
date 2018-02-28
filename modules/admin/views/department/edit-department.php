@@ -3,14 +3,14 @@
  * Created by liuFangShuo.
  * User: lfs
  * Date: 2018/2/27
- * Time: 18:04
+ * Time: 21:51
  */
 
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
-$this->title = '添加部门';
+$this->title = '编辑部门';
 
 //面包屑
 $this->params['breadcrumbs'][] = '人员管理';
@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-footer">
                     <div class="col-xs-3 col-sm-2 text-right"></div>
                     <div class="col-xs-9 col-sm-7">
-                        <?=Html::submitButton('添加',['class' => 'btn btn-info'])?>
+                        <?=Html::submitButton('编辑',['class' => 'btn btn-info'])?>
                     </div>
                 </div>
                 <?php ActiveForm::end();?>
