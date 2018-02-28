@@ -10,45 +10,45 @@ $this->params['breadcrumbs'][] = '质检管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-    <!-- Main content -->
-    <section class="content">
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="box box-info">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"></h3>
-                        <div class="box-tools">
-                            <a href="<?=Url::to(['quality/add-quality-item'])?>" class="btn btn-default btn-sm">
-                                <i class="fa fa-play"></i>添加质检项
-                            </a>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title"></h3>
+                    <div class="box-tools">
+                        <a href="<?=Url::to(['quality/add-quality-item'])?>" class="btn btn-default btn-sm">
+                            <i class="fa fa-play"></i>添加质检项
+                        </a>
 
-                        </div>
                     </div>
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                        <table id="quality-table" class="table table-bordered table-striped">
-                            <thead>
-                            <tr>
-                                <th>id</th>
-                                <th>质检项内容</th>
-                                <th>质检项标准</th>
-                                <th>质检项类型</th>
-                                <th>创建时间</th>
-                                <th>更新时间</th>
-                                <th>操作</th>
-                            </tr>
-                            </thead>
-
-                        </table>
-                    </div>
-                    <!-- /.box-body -->
                 </div>
-                <!-- /.box -->
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="quality-table" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>质检项内容</th>
+                            <th>质检项标准</th>
+                            <th>质检项类型</th>
+                            <th>创建时间</th>
+                            <th>更新时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+
+                    </table>
+                </div>
+                <!-- /.box-body -->
             </div>
-            <!-- /.col -->
+            <!-- /.box -->
         </div>
-        <!-- /.row -->
-    </section>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
 
 <?php JsBlock::begin()?>
     <script>

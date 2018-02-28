@@ -116,4 +116,41 @@ class QualityController extends BaseController
         //默认
         return $this->render('edit-quality',['model' => $model]);
     }
+
+    /**
+     * 质检类别
+     * @author: liuFangShuo
+     */
+    public function actionQualityType()
+    {
+        return $this->render('type');
+    }
+
+    /**
+     * 质检类别列表
+     * @author: liuFangShuo
+     */
+    public function actionQualityTypeList()
+    {
+        return $this->ajaxReturn();
+    }
+
+    /**
+     * 增加质检类别
+     * @author: liuFangShuo
+     */
+    public function actionAddQualityType()
+    {
+        return $this->render('add-type');
+    }
+
+    /**
+     * 编辑质检类别
+     * @author: liuFangShuo
+     */
+    public function actionEditQualityType()
+    {
+        return $this->render('edit-type');
+    }
+
 }
