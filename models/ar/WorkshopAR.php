@@ -93,7 +93,6 @@ class WorkshopAR extends \app\models\ar\BaseAR
 
         if(empty($model)){
             $model = new static();
-            $model->create_time = time();
         }
 
         if(!empty($this->pid)){
@@ -107,7 +106,6 @@ class WorkshopAR extends \app\models\ar\BaseAR
         $model->name = $this->name;
         $model->code = $this->code;
         $model->pid = $this->pid;
-        $model->update_time = time();
 
         if(!$model->save(false)){
             $this->addError('code', '网络问题，稍后重试');

@@ -103,7 +103,6 @@ class StationAR extends \app\models\ar\BaseAR
 
         if(empty($model)){
             $model = new static();
-            $model->create_time = time();
         }
 
         //查找一下上一级车间
@@ -120,7 +119,6 @@ class StationAR extends \app\models\ar\BaseAR
         $model->code = $this->code;
         $model->workshop_id = $this->workshop_id;
         $model->work_area_id = $this->work_area_id;
-        $model->update_time = time();
 
 
         if(!$model->save(false)){

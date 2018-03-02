@@ -77,7 +77,6 @@ class QualityInspectionItemAR extends \app\models\ar\BaseAR
         //查找一下
         if ($this->getScenario() == 'create') {
             $model = new static();
-            $model->create_time = time();
 
         }
 
@@ -104,7 +103,6 @@ class QualityInspectionItemAR extends \app\models\ar\BaseAR
         }
 
         $model->type = $this->type;
-        $model->update_time = time();
 
         if(!$model->save(false)){
             $this->addError('code', '网络问题，稍后重试');

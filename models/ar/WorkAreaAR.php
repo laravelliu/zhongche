@@ -92,13 +92,11 @@ class WorkAreaAR extends \app\models\ar\BaseAR
 
         if(empty($model)){
             $model = new static();
-            $model->create_time = time();
         }
 
         $model->name = $this->name;
         $model->code = $this->code;
         $model->workshop_id = $this->workshop_id;
-        $model->update_time = time();
 
         //todo::触发修改对应产线下面的车间信息
 

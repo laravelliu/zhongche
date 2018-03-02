@@ -79,18 +79,27 @@ class TypeAR extends \app\models\ar\BaseAR
             $model = static::findOne(['id' => $this->id, 'is_deleted' => STATUS_FALSE]);
 
             if (empty($model)) {
-                $this->addError('title','不存在此id');
+                $this->addError('name','不存在此id');
                 return false;
             }
         }
 
         $model->name = $this->name;
-        $model->pid = $this->pid;
 
         if($this->pid == 0){
             $model->level = 1;
         } else {
-            $model->level = 2;
+            //查找一下上一级
+            $pType = TypeAR::findOne(['is_deleted' => STATUS_FALSE, 'id' => $this->pid]);
+
+            if(empty($pType)){
+                $this->addError('pid','不存在id为'.$this->pid.'的上一级类别');
+                return false;
+            }
+
+            $model->pid = $this->pid;
+            $model->level = $pType->level+1;
+
         }
 
 

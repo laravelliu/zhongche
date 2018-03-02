@@ -77,7 +77,6 @@ class UserGroupAR extends \app\models\ar\BaseAR
         //查找一下
         if ($this->getScenario() == 'create') {
             $model = new static();
-            $model->create_time = time();
 
         }
 
@@ -92,7 +91,6 @@ class UserGroupAR extends \app\models\ar\BaseAR
 
         $model->name = $this->name;
         $model->station_id = $this->station_id;
-        $model->update_time = time();
 
         if(!$model->save(false)){
             $this->addError('code', '网络问题，稍后重试');
