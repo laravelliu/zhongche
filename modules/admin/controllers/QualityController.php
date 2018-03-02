@@ -183,10 +183,33 @@ class QualityController extends BaseController
      */
     public function actionEditQualityType()
     {
-        $model = new TypeAR();
+        $id = Yii::$app->request->get('id', null);
+        $model = TypeAR::findOne(['id' => $id, 'is_deleted' => STATUS_FALSE]);
+
+        if(empty($id) || empty($model)){
+            return $this->redirect(Url::to(['quality/quality-type']));
+        }
+
         $model->setScenario('update');
 
-        return $this->render('edit-type');
+        if(Yii::$app->request->isPost){
+
+            if($model->load($post = Yii::$app->request->post()) && $model->validate()){
+                if ($model->saveType()) {
+                    //成功跳转
+                    return $this->redirect(Url::to(['quality/quality-type']));
+                }
+            }
+
+            $model->getErrors();
+
+        }
+
+        $qualityModel = new QualityModel();
+        $qualityListInfo = $qualityModel->qualityTypeList();
+        unset($qualityListInfo[$id]);
+
+        return $this->render('edit-type',['model' => $model, 'qualityTypeList' => $qualityListInfo]);
     }
 
 }
