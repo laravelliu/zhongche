@@ -23,8 +23,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-header with-border">
                     <h3 class="box-title"></h3>
                     <div class="box-tools">
-                        <a href="<?=Url::to(['quality/add-quality-item'])?>" class="btn btn-default btn-sm">
-                            <i class="fa fa-play"></i>添加质检项
+                        <a href="<?=Url::to(['quality/add-quality-type'])?>" class="btn btn-default btn-sm">
+                            <i class="fa fa-play"></i>添加质检类别
                         </a>
 
                     </div>
@@ -35,9 +35,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <thead>
                         <tr>
                             <th>id</th>
-                            <th>质检项内容</th>
-                            <th>质检项标准</th>
-                            <th>质检项类型</th>
+                            <th>质检类别</th>
+                            <th>所属质检类别</th>
+                            <th>所在层级</th>
                             <th>创建时间</th>
                             <th>更新时间</th>
                             <th>操作</th>
@@ -99,14 +99,14 @@ $this->params['breadcrumbs'][] = $this->title;
         "rowId": 'id',
         'columns': [
             {data: "id"},
-            {data: "title"},
-            {data: "standard"},
-            {data: "type"},
+            {data: "name"},
+            {data: "pid"},
+            {data: "level"},
             {data: "create_time"},
             {data: "update_time"},
             {
                 render:function (data,type,full) {
-                    return '<a href="edit-quality-item?id=' + full['id'] + '">编辑</a>';
+                    return '<a href="edit-quality-type?id=' + full['id'] + '">编辑</a>';
                 }
             }
         ]

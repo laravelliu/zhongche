@@ -3,8 +3,10 @@
 namespace app\modules\admin\controllers;
 
 use app\models\ar\QualityInspectionItemAR;
+use app\models\ar\TypeAR;
 use app\models\QualityModel;
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
@@ -132,7 +134,21 @@ class QualityController extends BaseController
      */
     public function actionQualityTypeList()
     {
-        return $this->ajaxReturn();
+        $model = new QualityModel();
+        $qualityList = $model->getQualityType();
+
+        if(!empty($qualityList)){
+
+            $qualityTypes = ArrayHelper::map($qualityList,'id', 'name');
+
+            foreach ($qualityList as $k =>$v){
+                $qualityList[$k]['create_time'] = date('Y-m-d H:i:s', $v['create_time']);
+                $qualityList[$k]['update_time'] = date('Y-m-d H:i:s', $v['update_time']);
+                $qualityList[$k]['pid'] = isset($qualityTypes[$v['pid']])?$qualityTypes[$v['pid']] : '无';
+            }
+        }
+
+        return $this->ajaxReturn($qualityList);
     }
 
     /**
@@ -141,7 +157,24 @@ class QualityController extends BaseController
      */
     public function actionAddQualityType()
     {
-        return $this->render('add-type');
+        $model = new TypeAR();
+        $model->setScenario('create');
+
+        if(Yii::$app->request->isPost){
+
+            if($model->load($post = Yii::$app->request->post()) && $model->validate()){
+                if ($model->saveType()) {
+                    //成功跳转
+                    return $this->redirect(Url::to(['quality/quality-type']));
+                }
+            }
+
+            $model->getErrors();
+
+        }
+        $qualityModel = new QualityModel();
+
+        return $this->render('add-type',['model' => $model, 'qualityModel' => $qualityModel]);
     }
 
     /**
@@ -150,6 +183,9 @@ class QualityController extends BaseController
      */
     public function actionEditQualityType()
     {
+        $model = new TypeAR();
+        $model->setScenario('update');
+
         return $this->render('edit-type');
     }
 
