@@ -24,7 +24,7 @@ $db = [
 if(YII_ENV_DEV) {
     $db = [
         'class' => 'yii\db\Connection',
-        'dsn' => 'mysql:host=127.0.0.1;dbname=zhongche',
+        'dsn' => 'mysql:host=47.93.252.112;dbname=zhongche',
         'username' => 'root',
         'password' => '1',
         'charset' => 'utf8',

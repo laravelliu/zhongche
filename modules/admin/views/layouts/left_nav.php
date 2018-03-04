@@ -152,7 +152,7 @@ $user = $this->params['userInfo'];
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="invoice.html"><i class="fa fa-circle-o"></i>质检参数</a></li>
+                    <li><a href="<?=Url::to(['param/car-type'])?>"><i class="fa fa-circle-o"></i>车辆型号参数</a></li>
                     <li><a href="profile.html"><i class="fa fa-circle-o"></i>车辆参数</a></li>
                     <li><a href="login.html"><i class="fa fa-circle-o"></i> Login</a></li>
                     <li><a href="register.html"><i class="fa fa-circle-o"></i> Register</a></li>
