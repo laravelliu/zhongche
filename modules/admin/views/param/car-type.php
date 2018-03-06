@@ -67,21 +67,22 @@ $this->params['breadcrumbs'][] = $this->title;
             'autoWidth'   : false,
             "bLengthChange": true,
             ajax: {
-                url: "<?=Url::to(['quality/get-quality-item'])?>",
+                url: "<?=Url::to(['param/get-params'])?>",
+                data:{type:1},
                 type: "post",
                 dataType : "json"
             },
             'language':{
                 "sProcessing": "处理中...",
                 "sLengthMenu": "显示 _MENU_ 项结果",
-                "sZeroRecords": "没有匹配车辆类别信息",
+                "sZeroRecords": "没有匹配车辆型号信息",
                 "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
                 "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
                 "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
                 "sInfoPostFix": "",
                 "sSearch": "搜索:",
                 "sUrl": "",
-                "sEmptyTable": "暂无车辆类别信息",
+                "sEmptyTable": "暂无车辆型号信息",
                 "sLoadingRecords": "载入中...",
                 "sInfoThousands": ",",
                 "oPaginate": {
@@ -103,7 +104,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 {data: "update_time"},
                 {
                     render:function (data,type,full) {
-                        return '<a href="edit-car-type?id=' + full['id'] + '">编辑</a>';
+                        return '<a href="edit-vehicle-type?id=' + full['id'] + '&type='+full['type']+'">编辑</a>';
                     }
                 }
             ]

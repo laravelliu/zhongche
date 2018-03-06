@@ -9,8 +9,39 @@
 use yii\helpers\Url;
 
 $user = $this->params['userInfo'];
+$url = Yii::$app->request->getPathInfo();
+
+$a = [];
+$b = [
+        'admin/workshop/workshop',
+        'admin/workshop/add-workshop',
+        'admin/workshop/edit-workshop',
+        'admin/workshop/work-area',
+        'admin/workshop/add-work-area',
+        'admin/workshop/edit-work-area',
+        'admin/workshop/station',
+        'admin/workshop/add-station',
+        'admin/workshop/edit-station'
+];
+$c = [];
+$d = [
+        'admin/quality/quality-type',
+        'admin/quality/add-quality-type',
+        'admin/quality/edit-quality-type',
+        'admin/quality/index',
+        'admin/quality/add-quality-item',
+        'admin/quality/edit-quality-item',
+        'admin/quality/quality-group',
+];
+$f = [];
+$g = [
+        'admin/param/car-type',
+        'admin/param/add-vehicle-type',
+        'admin/param/edit-vehicle-type'
+    ];
 
 ?>
+<?php if(in_array($url,[''])):?>active<?php endif;?>
 
 <!-- Left side column. contains the logo and sidebar -->
 <aside class="main-sidebar">
@@ -70,7 +101,7 @@ $user = $this->params['userInfo'];
                 </ul>
             </li>
 
-            <li class="treeview">
+            <li class="treeview <?php if(in_array($url,$b)):?>active<?php endif;?>">
                 <a href="#">
                     <i class="fa fa-pie-chart"></i>
                     <span>厂房管理</span>
@@ -79,9 +110,9 @@ $user = $this->params['userInfo'];
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="<?=Url::to(['workshop/workshop'])?>"><i class="fa fa-circle-o"></i>车间管理</a></li>
-                    <li><a href="<?=Url::to(['workshop/work-area'])?>"><i class="fa fa-circle-o"></i>产线管理</a></li>
-                    <li><a href="<?=Url::to(['workshop/station'])?>"><i class="fa fa-circle-o"></i>工位管理</a></li>
+                    <li <?php if(in_array($url, ['admin/workshop/workshop', 'admin/workshop/add-workshop', 'admin/workshop/edit-workshop'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['workshop/workshop'])?>"><i class="fa fa-circle-o"></i>车间管理</a></li>
+                    <li <?php if(in_array($url, ['admin/workshop/work-area', 'admin/workshop/add-work-area', 'admin/workshop/edit-work-area'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['workshop/work-area'])?>"><i class="fa fa-circle-o"></i>产线管理</a></li>
+                    <li <?php if(in_array($url, ['admin/workshop/station', 'admin/workshop/add-station', 'admin/workshop/edit-station'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['workshop/station'])?>"><i class="fa fa-circle-o"></i>工位管理</a></li>
                 </ul>
             </li>
             <li class="treeview">
@@ -96,8 +127,18 @@ $user = $this->params['userInfo'];
                     <li><a href="<?=Url::to(['workshop/station'])?>"><i class="fa fa-circle-o"></i>质检流程管理</a></li>
                 </ul>
             </li>
-
             <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-table"></i> <span>质检任务管理</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="../tables/simple.html"><i class="fa fa-circle-o"></i>质检任务</a></li>
+                </ul>
+            </li>
+            <li class="treeview <?php if(in_array($url,$d)):?>active<?php endif;?>">
                 <a href="#">
                     <i class="fa fa-table"></i> <span>质检管理</span>
                     <span class="pull-right-container">
@@ -105,10 +146,10 @@ $user = $this->params['userInfo'];
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="<?=Url::to(['quality/quality-type'])?>"><i class="fa fa-circle-o"></i>质检类别管理</a></li>
-                    <li><a href="../tables/simple.html"><i class="fa fa-circle-o"></i>质检项组管理</a></li>
+                    <li <?php if(in_array($url, ['admin/quality/quality-type', 'admin/quality/add-quality-type', 'admin/quality/edit-quality-type'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['quality/quality-type'])?>"><i class="fa fa-circle-o"></i>质检类别管理</a></li>
+                    <li <?php if(in_array($url, ['admin/quality/quality-group'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['quality/quality-group'])?>"><i class="fa fa-circle-o"></i>质检项组管理</a></li>
                     <li><a href="../tables/data.html"><i class="fa fa-circle-o"></i>工位质检项组管理</a></li>
-                    <li><a href="<?=Url::to(['quality/index'])?>"><i class="fa fa-circle-o"></i>质检项管理</a></li>
+                    <li <?php if(in_array($url, ['admin/quality/index', 'admin/quality/add-quality-item', 'admin/quality/edit-quality-item'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['quality/index'])?>"><i class="fa fa-circle-o"></i>质检项管理</a></li>
                 </ul>
             </li>
 
@@ -144,7 +185,7 @@ $user = $this->params['userInfo'];
 
 
 
-            <li class="treeview active">
+            <li class="treeview <?php if(in_array($url, $g)):?>active<?php endif;?>">
                 <a href="#">
                     <i class="fa fa-folder"></i> <span>参数管理</span>
                     <span class="pull-right-container">
@@ -152,12 +193,12 @@ $user = $this->params['userInfo'];
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="<?=Url::to(['param/car-type'])?>"><i class="fa fa-circle-o"></i>车辆型号参数</a></li>
+                    <li <?php if(in_array($url, ['admin/param/car-type', 'admin/param/add-vehicle-type', 'admin/param/edit-vehicle-type'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['param/car-type'])?>"><i class="fa fa-circle-o"></i>车辆型号参数</a></li>
                     <li><a href="profile.html"><i class="fa fa-circle-o"></i>车辆参数</a></li>
                     <li><a href="login.html"><i class="fa fa-circle-o"></i> Login</a></li>
                     <li><a href="register.html"><i class="fa fa-circle-o"></i> Register</a></li>
                     <li><a href="lockscreen.html"><i class="fa fa-circle-o"></i> Lockscreen</a></li>
-                    <li class="active"><a href="404.html"><i class="fa fa-circle-o"></i> 404 Error</a></li>
+                    <li><a href="404.html"><i class="fa fa-circle-o"></i> 404 Error</a></li>
                     <li><a href="500.html"><i class="fa fa-circle-o"></i> 500 Error</a></li>
                     <li><a href="blank.html"><i class="fa fa-circle-o"></i> Blank Page</a></li>
                     <li><a href="pace.html"><i class="fa fa-circle-o"></i> Pace Page</a></li>

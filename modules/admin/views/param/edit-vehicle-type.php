@@ -3,20 +3,20 @@
  * Created by liuFangShuo.
  * User: lfs
  * Date: 2018/3/4
- * Time: 11:41
+ * Time: 16:31
  */
 
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
-$this->title = '添加车辆型号参数';
+$this->title = '编辑车辆型号参数';
 
 //面包屑
 $this->params['breadcrumbs'][] = '参数管理';
 $this->params['breadcrumbs'][] = $this->title;
-
 ?>
+
 <!-- Main content -->
 <section class="content">
     <div class="row">
@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-footer">
                     <div class="col-xs-3 col-sm-2 text-right"></div>
                     <div class="col-xs-9 col-sm-7">
-                        <?=Html::submitButton('添加',['class' => 'btn btn-info'])?>
+                        <?=Html::submitButton('编辑',['class' => 'btn btn-info'])?>
                     </div>
                 </div>
                 <?php ActiveForm::end();?>

@@ -212,4 +212,42 @@ class QualityController extends BaseController
         return $this->render('edit-type',['model' => $model, 'qualityTypeList' => $qualityListInfo]);
     }
 
+    /**
+     * 质检项组
+     * @author: liuFangShuo
+     */
+    public function actionQualityGroup()
+    {
+        return $this->render('quality-group');
+    }
+
+    /**
+     * 获取质检项组
+     * @author: liuFangShuo
+     */
+    public function actionGetQualityGroup()
+    {
+        return $this->ajaxReturn();
+    }
+
+    /**
+     * 编辑质检项组
+     * @return string
+     * @author: liuFangShuo
+     */
+    public function actionEditQualityGroup()
+    {
+        return $this->render('edit-quality-group');
+    }
+
+    /**
+     * 添加质检项组
+     * @return string
+     * @author: liuFangShuo
+     */
+    public function actionAddQualityGroup()
+    {
+        return $this->render('add-quality-group');
+
+    }
 }

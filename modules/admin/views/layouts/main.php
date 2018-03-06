@@ -19,7 +19,7 @@ AdminAsset::register($this);
 
 <?= $this->render('head');?>
 
-<body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
+<body class="hold-transition skin-blue sidebar-mini <!--sidebar-collapse-->">
 <?php $this->beginBody() ?>
 
 <div class="wrapper">
