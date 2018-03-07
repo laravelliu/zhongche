@@ -9,6 +9,7 @@
 namespace app\models;
 
 
+use app\models\ar\QualityInspectionGroupAR;
 use app\models\ar\QualityInspectionItemAR;
 use app\models\ar\TypeAR;
 use yii\base\Model;
@@ -47,5 +48,36 @@ class QualityModel extends Model
         $typeList = [0=>'无'] + ArrayHelper::map($qualityTypeList,'id', 'name');
 
         return $typeList;
+    }
+
+    /**
+     * 质检组
+     * @author: liuFangShuo
+     */
+    public function getQualityGroup()
+    {
+        $qualityList = QualityInspectionGroupAR::find()->where([])->asArray()->all();
+        return $qualityList;
+    }
+
+    /**
+     * @param int $level
+     * @return array
+     * @author: liuFangShuo
+     */
+    public function getQualityTypeByLevel($level = 0)
+    {
+        $return = [];
+        $qualityTypeList = $this->getQualityType();
+
+        if (!empty($qualityTypeList)) {
+            foreach ($qualityTypeList as $k => $v) {
+                if($v['level'] == $level){
+                    $return[] = $v;
+                }
+            }
+        }
+
+        return $return;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace app\modules\admin\controllers;
 
+use app\models\ar\QualityInspectionGroupAR;
 use app\models\ar\QualityInspectionItemAR;
 use app\models\ar\TypeAR;
 use app\models\QualityModel;
@@ -218,6 +219,20 @@ class QualityController extends BaseController
      */
     public function actionQualityGroup()
     {
+        //检查是否有质检类别
+        $model = new QualityModel();
+        $qualityType = $model->getQualityType();
+
+        if(empty($qualityType)){
+            $data = [
+                'title' => '缺少质检类别',
+                'content' => '没有质检类别，质检项组需要质检类别信息作为前置条件，请添加质检类别。',
+                'button' => '添加质检类别',
+                'url' => Url::to(['quality/add-quality-type'])
+            ];
+            return $this->render('/workshop/empty', ['data' => $data]);
+
+        }
         return $this->render('quality-group');
     }
 
@@ -227,7 +242,20 @@ class QualityController extends BaseController
      */
     public function actionGetQualityGroup()
     {
-        return $this->ajaxReturn();
+        $model = new QualityModel();
+        $qualityGroupList = $model->getQualityGroup();
+        $qyalityType = $model->getQualityTypeByLevel(1);
+        $qyalityTypeList = ArrayHelper::map($qyalityType,'id','name');
+
+
+        if(!empty($qualityGroupList)){
+            foreach ($qualityGroupList as $k => $v){
+                $qualityGroupList[$k]['create_time'] = date('Y-m-d H:i:s', $v['create_time']);
+                $qualityGroupList[$k]['update_time'] = date('Y-m-d H:i:s', $v['update_time']);
+                $qualityGroupList[$k]['type'] = $qyalityTypeList[$v['type_id']];
+            }
+        }
+        return $this->ajaxReturn($qualityGroupList);
     }
 
     /**
@@ -247,7 +275,25 @@ class QualityController extends BaseController
      */
     public function actionAddQualityGroup()
     {
-        return $this->render('add-quality-group');
+        $model = new QualityInspectionGroupAR();
+        $model->setScenario('create');
+
+        $qualutyModel = new QualityModel();
+        $qualityType = $qualutyModel->getQualityTypeByLevel(1);
+        $qualityType = ArrayHelper::map($qualityType,'id','name');
+
+        if(Yii::$app->request->isPost){
+            if($model->load($post = Yii::$app->request->post()) && $model->validate()){
+                if ($model->saveGroup()) {
+                    //成功跳转
+                    return $this->redirect(Url::to(['quality/quality-group']));
+                }
+            }
+
+            $model->getErrors();
+        }
+
+        return $this->render('add-quality-group',['model' => $model, 'qualityType' => $qualityType]);
 
     }
 }

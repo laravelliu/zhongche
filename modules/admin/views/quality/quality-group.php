@@ -36,9 +36,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         <thead>
                         <tr>
                             <th>id</th>
-                            <th>质检项内容</th>
-                            <th>质检项标准</th>
-                            <th>质检项类型</th>
+                            <th>质检项组</th>
+                            <th>所属质检类别</th>
                             <th>创建时间</th>
                             <th>更新时间</th>
                             <th>操作</th>
@@ -65,11 +64,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'ordering'    : true,
         'info'        : true,
         "scrollX"     : false,
-        "aaSorting"   : [[ 0, "asc" ], [6, "desc"]],
+        "aaSorting"   : [[ 0, "asc" ]],
         'autoWidth'   : false,
         "bLengthChange": true,
         ajax: {
-            url: "<?=Url::to(['quality/get-quality-item'])?>",
+            url: "<?=Url::to(['quality/get-quality-group'])?>",
             type: "post",
             dataType : "json"
         },
@@ -101,7 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns': [
             {data: "id"},
             {data: "name"},
-            {data: "type_id"},
+            {data: "type"},
             {data: "create_time"},
             {data: "update_time"},
             {
