@@ -22,3 +22,6 @@ define('QUALITY_TYPE_FILL', 2);     //填空
 
 //车辆参数
 define('PARAM_TYPE_VEHICLE_TYPE', 1);
+
+define('QUALITY_PROCESS_ITEM',1);
+define('QUALITY_PROCESS_GROUP',2);

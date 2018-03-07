@@ -2,6 +2,7 @@
 
 namespace app\modules\admin\controllers;
 
+use app\models\ar\ProcessAR;
 use app\models\ar\QualityInspectionGroupAR;
 use app\models\ar\QualityInspectionItemAR;
 use app\models\ar\TypeAR;
@@ -265,7 +266,31 @@ class QualityController extends BaseController
      */
     public function actionEditQualityGroup()
     {
-        return $this->render('edit-quality-group');
+        $id = Yii::$app->request->get('id', null);
+
+        $model = QualityInspectionGroupAR::findOne(['id' => $id,'is_deleted'=>STATUS_FALSE]);
+
+        if(empty($id) || empty($model)){
+            return $this->redirect(['quality/quality-group']);
+        }
+        $model->setScenario('update');
+
+        if(Yii::$app->request->isPost){
+            if($model->load($post = Yii::$app->request->post()) && $model->validate()){
+                if ($model->saveGroup()) {
+                    //成功跳转
+                    return $this->redirect(Url::to(['quality/quality-group']));
+                }
+            }
+
+            $model->getErrors();
+        }
+
+        $qualutyModel = new QualityModel();
+        $qualityType = $qualutyModel->getQualityTypeByLevel(1);
+        $qualityType = ArrayHelper::map($qualityType,'id','name');
+
+        return $this->render('edit-quality-group', ['model' => $model, 'qualityType' => $qualityType]);
     }
 
     /**
@@ -296,4 +321,67 @@ class QualityController extends BaseController
         return $this->render('add-quality-group',['model' => $model, 'qualityType' => $qualityType]);
 
     }
+
+    /**
+     * 质检流程
+     * @author: liuFangShuo
+     */
+    public function actionQualityProcess()
+    {
+        return $this->render('process');
+    }
+
+    /**
+     * 获取质检流程
+     * @author: liuFangShuo
+     */
+    public function actionGetQualityProcess()
+    {
+        $model = new QualityModel();
+        $process = $model->qualityProcessList();
+
+        if(!empty($process)){
+            foreach ($process as $k => $v){
+                $process[$k]['create_time'] = date('Y-m-d H:i:s', $v['create_time']);
+                $process[$k]['update_time'] = date('Y-m-d H:i:s', $v['update_time']);
+                $process[$k]['type'] = Yii::$app->params['quality_process'][$v['type']];
+            }
+        }
+
+        return $this->ajaxReturn($process);
+    }
+
+    /**
+     * 添加质检流程
+     * @author: liuFangShuo
+     */
+    public function actionAddQualityProcess()
+    {
+        $model = new ProcessAR();
+        $model->setScenario('create');
+
+        if(Yii::$app->request->isPost){
+            if($model->load($post = Yii::$app->request->post()) && $model->validate()){
+                if ($model->saveProcess()) {
+                    //成功跳转
+                    return $this->redirect(Url::to(['quality/quality-group']));
+                }
+            }
+
+            $model->getErrors();
+        }
+
+        return $this->render('add-quality-process',['model' => $model]);
+
+    }
+
+    /**
+     * 编辑质检流程
+     * @author: liuFangShuo
+     */
+    public function actionEditQualityProcess()
+    {
+
+    }
 }
+

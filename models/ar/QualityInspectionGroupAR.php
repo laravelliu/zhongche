@@ -10,6 +10,7 @@ use Yii;
  * @property int $id 质检组
  * @property string $name 质检组名称
  * @property int $type_id 质检种类
+ * @property int $is_deleted
  * @property int $create_time 创建时间
  * @property int $update_time 更新时间
  */
@@ -41,7 +42,7 @@ class QualityInspectionGroupAR extends \app\models\ar\BaseAR
     {
         return [
             [['type_id'], 'required', 'on' => 'default'],
-            [['type_id'], 'integer', 'on' => 'default'],
+            [['type_id','is_deleted'], 'integer', 'on' => 'default'],
             [['name'], 'string', 'max' => 64, 'on' => 'default'],
             [['name', 'type_id'], 'required', 'message' => '不能为空', 'on' =>['create','update']]
         ];
@@ -56,6 +57,7 @@ class QualityInspectionGroupAR extends \app\models\ar\BaseAR
             'id' => 'ID',
             'name' => 'Name',
             'type_id' => 'Type ID',
+            'is_deleted' => 'Is Deleted',
             'create_time' => 'Create Time',
             'update_time' => 'Update Time',
         ];

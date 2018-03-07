@@ -23,7 +23,11 @@ $b = [
         'admin/workshop/add-station',
         'admin/workshop/edit-station'
 ];
-$c = [];
+$c = [
+        'admin/quality/quality-process',
+        'admin/quality/add-quality-process',
+        'admin/quality/edit-quality-process'
+];
 $d = [
         'admin/quality/quality-type',
         'admin/quality/add-quality-type',
@@ -115,7 +119,7 @@ $g = [
                     <li <?php if(in_array($url, ['admin/workshop/station', 'admin/workshop/add-station', 'admin/workshop/edit-station'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['workshop/station'])?>"><i class="fa fa-circle-o"></i>工位管理</a></li>
                 </ul>
             </li>
-            <li class="treeview">
+            <li class="treeview <?php if(in_array($url,$c)):?>active<?php endif;?>">
                 <a href="#">
                     <i class="fa fa-edit"></i>
                     <span>流程管理</span>
@@ -124,7 +128,7 @@ $g = [
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="<?=Url::to(['workshop/station'])?>"><i class="fa fa-circle-o"></i>质检流程管理</a></li>
+                    <li <?php if(in_array($url, ['admin/quality/quality-process', 'admin/quality/add-quality-process', 'admin/quality/edit-quality-process'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['quality/quality-process'])?>"><i class="fa fa-circle-o"></i>质检流程管理</a></li>
                 </ul>
             </li>
             <li class="treeview">

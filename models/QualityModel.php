@@ -9,6 +9,7 @@
 namespace app\models;
 
 
+use app\models\ar\ProcessAR;
 use app\models\ar\QualityInspectionGroupAR;
 use app\models\ar\QualityInspectionItemAR;
 use app\models\ar\TypeAR;
@@ -61,23 +62,25 @@ class QualityModel extends Model
     }
 
     /**
+     * 获取质检类别
      * @param int $level
      * @return array
      * @author: liuFangShuo
      */
     public function getQualityTypeByLevel($level = 0)
     {
-        $return = [];
-        $qualityTypeList = $this->getQualityType();
 
-        if (!empty($qualityTypeList)) {
-            foreach ($qualityTypeList as $k => $v) {
-                if($v['level'] == $level){
-                    $return[] = $v;
-                }
-            }
-        }
+        $qualityType = TypeAR::find()->where(['is_deleted' => STATUS_FALSE, 'level' => $level])->asArray()->all();
+        return $qualityType;
+    }
 
-        return $return;
+    /**
+     * 质检流程
+     * @author: liuFangShuo
+     */
+    public function qualityProcessList()
+    {
+        $qualityProcess = ProcessAR::find()->where(['is_deleted' =>STATUS_FALSE])->asArray()->all();
+        return $qualityProcess;
     }
 }
