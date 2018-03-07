@@ -364,7 +364,7 @@ class QualityController extends BaseController
             if($model->load($post = Yii::$app->request->post()) && $model->validate()){
                 if ($model->saveProcess()) {
                     //成功跳转
-                    return $this->redirect(Url::to(['quality/quality-group']));
+                    return $this->redirect(Url::to(['quality/quality-process']));
                 }
             }
 
@@ -381,7 +381,27 @@ class QualityController extends BaseController
      */
     public function actionEditQualityProcess()
     {
+        $id = Yii::$app->request->get('id', null);
 
+        $model = ProcessAR::findOne(['id' => $id,'is_deleted'=>STATUS_FALSE]);
+
+        if(empty($id) || empty($model)){
+            return $this->redirect(['quality/quality-process']);
+        }
+        $model->setScenario('update');
+
+        if(Yii::$app->request->isPost){
+            if($model->load($post = Yii::$app->request->post()) && $model->validate()){
+                if ($model->saveProcess()) {
+                    //成功跳转
+                    return $this->redirect(Url::to(['quality/quality-process']));
+                }
+            }
+
+            $model->getErrors();
+        }
+
+        return $this->render('edit-quality-process',['model'=>$model]);
     }
 }
 
