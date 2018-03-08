@@ -11,7 +11,9 @@ use yii\helpers\Url;
 $user = $this->params['userInfo'];
 $url = Yii::$app->request->getPathInfo();
 
-$a = [];
+$a = [
+        'admin/admin/index',
+];
 $b = [
         'admin/workshop/workshop',
         'admin/workshop/add-workshop',
@@ -64,7 +66,7 @@ $g = [
 
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
-            <li class="treeview">
+            <li class="treeview <?php if(in_array($url,$a)):?>active<?php endif;?>">
                 <a href="#">
                     <i class="fa fa-dashboard"></i>
                     <span>人员管理</span>
@@ -73,7 +75,7 @@ $g = [
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li>
+                    <li <?php if(in_array($url,['admin/admin/index'])):?>class="active"<?php endif;?>>
                         <a href="<?=Url::to(['admin/index'])?>"><i class="fa fa-circle-o"></i>人员列表</a>
                     </li>
 

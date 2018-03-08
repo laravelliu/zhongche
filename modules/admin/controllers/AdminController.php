@@ -17,6 +17,15 @@ class AdminController extends BaseController
         return $this->render('index');
     }
 
+    /**
+     * 获取用户列表
+     * @author: liuFangShuo
+     */
+    public function actionGetUsers()
+    {
+
+    }
+
     public function actionUserList()
     {
         return $this->render('test');
