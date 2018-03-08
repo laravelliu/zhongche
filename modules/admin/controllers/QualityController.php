@@ -141,12 +141,9 @@ class QualityController extends BaseController
 
         if(!empty($qualityList)){
 
-            $qualityTypes = ArrayHelper::map($qualityList,'id', 'name');
-
             foreach ($qualityList as $k =>$v){
                 $qualityList[$k]['create_time'] = date('Y-m-d H:i:s', $v['create_time']);
                 $qualityList[$k]['update_time'] = date('Y-m-d H:i:s', $v['update_time']);
-                $qualityList[$k]['pid'] = isset($qualityTypes[$v['pid']])?$qualityTypes[$v['pid']] : '无';
             }
         }
 
@@ -174,9 +171,8 @@ class QualityController extends BaseController
             $model->getErrors();
 
         }
-        $qualityModel = new QualityModel();
 
-        return $this->render('add-type',['model' => $model, 'qualityModel' => $qualityModel]);
+        return $this->render('add-type',['model' => $model]);
     }
 
     /**
@@ -207,11 +203,7 @@ class QualityController extends BaseController
 
         }
 
-        $qualityModel = new QualityModel();
-        $qualityListInfo = $qualityModel->qualityTypeList();
-        unset($qualityListInfo[$id]);
-
-        return $this->render('edit-type',['model' => $model, 'qualityTypeList' => $qualityListInfo]);
+        return $this->render('edit-type',['model' => $model]);
     }
 
     /**
@@ -245,7 +237,7 @@ class QualityController extends BaseController
     {
         $model = new QualityModel();
         $qualityGroupList = $model->getQualityGroup();
-        $qyalityType = $model->getQualityTypeByLevel(1);
+        $qyalityType = $model->getQualityType();
         $qyalityTypeList = ArrayHelper::map($qyalityType,'id','name');
 
 
@@ -287,7 +279,7 @@ class QualityController extends BaseController
         }
 
         $qualutyModel = new QualityModel();
-        $qualityType = $qualutyModel->getQualityTypeByLevel(1);
+        $qualityType = $qualutyModel->getQualityType();
         $qualityType = ArrayHelper::map($qualityType,'id','name');
 
         return $this->render('edit-quality-group', ['model' => $model, 'qualityType' => $qualityType]);
@@ -304,7 +296,7 @@ class QualityController extends BaseController
         $model->setScenario('create');
 
         $qualutyModel = new QualityModel();
-        $qualityType = $qualutyModel->getQualityTypeByLevel(1);
+        $qualityType = $qualutyModel->getQualityType();
         $qualityType = ArrayHelper::map($qualityType,'id','name');
 
         if(Yii::$app->request->isPost){

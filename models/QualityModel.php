@@ -62,19 +62,6 @@ class QualityModel extends Model
     }
 
     /**
-     * 获取质检类别
-     * @param int $level
-     * @return array
-     * @author: liuFangShuo
-     */
-    public function getQualityTypeByLevel($level = 0)
-    {
-
-        $qualityType = TypeAR::find()->where(['is_deleted' => STATUS_FALSE, 'level' => $level])->asArray()->all();
-        return $qualityType;
-    }
-
-    /**
      * 质检流程
      * @author: liuFangShuo
      */

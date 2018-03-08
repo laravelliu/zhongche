@@ -68,9 +68,11 @@ class AdminAsset extends AssetBundle
             case 'admin/department/index':
             case 'admin/staff/staff-group':
             case 'admin/quality/quality-type':
-            case 'admin/param/car-type':
+            //case 'admin/param/car-type':
             case 'admin/quality/quality-group':
             case 'admin/quality/quality-process':
+            case 'admin/vehicle/vehicle-type':
+            case 'admin/vehicle/vehicle-model':
                 $css = ['bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css'];
                 $js = [
                     'bower_components/datatables.net/js/jquery.dataTables.min.js',

@@ -171,6 +171,20 @@ $g = [
                 </ul>
             </li>
 
+            <li class="treeview <?php if(in_array($url, $g)):?>active<?php endif;?>">
+                <a href="#">
+                    <i class="fa fa-table"></i><span>车辆管理</span>
+                    <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="<?=Url::to(['vehicle/index'])?>"><i class="fa fa-circle-o"></i>车辆信息列表</a></li>
+                    <li><a href="<?=Url::to(['vehicle/vehicle-type'])?>"><i class="fa fa-circle-o"></i>车辆类型</a></li>
+                    <li <?php if(in_array($url, ['admin/param/car-type', 'admin/param/add-vehicle-type', 'admin/param/edit-vehicle-type'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['vehicle/vehicle-model'])?>"><i class="fa fa-circle-o"></i>车辆型号</a></li>
+                </ul>
+            </li>
+
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-laptop"></i>
@@ -191,7 +205,7 @@ $g = [
 
 
 
-            <li class="treeview <?php if(in_array($url, $g)):?>active<?php endif;?>">
+            <li class="treeview">
                 <a href="#">
                     <i class="fa fa-folder"></i> <span>参数管理</span>
                     <span class="pull-right-container">
@@ -199,8 +213,6 @@ $g = [
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li <?php if(in_array($url, ['admin/param/car-type', 'admin/param/add-vehicle-type', 'admin/param/edit-vehicle-type'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['param/car-type'])?>"><i class="fa fa-circle-o"></i>车辆型号参数</a></li>
-                    <li><a href="profile.html"><i class="fa fa-circle-o"></i>车辆参数</a></li>
                     <li><a href="login.html"><i class="fa fa-circle-o"></i> Login</a></li>
                     <li><a href="register.html"><i class="fa fa-circle-o"></i> Register</a></li>
                     <li><a href="lockscreen.html"><i class="fa fa-circle-o"></i> Lockscreen</a></li>

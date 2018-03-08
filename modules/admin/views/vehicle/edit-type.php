@@ -2,19 +2,20 @@
 /**
  * Created by liuFangShuo.
  * User: lfs
- * Date: 2018/2/28
- * Time: 17:09
+ * Date: 2018/3/8
+ * Time: 16:07
  */
 
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
-$this->title = '编辑质检类别';
+$this->title = '编辑车辆类别';
 
 //面包屑
-$this->params['breadcrumbs'][] = '质检管理';
+$this->params['breadcrumbs'][] = '车辆管理';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 
 <!-- Main content -->
@@ -25,8 +26,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-header with-border">
                     <h3 class="box-title"></h3>
                     <div class="box-tools">
-                        <a href="<?=Url::to(['quality/quality-type'])?>" class="btn btn-default btn-sm">
-                            <i class="fa fa-play"></i>质检类别列表
+                        <a href="<?=Url::to(['vehicle/vehicle-type'])?>" class="btn btn-default btn-sm">
+                            <i class="fa fa-play"></i>车辆类型列表
                         </a>
                     </div>
                 </div>
@@ -39,8 +40,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]
                 ])?>
                 <div class="box-body">
-                    <?=$form->field($model,'name')->textInput(['placeholder' => '请输入质检类别'])->label('质检类别名称：');?>
 
+                    <?=$form->field($model,'name')->textInput(['placeholder' => '请输入车辆类别'])->label('车辆类别名称：');?>
                 </div>
                 <div class="box-footer">
                     <div class="col-xs-3 col-sm-2 text-right"></div>

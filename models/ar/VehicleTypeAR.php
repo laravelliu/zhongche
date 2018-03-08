@@ -5,22 +5,22 @@ namespace app\models\ar;
 use Yii;
 
 /**
- * This is the model class for table "zc_type".
+ * This is the model class for table "zc_vehicle_type".
  *
- * @property int $id 质检类别
- * @property string $name 质检名称
+ * @property int $id 车辆类别id
+ * @property string $name 车辆类别名称
  * @property int $is_deleted 是否删除
  * @property int $create_time
  * @property int $update_time
  */
-class TypeAR extends \app\models\ar\BaseAR
+class VehicleTypeAR extends \app\models\ar\BaseAR
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'zc_type';
+        return 'zc_vehicle_type';
     }
 
     public function scenarios()
@@ -34,15 +34,16 @@ class TypeAR extends \app\models\ar\BaseAR
         return  array_merge($parent,$self);
     }
 
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['is_deleted'], 'integer', 'on' => ['default']],
-            [['name'], 'string', 'max' => 128, 'on' => ['default']],
-            [['name'], 'required', 'message' => '不能为空', 'on' => ['create', 'update']],
+            [['name', 'is_deleted'], 'required','on'=>'default'],
+            [['name', 'is_deleted'], 'string', 'max' => 16, 'on'=>'default'],
+            ['name', 'required', 'message' => '不能为空', 'on' =>['create', 'update']]
         ];
     }
 
@@ -61,7 +62,8 @@ class TypeAR extends \app\models\ar\BaseAR
     }
 
     /**
-     * 保存质检类别
+     * 保存车辆类别
+     * @return bool
      * @author: liuFangShuo
      */
     public function saveType()
@@ -89,5 +91,4 @@ class TypeAR extends \app\models\ar\BaseAR
             return true;
         }
     }
-
 }

@@ -2,17 +2,19 @@
 /**
  * Created by liuFangShuo.
  * User: lfs
- * Date: 2018/2/28
- * Time: 16:30
+ * Date: 2018/3/8
+ * Time: 16:07
  */
 
 use yii\helpers\Url;
 use app\widgets\JsBlock;
-$this->title = '质检类别列表';
+
+$this->title = '车辆类型';
 
 //面包屑
-$this->params['breadcrumbs'][] = '质检管理';
+$this->params['breadcrumbs'][] = '车辆管理';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 
 <!-- Main content -->
@@ -23,8 +25,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-header with-border">
                     <h3 class="box-title"></h3>
                     <div class="box-tools">
-                        <a href="<?=Url::to(['quality/add-quality-type'])?>" class="btn btn-default btn-sm">
-                            <i class="fa fa-play"></i>添加质检类别
+                        <a href="<?=Url::to(['vehicle/add-vehicle-type'])?>" class="btn btn-default btn-sm">
+                            <i class="fa fa-play"></i>添加车辆类型
                         </a>
 
                     </div>
@@ -35,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <thead>
                         <tr>
                             <th>id</th>
-                            <th>质检类别名称</th>
+                            <th>车辆类型</th>
                             <th>创建时间</th>
                             <th>更新时间</th>
                             <th>操作</th>
@@ -66,21 +68,21 @@ $this->params['breadcrumbs'][] = $this->title;
         'autoWidth'   : false,
         "bLengthChange": true,
         ajax: {
-            url: "<?=Url::to(['quality/quality-type-list'])?>",
+            url: "<?=Url::to(['vehicle/get-vehicle-type'])?>",
             type: "post",
             dataType : "json"
         },
         'language':{
             "sProcessing": "处理中...",
             "sLengthMenu": "显示 _MENU_ 项结果",
-            "sZeroRecords": "没有匹配质检类别信息",
+            "sZeroRecords": "没有匹配车辆类型信息",
             "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
             "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
             "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
             "sInfoPostFix": "",
             "sSearch": "搜索:",
             "sUrl": "",
-            "sEmptyTable": "暂无质检类别信息",
+            "sEmptyTable": "暂无车辆类型信息",
             "sLoadingRecords": "载入中...",
             "sInfoThousands": ",",
             "oPaginate": {
@@ -102,7 +104,7 @@ $this->params['breadcrumbs'][] = $this->title;
             {data: "update_time"},
             {
                 render:function (data,type,full) {
-                    return '<a href="edit-quality-type?id=' + full['id'] + '">编辑</a>';
+                    return '<a href="edit-vehicle-type?id=' + full['id'] + '">编辑</a>';
                 }
             }
         ]

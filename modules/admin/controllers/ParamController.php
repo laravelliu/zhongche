@@ -103,4 +103,10 @@ class ParamController extends BaseController
 
         return $this->render('edit-vehicle-type',['model' => $model]);
     }
+
+
+    public function actionVehicleModle()
+    {
+
+    }
 }

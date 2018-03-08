@@ -41,7 +41,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-body">
 
                     <?=$form->field($model,'name')->textInput(['placeholder' => '请输入质检类别'])->label('质检类别名称：');?>
-                    <?=$form->field($model,'pid')->dropDownList($qualityModel->qualityTypeList(),['placeholder' => '请输入所属质检类别'])->label('上一级质检类别：');?>
 
                 </div>
                 <div class="box-footer">
