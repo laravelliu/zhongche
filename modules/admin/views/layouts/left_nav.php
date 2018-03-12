@@ -41,9 +41,13 @@ $d = [
 ];
 $f = [];
 $g = [
-        'admin/param/car-type',
-        'admin/param/add-vehicle-type',
-        'admin/param/edit-vehicle-type'
+        'admin/vehicle/index',
+        'admin/vehicle/vehicle-model',
+        'admin/vehicle/add-vehicle-model',
+        'admin/vehicle/edit-vehicle-model',
+        'admin/vehicle/vehicle-type',
+        'admin/vehicle/add-vehicle-type',
+        'admin/vehicle/edit-vehicle-type',
     ];
 
 ?>
@@ -179,9 +183,9 @@ $g = [
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="<?=Url::to(['vehicle/index'])?>"><i class="fa fa-circle-o"></i>车辆信息列表</a></li>
-                    <li><a href="<?=Url::to(['vehicle/vehicle-type'])?>"><i class="fa fa-circle-o"></i>车辆类型</a></li>
-                    <li <?php if(in_array($url, ['admin/param/car-type', 'admin/param/add-vehicle-type', 'admin/param/edit-vehicle-type'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['vehicle/vehicle-model'])?>"><i class="fa fa-circle-o"></i>车辆型号</a></li>
+                    <li ><a href="<?=Url::to(['vehicle/index'])?>"><i class="fa fa-circle-o"></i>车辆信息列表</a></li>
+                    <li <?php if(in_array($url, ['admin/vehicle/vehicle-type', 'admin/vehicle/add-vehicle-type', 'admin/vehicle/edit-vehicle-type'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['vehicle/vehicle-type'])?>"><i class="fa fa-circle-o"></i>车辆类型</a></li>
+                    <li <?php if(in_array($url, ['admin/vehicle/vehicle-model', 'admin/vehicle/add-vehicle-model', 'admin/vehicle/edit-vehicle-model'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['vehicle/vehicle-model'])?>"><i class="fa fa-circle-o"></i>车辆型号</a></li>
                 </ul>
             </li>
 

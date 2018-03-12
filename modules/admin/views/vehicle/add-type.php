@@ -10,7 +10,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
-$this->title = '添加车辆类别';
+$this->title = '添加车辆类型';
 
 //面包屑
 $this->params['breadcrumbs'][] = '车辆管理';
@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ])?>
                 <div class="box-body">
 
-                    <?=$form->field($model,'name')->textInput(['placeholder' => '请输入车辆类别'])->label('车辆类别名称：');?>
+                    <?=$form->field($model,'name')->textInput(['placeholder' => '请输入车辆类型'])->label('车辆类型名称：');?>
                 </div>
                 <div class="box-footer">
                     <div class="col-xs-3 col-sm-2 text-right"></div>

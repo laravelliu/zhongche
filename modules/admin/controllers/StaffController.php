@@ -75,7 +75,7 @@ class StaffController extends BaseController
                 'url' => Url::to(['workshop/add-station'])
             ];
 
-            return $this->render('workshop/empty',['data' => $data]);
+            return $this->render('/workshop/empty',['data' => $data]);
         }
 
         $model = new UserGroupAR();
