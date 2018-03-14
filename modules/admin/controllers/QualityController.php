@@ -246,6 +246,7 @@ class QualityController extends BaseController
                 $qualityGroupList[$k]['create_time'] = date('Y-m-d H:i:s', $v['create_time']);
                 $qualityGroupList[$k]['update_time'] = date('Y-m-d H:i:s', $v['update_time']);
                 $qualityGroupList[$k]['type'] = $qyalityTypeList[$v['type_id']];
+                $qualityGroupList[$k]['is_have_station'] = $v['is_have_station'] == 0 ? '是' : '否';
             }
         }
         return $this->ajaxReturn($qualityGroupList);

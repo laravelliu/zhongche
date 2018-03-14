@@ -12,9 +12,35 @@ use yii\helpers\Url;
 
 class VehicleController extends BaseController
 {
+    /**
+     * 车辆首页
+     * @return string
+     * @author: liuFangShuo
+     */
     public function actionIndex()
     {
         return $this->render('index');
+    }
+
+    /**
+     * 获取车辆信息
+     * @author: liuFangShuo
+     */
+    public function actionGetVehicleInfo()
+    {
+        $vehicleModel = new VehicleModel();
+        $vehicleList = $vehicleModel->getVehicleList();
+
+        if(!empty($vehicleList)){
+            foreach ($vehicleList as $k => $v) {
+                $vehicleList[$k]['create_time'] = date('Y-m-d H:i:s', $v['create_time']);
+                $vehicleList[$k]['update_time'] = date('Y-m-d H:i:s', $v['update_time']);
+                $vehicleList[$k]['vehicle_type'] = $v['vehicle_type_id'];
+                $vehicleList[$k]['vehicle_model'] = $v['vehicle_model_id'];
+            }
+        }
+
+        return $this->ajaxReturn($vehicleList);
     }
 
     /**
@@ -278,6 +304,5 @@ class VehicleController extends BaseController
         return $this->render('edit-type',['model' => $model]);
 
     }
-
 
 }

@@ -9,6 +9,7 @@
 namespace app\models;
 
 
+use app\models\ar\VehicleInfoAR;
 use app\models\ar\VehicleModelAR;
 use app\models\ar\VehicleTypeAR;
 use yii\base\Model;
@@ -33,5 +34,15 @@ class VehicleModel extends Model
     {
         $vehicleModelList = VehicleModelAR::find()->where(['is_deleted' => STATUS_FALSE])->asArray()->all();
         return $vehicleModelList;
+    }
+
+    /**
+     * 获取车辆列表
+     * @author: liuFangShuo
+     */
+    public function getVehicleList()
+    {
+        $vehicleList = VehicleInfoAR::find()->where(['is_deleted' => STATUS_FALSE])->asArray()->all();
+        return $vehicleList;
     }
 }

@@ -57,7 +57,7 @@ class QualityModel extends Model
      */
     public function getQualityGroup()
     {
-        $qualityList = QualityInspectionGroupAR::find()->where([])->asArray()->all();
+        $qualityList = QualityInspectionGroupAR::find()->where(['is_deleted' => STATUS_FALSE])->asArray()->all();
         return $qualityList;
     }
 

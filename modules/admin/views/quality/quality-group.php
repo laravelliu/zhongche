@@ -38,6 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <th>id</th>
                             <th>质检项组</th>
                             <th>所属质检类别</th>
+                            <th>是否为入厂鉴定</th>
                             <th>创建时间</th>
                             <th>更新时间</th>
                             <th>操作</th>
@@ -101,6 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
             {data: "id"},
             {data: "name"},
             {data: "type"},
+            {data: "is_have_station"},
             {data: "create_time"},
             {data: "update_time"},
             {

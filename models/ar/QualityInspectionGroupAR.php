@@ -9,10 +9,11 @@ use Yii;
  *
  * @property int $id 质检组
  * @property string $name 质检组名称
- * @property int $type_id 质检种类
- * @property int $is_deleted
+ * @property int $type_id 质检类别ID
+ * @property int $is_deleted 是否删除
  * @property int $create_time 创建时间
  * @property int $update_time 更新时间
+ * @property int $is_have_station 是否有工位（1：有 0：没有）
  */
 class QualityInspectionGroupAR extends \app\models\ar\BaseAR
 {
@@ -28,8 +29,8 @@ class QualityInspectionGroupAR extends \app\models\ar\BaseAR
     {
         $parent = parent::scenarios();
         $self = [
-            'create' => ['name', 'type_id'],
-            'update' => ['name', 'type_id'],
+            'create' => ['name', 'type_id', 'is_have_station'],
+            'update' => ['name', 'type_id', 'is_have_station'],
         ];
 
         return  array_merge($parent,$self);
@@ -44,7 +45,7 @@ class QualityInspectionGroupAR extends \app\models\ar\BaseAR
             [['type_id'], 'required', 'on' => 'default'],
             [['type_id','is_deleted'], 'integer', 'on' => 'default'],
             [['name'], 'string', 'max' => 64, 'on' => 'default'],
-            [['name', 'type_id'], 'required', 'message' => '不能为空', 'on' =>['create','update']]
+            [['name', 'type_id','is_have_station'], 'required', 'message' => '不能为空', 'on' =>['create','update']]
         ];
     }
 
@@ -60,6 +61,7 @@ class QualityInspectionGroupAR extends \app\models\ar\BaseAR
             'is_deleted' => 'Is Deleted',
             'create_time' => 'Create Time',
             'update_time' => 'Update Time',
+            'is_have_station' => 'Is Have Station',
         ];
     }
 

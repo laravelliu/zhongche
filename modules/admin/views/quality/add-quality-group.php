@@ -42,6 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     <?=$form->field($model,'name')->textInput(['placeholder' => '请输入质检项组名称'])->label('质检项组：');?>
                     <?=$form->field($model,'type_id')->dropDownList($qualityType)->label('质检项类别：');?>
+                    <?=$form->field($model,'is_have_station')->radioList([0 => '是', 1 => '否'])->label('是否为入厂鉴定：');?>
 
                 </div>
                 <div class="box-footer">
