@@ -10,6 +10,7 @@ namespace app\models;
 
 
 use app\models\ar\DepartmentAR;
+use app\models\ar\PermissionAR;
 use app\models\ar\RoleAR;
 use app\models\ar\UserGroupAR;
 use yii\base\Model;
@@ -43,6 +44,16 @@ class StaffModel extends Model
     {
         $role = RoleAR::find()->where(['is_deleted' => STATUS_FALSE])->asArray()->all();
         return $role;
+    }
+
+    /**
+     * 获取权限
+     * @author: liuFangShuo
+     */
+    public function getPermission()
+    {
+        $permission = PermissionAR::find()->where(['is_deleted' => STATUS_FALSE])->asArray()->all();
+        return $permission;
     }
 
 }

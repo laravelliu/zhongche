@@ -87,19 +87,17 @@ class StaffController extends BaseController
             $model->station_id = $sId;
         }
 
-        if (Yii::$app->request->isPost) {
-            if(Yii::$app->request->isPost){
+        if(Yii::$app->request->isPost){
 
-                if($model->load($post = Yii::$app->request->post()) && $model->validate()){
-                    if ($model->saveStaffGroup()) {
-                        //成功跳转
-                        return $this->redirect(Url::to(['staff/staff-group']));
-                    }
+            if($model->load($post = Yii::$app->request->post()) && $model->validate()){
+                if ($model->saveStaffGroup()) {
+                    //成功跳转
+                    return $this->redirect(Url::to(['staff/staff-group']));
                 }
-
-                $model->getErrors();
-
             }
+
+            $model->getErrors();
+
         }
 
         return $this->render('add-staff-group',['model' => $model, 'station' => $station]);
