@@ -84,6 +84,11 @@ class AdminAsset extends AssetBundle
                     'bower_components/jquery-slimscroll/jquery.slimscroll.min.js'
                     ];
                 break;
+            case "admin/quality/add-item":
+                $js = [
+                    '/js/select.js'
+                ];
+                break;
             default:
                 break;
 

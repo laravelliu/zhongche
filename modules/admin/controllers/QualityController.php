@@ -405,5 +405,45 @@ class QualityController extends BaseController
     {
         return $this->render('task');
     }
+
+    /**
+     * 给质检项组分配质检项
+     * @author: liuFangShuo
+     */
+    public function actionAddItem()
+    {
+        $id = Yii::$app->request->get('id', null);
+
+        //获取质检项组
+        $model = new QualityModel();
+        $qualityGroup = $model->getQualityGroupById($id);
+
+        if(empty($id) || empty($model)){
+            return $this->redirect(Url::to(['quality/quality-group']));
+        }
+
+        //获取所有质检项
+        $qualityListAll = $model->getQualityList();
+        $all = ArrayHelper::map($qualityListAll,'id','title');
+
+        $selected = [];
+        $unSelect = [];
+        $selectedItem = $model->getQualityItemByGroupId($id);
+
+        if (empty($selectedItem)) {
+
+            $unSelect = $all;
+        } else {
+
+            //已经选择的类型
+            foreach ($selectedItem as $k => $v) {
+                $selected[$v['item_id']] = $all[$v['item_id']];
+            }
+
+            $unSelect = array_diff($all,$selected);
+        }
+
+        return $this->render('add-item', ['group' => $qualityGroup, 'qualityItem' => ['all' => $all, 'selected' => $selected, 'unSelect' => $unSelect]]);
+    }
 }
 

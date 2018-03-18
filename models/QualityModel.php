@@ -12,6 +12,7 @@ namespace app\models;
 use app\models\ar\ProcessAR;
 use app\models\ar\QualityInspectionGroupAR;
 use app\models\ar\QualityInspectionItemAR;
+use app\models\ar\QualityInspectionGroupItemAR;
 use app\models\ar\TypeAR;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
@@ -69,5 +70,28 @@ class QualityModel extends Model
     {
         $qualityProcess = ProcessAR::find()->where(['is_deleted' =>STATUS_FALSE])->asArray()->all();
         return $qualityProcess;
+    }
+
+    /**
+     * 根据id获取质检项组
+     * @param string $id
+     * @return null|static
+     * @author: liuFangShuo
+     */
+    public function getQualityGroupById(string $id)
+    {
+        return QualityInspectionGroupAR::findOne(['is_deleted' => STATUS_FALSE, 'id' => $id]);
+    }
+
+    /**
+     * 根据质检项组获取质检项
+     * @param string $groupId
+     * @return array|\yii\db\ActiveRecord[]
+     * @author: liuFangShuo
+     */
+    public function getQualityItemByGroupId(string $groupId)
+    {
+        $itemId = QualityInspectionGroupItemAR::find()->where(['group_id' => $groupId])->asArray()->all();
+        return $itemId;
     }
 }
