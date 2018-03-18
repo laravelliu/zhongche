@@ -40,7 +40,7 @@ class QualityModel extends Model
     }
 
     /**
-     * 质检类别列表
+     * 质检类型列表
      * @author: liuFangShuo
      */
     public function qualityTypeList()

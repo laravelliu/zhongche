@@ -8,7 +8,7 @@
 
 use yii\helpers\Url;
 use app\widgets\JsBlock;
-$this->title = '质检类别列表';
+$this->title = '质检类型列表';
 
 //面包屑
 $this->params['breadcrumbs'][] = '质检管理';
@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <h3 class="box-title"></h3>
                     <div class="box-tools">
                         <a href="<?=Url::to(['quality/add-quality-type'])?>" class="btn btn-default btn-sm">
-                            <i class="fa fa-play"></i>添加质检类别
+                            <i class="fa fa-play"></i>添加质检类型
                         </a>
 
                     </div>
@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <thead>
                         <tr>
                             <th>id</th>
-                            <th>质检类别名称</th>
+                            <th>质检类型名称</th>
                             <th>创建时间</th>
                             <th>更新时间</th>
                             <th>操作</th>
@@ -73,14 +73,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'language':{
             "sProcessing": "处理中...",
             "sLengthMenu": "显示 _MENU_ 项结果",
-            "sZeroRecords": "没有匹配质检类别信息",
+            "sZeroRecords": "没有匹配质检类型信息",
             "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
             "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
             "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
             "sInfoPostFix": "",
             "sSearch": "搜索:",
             "sUrl": "",
-            "sEmptyTable": "暂无质检类别信息",
+            "sEmptyTable": "暂无质检类型信息",
             "sLoadingRecords": "载入中...",
             "sInfoThousands": ",",
             "oPaginate": {

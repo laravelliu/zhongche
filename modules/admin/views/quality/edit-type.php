@@ -10,7 +10,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
-$this->title = '编辑质检类别';
+$this->title = '编辑质检类型';
 
 //面包屑
 $this->params['breadcrumbs'][] = '质检管理';
@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <h3 class="box-title"></h3>
                     <div class="box-tools">
                         <a href="<?=Url::to(['quality/quality-type'])?>" class="btn btn-default btn-sm">
-                            <i class="fa fa-play"></i>质检类别列表
+                            <i class="fa fa-play"></i>质检类型列表
                         </a>
                     </div>
                 </div>
@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]
                 ])?>
                 <div class="box-body">
-                    <?=$form->field($model,'name')->textInput(['placeholder' => '请输入质检类别'])->label('质检类别名称：');?>
+                    <?=$form->field($model,'name')->textInput(['placeholder' => '请输入质检类型'])->label('质检类型名称：');?>
 
                 </div>
                 <div class="box-footer">

@@ -13,7 +13,7 @@ use Yii;
  * @property int $is_deleted 是否删除
  * @property int $create_time 创建时间
  * @property int $update_time 更新时间
- * @property int $is_have_station 是否有工位（1：有 0：没有）
+ * @property int $item_type 是否有工位（1：有 0：没有）
  */
 class QualityInspectionGroupAR extends \app\models\ar\BaseAR
 {
@@ -29,8 +29,8 @@ class QualityInspectionGroupAR extends \app\models\ar\BaseAR
     {
         $parent = parent::scenarios();
         $self = [
-            'create' => ['name', 'type_id', 'is_have_station'],
-            'update' => ['name', 'type_id', 'is_have_station'],
+            'create' => ['name', 'type_id', 'item_type'],
+            'update' => ['name', 'type_id', 'item_type'],
         ];
 
         return  array_merge($parent,$self);
@@ -45,7 +45,8 @@ class QualityInspectionGroupAR extends \app\models\ar\BaseAR
             [['type_id'], 'required', 'on' => 'default'],
             [['type_id','is_deleted'], 'integer', 'on' => 'default'],
             [['name'], 'string', 'max' => 64, 'on' => 'default'],
-            [['name', 'type_id','is_have_station'], 'required', 'message' => '不能为空', 'on' =>['create','update']]
+            [['name', 'type_id','item_type'], 'required', 'message' => '不能为空', 'on' =>['create','update']],
+            ['item_type', 'in', 'range' => array_keys(Yii::$app->params['quality_item_type']), 'message'=> '不在指定范围', 'on' =>['create', 'update']]
         ];
     }
 
@@ -61,7 +62,7 @@ class QualityInspectionGroupAR extends \app\models\ar\BaseAR
             'is_deleted' => 'Is Deleted',
             'create_time' => 'Create Time',
             'update_time' => 'Update Time',
-            'is_have_station' => 'Is Have Station',
+            'item_type' => 'Item Type',
         ];
     }
 

@@ -218,9 +218,9 @@ class QualityController extends BaseController
 
         if(empty($qualityType)){
             $data = [
-                'title' => '缺少质检类别',
-                'content' => '没有质检类别，质检项组需要质检类别信息作为前置条件，请添加质检类别。',
-                'button' => '添加质检类别',
+                'title' => '缺少质检类型',
+                'content' => '没有质检类型，质检项组需要质检类型信息作为前置条件，请添加质检类型。',
+                'button' => '添加质检类型',
                 'url' => Url::to(['quality/add-quality-type'])
             ];
             return $this->render('/workshop/empty', ['data' => $data]);
@@ -246,7 +246,7 @@ class QualityController extends BaseController
                 $qualityGroupList[$k]['create_time'] = date('Y-m-d H:i:s', $v['create_time']);
                 $qualityGroupList[$k]['update_time'] = date('Y-m-d H:i:s', $v['update_time']);
                 $qualityGroupList[$k]['type'] = $qyalityTypeList[$v['type_id']];
-                $qualityGroupList[$k]['is_have_station'] = $v['is_have_station'] == 0 ? '是' : '否';
+                $qualityGroupList[$k]['item_type'] = Yii::$app->params['quality_item_type'][$v['item_type']];
             }
         }
         return $this->ajaxReturn($qualityGroupList);
@@ -395,6 +395,15 @@ class QualityController extends BaseController
         }
 
         return $this->render('edit-quality-process',['model'=>$model]);
+    }
+
+    /**
+     *  质检任务
+     * @author: liuFangShuo
+     */
+    public function actionTask()
+    {
+        return $this->render('task');
     }
 }
 

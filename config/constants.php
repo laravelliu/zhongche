@@ -25,3 +25,8 @@ define('PARAM_TYPE_VEHICLE_TYPE', 1);
 
 define('QUALITY_PROCESS_ITEM',1);
 define('QUALITY_PROCESS_GROUP',2);
+
+//质检项类别（入厂和整车质检没有工位）
+define('QUALITY_ITEM_TYPE_BEGIN',1);    //入厂
+define('QUALITY_ITEM_TYPE_DURING',2);   //质检
+define('QUALITY_ITEM_TYPE_OVER',3);     //整车质检

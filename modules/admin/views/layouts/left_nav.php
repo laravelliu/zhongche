@@ -74,7 +74,9 @@ $d = [
     'admin/quality/edit-quality-item',
     'admin/quality/quality-group',
 ];
-$f = [];
+$f = [
+    'admin/quality/task'
+];
 $g = [
     'admin/vehicle/index',
     'admin/vehicle/vehicle-model',
@@ -162,6 +164,7 @@ $g = [
                     <li <?php if(in_array($url, ['admin/workshop/station', 'admin/workshop/add-station', 'admin/workshop/edit-station'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['workshop/station'])?>"><i class="fa fa-circle-o"></i>工位管理</a></li>
                 </ul>
             </li>
+
             <li class="treeview <?php if(in_array($url,$c)):?>active<?php endif;?>">
                 <a href="#">
                     <i class="fa fa-edit"></i>
@@ -174,7 +177,8 @@ $g = [
                     <li <?php if(in_array($url, ['admin/quality/quality-process', 'admin/quality/add-quality-process', 'admin/quality/edit-quality-process'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['quality/quality-process'])?>"><i class="fa fa-circle-o"></i>质检流程管理</a></li>
                 </ul>
             </li>
-            <li class="treeview">
+
+            <li class="treeview <?php if(in_array($url,$f)):?>active<?php endif;?>">
                 <a href="#">
                     <i class="fa fa-table"></i> <span>质检任务管理</span>
                     <span class="pull-right-container">
@@ -182,9 +186,10 @@ $g = [
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="../tables/simple.html"><i class="fa fa-circle-o"></i>质检任务</a></li>
+                    <li <?php if(in_array($url, ['admin/quality/task'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['quality/task'])?>"><i class="fa fa-circle-o"></i>质检任务</a></li>
                 </ul>
             </li>
+
             <li class="treeview <?php if(in_array($url,$d)):?>active<?php endif;?>">
                 <a href="#">
                     <i class="fa fa-table"></i> <span>质检管理</span>
@@ -193,9 +198,8 @@ $g = [
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li <?php if(in_array($url, ['admin/quality/quality-type', 'admin/quality/add-quality-type', 'admin/quality/edit-quality-type'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['quality/quality-type'])?>"><i class="fa fa-circle-o"></i>质检类别管理</a></li>
+                    <li <?php if(in_array($url, ['admin/quality/quality-type', 'admin/quality/add-quality-type', 'admin/quality/edit-quality-type'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['quality/quality-type'])?>"><i class="fa fa-circle-o"></i>质检类型管理</a></li>
                     <li <?php if(in_array($url, ['admin/quality/quality-group'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['quality/quality-group'])?>"><i class="fa fa-circle-o"></i>质检项组管理</a></li>
-                    <li><a href="../tables/data.html"><i class="fa fa-circle-o"></i>工位质检项组管理</a></li>
                     <li <?php if(in_array($url, ['admin/quality/index', 'admin/quality/add-quality-item', 'admin/quality/edit-quality-item'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['quality/index'])?>"><i class="fa fa-circle-o"></i>质检项管理</a></li>
                 </ul>
             </li>
@@ -208,7 +212,7 @@ $g = [
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="#"><i class="fa fa-circle-o"></i>配置质检类别拥有产线</a></li>
+                    <li><a href="#"><i class="fa fa-circle-o"></i>配置质检类型拥有产线</a></li>
                 </ul>
             </li>
 
@@ -220,7 +224,7 @@ $g = [
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li ><a href="<?=Url::to(['vehicle/index'])?>"><i class="fa fa-circle-o"></i>车辆信息列表</a></li>
+                    <li <?php if(in_array($url,['admin/vehicle/index'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['vehicle/index'])?>"><i class="fa fa-circle-o"></i>车辆信息列表</a></li>
                     <li <?php if(in_array($url, ['admin/vehicle/vehicle-type', 'admin/vehicle/add-vehicle-type', 'admin/vehicle/edit-vehicle-type'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['vehicle/vehicle-type'])?>"><i class="fa fa-circle-o"></i>车辆类型</a></li>
                     <li <?php if(in_array($url, ['admin/vehicle/vehicle-model', 'admin/vehicle/add-vehicle-model', 'admin/vehicle/edit-vehicle-model'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['vehicle/vehicle-model'])?>"><i class="fa fa-circle-o"></i>车辆型号</a></li>
                 </ul>
