@@ -71,19 +71,29 @@ class VehicleModelAR extends \app\models\ar\BaseAR
      */
     public function saveModel()
     {
-        //查找一下
-        $model = static::findOne(['name' => trim($this->name), 'vehicle_type_id' => $this->vehicle_type_id, 'is_deleted' => STATUS_FALSE]);
 
         //创建时必须不能存在
-        if($this->getScenario() == 'create' && !empty($model)){
-            $this->addError('name', '车辆型号已存在');
-            return false;
+        if($this->getScenario() == 'create'){
+            //查找一下
+            $model = static::findOne(['name' => trim($this->name), 'vehicle_type_id' => $this->vehicle_type_id, 'is_deleted' => STATUS_FALSE]);
+
+            if(!empty($model)){
+                $this->addError('name', '车辆型号已存在');
+                return false;
+            }
+
         }
 
         //更新时必须存在
-        if($this->getScenario() == 'update' && empty($model)){
-            $this->addError('name', '车辆型号不存在');
-            return false;
+        if($this->getScenario() == 'update'){
+
+            $model =  static::findOne(['id' => $this->id, 'is_deleted' => STATUS_FALSE]);
+
+            if(empty($model)){
+                $this->addError('name', '车辆型号不存在');
+                return false;
+            }
+
         }
 
         if(empty($model)){

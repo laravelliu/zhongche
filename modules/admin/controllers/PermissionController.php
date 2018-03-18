@@ -82,10 +82,18 @@ class PermissionController extends BaseController
         if(empty($id) || empty($model)){
             return $this->redirect(Url::to(['permission/index']));
         }
+
         $model->scenarios('update');
 
         if(Yii::$app->request->isPost){
+            if($model->load($post = Yii::$app->request->post()) && $model->validate()){
+                if ($model->savePermission()) {
+                    //成功跳转
+                    return $this->redirect(Url::to(['permission/index']));
+                }
+            }
 
+            $model->getErrors();
         }
 
         $staffModel = new StaffModel();

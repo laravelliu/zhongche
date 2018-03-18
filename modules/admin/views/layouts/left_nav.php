@@ -12,43 +12,78 @@ $user = $this->params['userInfo'];
 $url = Yii::$app->request->getPathInfo();
 
 $a = [
-        'admin/admin/index',
+    'admin/staff/staff-group',
+    'admin/staff/add-group',
+    'admin/staff/edit-staff-group',
+
+    'admin/department/index',
+    'admin/department/add-department',
+    'admin/department/edit-department',
+
+    'admin/role/index',
+    'admin/role/edit-role',
+    'admin/role/add-role',
+
+    'admin/permission/index',
+    'admin/permission/add-permission',
+    'admin/permission/edit-permission',
+
+    'admin/admin/index',
+];
+$a1 = [
+    'admin/staff/staff-group',
+    'admin/staff/add-group',
+    'admin/staff/edit-staff-group'
+];
+$a2 = [
+    'admin/department/index',
+    'admin/department/add-department',
+    'admin/department/edit-department',
+
+    'admin/role/index',
+    'admin/role/edit-role',
+    'admin/role/add-role',
+
+    'admin/permission/index',
+    'admin/permission/add-permission',
+    'admin/permission/edit-permission'
+
 ];
 $b = [
-        'admin/workshop/workshop',
-        'admin/workshop/add-workshop',
-        'admin/workshop/edit-workshop',
-        'admin/workshop/work-area',
-        'admin/workshop/add-work-area',
-        'admin/workshop/edit-work-area',
-        'admin/workshop/station',
-        'admin/workshop/add-station',
-        'admin/workshop/edit-station'
+    'admin/workshop/workshop',
+    'admin/workshop/add-workshop',
+    'admin/workshop/edit-workshop',
+    'admin/workshop/work-area',
+    'admin/workshop/add-work-area',
+    'admin/workshop/edit-work-area',
+    'admin/workshop/station',
+    'admin/workshop/add-station',
+    'admin/workshop/edit-station'
 ];
 $c = [
-        'admin/quality/quality-process',
-        'admin/quality/add-quality-process',
-        'admin/quality/edit-quality-process'
+    'admin/quality/quality-process',
+    'admin/quality/add-quality-process',
+    'admin/quality/edit-quality-process'
 ];
 $d = [
-        'admin/quality/quality-type',
-        'admin/quality/add-quality-type',
-        'admin/quality/edit-quality-type',
-        'admin/quality/index',
-        'admin/quality/add-quality-item',
-        'admin/quality/edit-quality-item',
-        'admin/quality/quality-group',
+    'admin/quality/quality-type',
+    'admin/quality/add-quality-type',
+    'admin/quality/edit-quality-type',
+    'admin/quality/index',
+    'admin/quality/add-quality-item',
+    'admin/quality/edit-quality-item',
+    'admin/quality/quality-group',
 ];
 $f = [];
 $g = [
-        'admin/vehicle/index',
-        'admin/vehicle/vehicle-model',
-        'admin/vehicle/add-vehicle-model',
-        'admin/vehicle/edit-vehicle-model',
-        'admin/vehicle/vehicle-type',
-        'admin/vehicle/add-vehicle-type',
-        'admin/vehicle/edit-vehicle-type',
-    ];
+    'admin/vehicle/index',
+    'admin/vehicle/vehicle-model',
+    'admin/vehicle/add-vehicle-model',
+    'admin/vehicle/edit-vehicle-model',
+    'admin/vehicle/vehicle-type',
+    'admin/vehicle/add-vehicle-type',
+    'admin/vehicle/edit-vehicle-type',
+];
 
 ?>
 <?php if(in_array($url,[''])):?>active<?php endif;?>
@@ -83,28 +118,30 @@ $g = [
                         <a href="<?=Url::to(['admin/index'])?>"><i class="fa fa-circle-o"></i>人员列表</a>
                     </li>
 
-                    <li class="treeview">
+                    <li class="treeview <?php if(in_array($url,$a1)):?>menu-open<?php endif?>">
                         <a href="#"><i class="fa fa-circle-o"></i>员工管理
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
-                        <ul class="treeview-menu">
-                            <li><a href="<?=Url::to(['staff/staff-group'])?>"><i class="fa fa-circle-o"></i>员工组管理</a></li>
+                        <ul class="treeview-menu" <?php if(in_array($url,$a1)):?>style="display: block;"<?php endif;?>>
+                            <li <?php if(in_array($url,['admin/staff/staff-group','admin/staff/add-group','admin/staff/edit-staff-group'])):?>class="active"<?php endif;?>>
+                                <a href="<?=Url::to(['staff/staff-group'])?>"><i class="fa fa-circle-o"></i>员工组管理</a>
+                            </li>
                         </ul>
                     </li>
 
-                    <li class="treeview">
+                    <li class="treeview <?php if(in_array($url,$a2)):?>menu-open<?php endif?>">
                         <a href="#"><i class="fa fa-circle-o"></i>其他管理
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
-                        <ul class="treeview-menu">
-                            <li><a href="<?=Url::to(['department/index'])?>"><i class="fa fa-circle-o"></i>部门管理</a></li>
-                            <li><a href="<?=Url::to(['role/index'])?>"><i class="fa fa-circle-o"></i>角色管理</a></li>
-                            <li><a href="<?=Url::to(['permission/index'])?>"><i class="fa fa-circle-o"></i>权限管理</a></li>
-                            <li><a href="<?=Url::to(['role/distribution'])?>"><i class="fa fa-circle-o"></i>分配权限</a></li>
+                        <ul class="treeview-menu" <?php if(in_array($url,$a2)):?>style="display: block;"<?php endif;?>>
+                            <li <?php if(in_array($url,['admin/department/index','admin/department/add-department','admin/department/edit-department'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['department/index'])?>"><i class="fa fa-circle-o"></i>部门管理</a></li>
+                            <li <?php if(in_array($url,['admin/role/index','admin/role/edit-role','admin/role/add-role'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['role/index'])?>"><i class="fa fa-circle-o"></i>角色管理</a></li>
+                            <li <?php if(in_array($url,['admin/permission/index','admin/permission/add-permission','admin/permission/edit-permission'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['permission/index'])?>"><i class="fa fa-circle-o"></i>权限管理</a></li>
+                            <li <?php if(in_array($url,[])):?>class="active"<?php endif;?>><a href="<?=Url::to(['role/distribution'])?>"><i class="fa fa-circle-o"></i>分配权限</a></li>
                         </ul>
                     </li>
 

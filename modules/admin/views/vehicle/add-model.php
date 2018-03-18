@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     <?=$form->field($model,'name')->textInput(['placeholder' => '请输入车辆型号'])->label('车辆型号名称：');?>
                     <?=$form->field($model,'vehicle_type_id')->dropDownList($vehicleType,['prompt' => '请选择车辆类型'])->label('所属车辆类型：');?>
-                    <?=$form->field($model,'type_id')->dropDownList($qualityType,['prompt' => '请选择质检流程'])->label('车辆型号名称：');?>
+                    <?=$form->field($model,'type_id')->dropDownList($qualityType,['prompt' => '请选择质检流程'])->label('所需质检流程：');?>
                 </div>
                 <div class="box-footer">
                     <div class="col-xs-3 col-sm-2 text-right"></div>

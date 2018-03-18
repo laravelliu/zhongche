@@ -128,8 +128,11 @@ class StaffController extends BaseController
             $model->getErrors();
         }
 
+        $workshopModel = new WorkshopModel();
+        $stationList = $workshopModel->getStationList();
+        $station = ArrayHelper::map($stationList,'id','name');
 
-        return $this->render('edit-staff-group',['model' => $model]);
+        return $this->render('edit-staff-group',['model' => $model, 'station' => $station]);
     }
 }
 
