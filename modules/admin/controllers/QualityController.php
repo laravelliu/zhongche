@@ -406,6 +406,7 @@ class QualityController extends BaseController
         return $this->render('task');
     }
 
+
     /**
      * 给质检项组分配质检项
      * @author: liuFangShuo
@@ -443,7 +444,51 @@ class QualityController extends BaseController
             $unSelect = array_diff($all,$selected);
         }
 
-        return $this->render('add-item', ['group' => $qualityGroup, 'qualityItem' => ['all' => $all, 'selected' => $selected, 'unSelect' => $unSelect]]);
+        return $this->render('add-item', ['group' => $qualityGroup, 'qualityItem' => ['all' => $all, 'selected' => $selected, 'unSelect' => $unSelect,'id'=>$id,'url'=>Url::to(['quality/save-item'])]]);
+    }
+
+    /**
+     * 质检项组保存质检项
+     * @author: liuFangShuo
+     */
+    public function actionSaveItem()
+    {
+        if (Yii::$app->request->isAjax) {
+            $select = Yii::$app->request->post('selected',null);
+            $unSelect = Yii::$app->request->post('unSelect',null);
+            $id = Yii::$app->request->post('id', null);
+
+            if (empty($id)) {
+                return $this->ajaxReturn([],1,'不存在id');
+            }
+
+            $selectId = [];
+            $unSelectId = [];
+
+            if (!empty($select)) {
+                foreach ($select as $k => $v) {
+                    $selectId[] =  $v['0'];
+                }
+            }
+
+            if (!empty($unSelect)) {
+                foreach ($unSelect as $k => $v) {
+                    $unSelectId[] =  $v['0'];
+                }
+            }
+
+
+            $model = new QualityModel();
+            $res = $model->saveGroupItem($id,$selectId,$unSelectId);
+
+            if($res){
+                return $this->ajaxReturn([]);
+            }
+
+            return $this->ajaxReturn([],1,$model->getFirstError('name'));
+        }
+
+        return false;
     }
 }
 

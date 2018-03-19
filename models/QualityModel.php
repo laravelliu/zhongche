@@ -16,6 +16,8 @@ use app\models\ar\QualityInspectionGroupItemAR;
 use app\models\ar\TypeAR;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
+use Yii;
+use yii\web\NotFoundHttpException;
 
 class QualityModel extends Model
 {
@@ -93,5 +95,71 @@ class QualityModel extends Model
     {
         $itemId = QualityInspectionGroupItemAR::find()->where(['group_id' => $groupId])->asArray()->all();
         return $itemId;
+    }
+
+    /**
+     * 更改质检组的质检项
+     * @author: liuFangShuo
+     */
+    public function saveGroupItem($id, $select = [], $delete = [])
+    {
+        $trans = Yii::$app->db->beginTransaction();
+
+        try{
+            $qualityGroup = $this->getQualityGroupById($id);
+            if(empty($qualityGroup)){
+                throw new NotFoundHttpException('质检组不存在');
+            }
+
+
+            if (!empty($delete)) {
+                $arrDel = [];
+                foreach ($delete as $k => $v){
+                    $arrDel[] = [$id,$v];
+                }
+
+                $sql = "delete from zc_quality_inspection_group_item where group_id=$id and item_id in (" .implode(',',$delete).")";
+
+                $res= \Yii::$app->db->createCommand($sql)->query();
+
+                if(!$res){
+                    throw new NotFoundHttpException('删除失败');
+                }
+            }
+
+            if (!empty($select)) {
+
+                $haveSelect = QualityInspectionGroupItemAR::find()->where(['group_id' =>$id, 'item_id' =>$select])->asArray()->all();
+
+                if (!empty($haveSelect)) {
+                    $haveSelect = array_column($haveSelect,'item_id');
+                }
+
+                $diff = array_diff($select,$haveSelect);
+
+
+                if (!empty($diff)) {
+                    $arrSelect = [];
+                    foreach ($diff as $k => $v){
+                        $arrSelect[] = [$id,$v,time(),time()];
+                    }
+
+                    $res= \Yii::$app->db->createCommand()->batchInsert(QualityInspectionGroupItemAR::tableName(), ['group_id', 'item_id', 'create_time', 'update_time'], $arrSelect)->execute();
+
+                    if(!$res){
+                        throw new NotFoundHttpException('新增失败');
+                    }
+                }
+
+            }
+
+            $trans->commit();
+            return true;
+
+        } catch (\Exception $e){
+            $trans->rollBack();
+            $this->addError('name',$e->getMessage());
+            return false;
+        }
     }
 }

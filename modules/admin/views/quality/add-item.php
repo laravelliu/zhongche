@@ -6,6 +6,7 @@
  * Time: 14:43
  */
 use app\widgets\JsBlock;
+use yii\helpers\Url;
 
 $this->title = '分配质检项';
 
@@ -18,11 +19,18 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-md-12">
         <div class="box box-primary">
             <div class="box-header with-border">
-                <h4><?=$group['name']?></h4>
+                <h3 class="box-title">质检项组名称：<span><?=$group['name']?></span></h3>
+                <div class="box-tools">
+                    <a href="<?=Url::to(['quality/quality-group'])?>" class="btn btn-default btn-sm">
+                        <i class="fa fa-play"></i>质检项组列表
+                    </a>
+                </div>
+
             </div>
+
             <div class="box-body">
                 <div class="col-md-6 pull-left">
-                    <h5>未选择</h5>
+                    <h5>未选择质检项</h5>
                     <select multiple="multiple" id="unSelect" style="width:100%;height: 350px;">
                         <?php if(!empty($qualityItem['unSelect'])):?>
                             <?php foreach ($qualityItem['unSelect'] as $k => $v):?>
@@ -41,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
 
                 <div class="col-md-6 pull-left">
-                    <h5>已选择</h5>
+                    <h5>已选择质检项</h5>
                     <select multiple="multiple" id="selected" style="width: 100%;height: 350px;">
                         <?php if(!empty($qualityItem['selected'])):?>
                             <?php foreach ($qualityItem['selected'] as $k => $v):?>
@@ -62,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
 
                 <div style="margin-top: 20px;" class="col-md-12 col-sm-offset-5">
-                    <a style="width: 100px;" class="btn btn-block btn-success">保存</a>
+                    <a id="save_info" style="width: 100px;" class="btn btn-block btn-success">保存</a>
                 </div>
             </div>
         </div>
