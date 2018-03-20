@@ -77,6 +77,7 @@ class AdminAsset extends AssetBundle
             case 'admin/role/index':
             case 'admin/permission/index':
             case 'admin/quality/task':
+            case 'admin/admin/index':
                 $css = ['bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css'];
                 $js = [
                     'bower_components/datatables.net/js/jquery.dataTables.min.js',
@@ -85,6 +86,7 @@ class AdminAsset extends AssetBundle
                     ];
                 break;
             case "admin/quality/add-item":
+            case "admin/role/distribution":
                 $js = [
                     '/js/select.js'
                 ];

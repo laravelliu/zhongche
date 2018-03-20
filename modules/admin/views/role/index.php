@@ -102,7 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
             {data: "update_time"},
             {
                 render:function (data,type,full) {
-                    return '<a href="edit-role?id=' + full['id'] + '">编辑</a>&nbsp<a href="<?=Url::to(['staff/add-group'])?>?id=' + full['id'] + '">分配权限</a>';
+                    return '<a href="edit-role?id=' + full['id'] + '">编辑</a>&nbsp<a href="<?=Url::to(['role/distribution'])?>?id=' + full['id'] + '">分配权限</a>';
                 }
             }
         ]

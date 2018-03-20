@@ -9,38 +9,42 @@ $this->title = '人员列表';
 $this->params['breadcrumbs'][] = '人员管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-    <!-- Main content -->
-    <section class="content">
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="box box-info">
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                        <table id="car-type-table" class="table table-bordered table-striped">
-                            <thead>
-                            <tr>
-                                <th>id</th>
-                                <th>车辆类别</th>
-                                <th>创建时间</th>
-                                <th>更新时间</th>
-                                <th>操作</th>
-                            </tr>
-                            </thead>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box box-info">
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="user-table" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>姓名</th>
+                            <th>手机号</th>
+                            <th>所在部门</th>
+                            <th>所在员工组</th>
+                            <th>是否能访问后台</th>
+                            <th>创建时间</th>
+                            <th>更改时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
 
-                        </table>
-                    </div>
-                    <!-- /.box-body -->
+                    </table>
                 </div>
-                <!-- /.box -->
+                <!-- /.box-body -->
             </div>
-            <!-- /.col -->
+            <!-- /.box -->
         </div>
-        <!-- /.row -->
-    </section>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
 
 <?php JsBlock::begin()?>
     <script>
-        $('#car-type-table').DataTable({
+        $('#user-table').DataTable({
             'paging'      : true,
             'lengthChange': false,
             'searching'   : true,
@@ -83,12 +87,22 @@ $this->params['breadcrumbs'][] = $this->title;
             "rowId": 'id',
             'columns': [
                 {data: "id"},
-                {data: "json"},
+                {data: "name"},
+                {data: "phone"},
+                {data: "department"},
+                {data: "group"},
+                {data: "is_admin", render:function (data,type,full) {
+                   if (data == 0) {
+                       return '否';
+                   }
+
+                   return '是';
+                }},
                 {data: "create_time"},
                 {data: "update_time"},
                 {
                     render:function (data,type,full) {
-                        return '<a href="edit-vehicle-type?id=' + full['id'] + '&type='+full['type']+'">编辑</a>';
+                        return '<a href="edit-vehicle-type?id=' + full['id'] + '">更改信息</a>&nbsp;<a href="edit-vehicle-type?id=' + full['id'] + '">分配角色</a>';
                     }
                 }
             ]
