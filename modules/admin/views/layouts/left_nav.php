@@ -150,7 +150,6 @@ $g = [
                             <li <?php if(in_array($url,['admin/department/index','admin/department/add-department','admin/department/edit-department'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['department/index'])?>"><i class="fa fa-circle-o"></i>部门管理</a></li>
                             <li <?php if(in_array($url,['admin/role/index','admin/role/edit-role','admin/role/add-role'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['role/index'])?>"><i class="fa fa-circle-o"></i>角色管理</a></li>
                             <li <?php if(in_array($url,['admin/permission/index','admin/permission/add-permission','admin/permission/edit-permission'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['permission/index'])?>"><i class="fa fa-circle-o"></i>权限管理</a></li>
-                            <li <?php if(in_array($url,[])):?>class="active"<?php endif;?>><a href="<?=Url::to(['role/distribution'])?>"><i class="fa fa-circle-o"></i>分配权限</a></li>
                         </ul>
                     </li>
 
