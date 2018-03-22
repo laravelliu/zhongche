@@ -490,5 +490,14 @@ class QualityController extends BaseController
 
         return false;
     }
+
+    /**
+     * 选择能做此质检类型的产线
+     * @author: liuFangShuo
+     */
+    public function actionDistributionArea()
+    {
+        return $this->render('distribution');
+    }
 }
 
