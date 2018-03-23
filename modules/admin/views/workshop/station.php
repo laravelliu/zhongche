@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <th>编号</th>
                             <th>上一级工位</th>
                             <th>所处位置</th>
-                            <th>所属产线</th>
+                            <th>所属工区</th>
                             <th>所属车间</th>
                             <th>创建时间</th>
                             <th>更新时间</th>

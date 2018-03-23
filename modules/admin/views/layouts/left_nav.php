@@ -114,6 +114,7 @@ $g = [
 
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
+            <li <?php if(in_array($url,['admin/index/index','admin'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['index/index'])?>"><i class="fa fa-circle-o"></i>控制台</a></li>
             <li class="treeview <?php if(in_array($url,$a)):?>active<?php endif;?>">
                 <a href="#">
                     <i class="fa fa-dashboard"></i>
@@ -166,7 +167,7 @@ $g = [
                 </a>
                 <ul class="treeview-menu">
                     <li <?php if(in_array($url, ['admin/workshop/workshop', 'admin/workshop/add-workshop', 'admin/workshop/edit-workshop'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['workshop/workshop'])?>"><i class="fa fa-circle-o"></i>车间管理</a></li>
-                    <li <?php if(in_array($url, ['admin/workshop/work-area', 'admin/workshop/add-work-area', 'admin/workshop/edit-work-area'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['workshop/work-area'])?>"><i class="fa fa-circle-o"></i>产线管理</a></li>
+                    <li <?php if(in_array($url, ['admin/workshop/work-area', 'admin/workshop/add-work-area', 'admin/workshop/edit-work-area'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['workshop/work-area'])?>"><i class="fa fa-circle-o"></i>工区管理</a></li>
                     <li <?php if(in_array($url, ['admin/workshop/station', 'admin/workshop/add-station', 'admin/workshop/edit-station'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['workshop/station'])?>"><i class="fa fa-circle-o"></i>工位管理</a></li>
                 </ul>
             </li>
@@ -218,7 +219,7 @@ $g = [
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="#"><i class="fa fa-circle-o"></i>配置质检类型拥有产线</a></li>
+                    <li><a href="#"><i class="fa fa-circle-o"></i>配置质检类型拥有工区</a></li>
                 </ul>
             </li>
 

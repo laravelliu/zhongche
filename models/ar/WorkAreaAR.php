@@ -7,9 +7,9 @@ use Yii;
 /**
  * This is the model class for table "zc_work_area".
  *
- * @property int $id 产线id
- * @property string $name 产线名称
- * @property string $code 产线编码
+ * @property int $id 工区id
+ * @property string $name 工区名称
+ * @property string $code 工区编码
  * @property int $workshop_id 车间id
  * @property int $is_deleted 是否删除
  * @property int $create_time
@@ -72,7 +72,7 @@ class WorkAreaAR extends \app\models\ar\BaseAR
         ];
     }
 
-    //保存产线
+    //保存工区
     public function saveWorkArea()
     {
         //查找一下
@@ -80,13 +80,13 @@ class WorkAreaAR extends \app\models\ar\BaseAR
 
         //创建时必须不能存在
         if($this->getScenario() == 'create' && !empty($model)){
-            $this->addError('code', '产线编号已存在');
+            $this->addError('code', '工区编号已存在');
             return false;
         }
 
         //更新时必须存在
         if($this->getScenario() == 'update' && empty($model)){
-            $this->addError('name', '产线不存在');
+            $this->addError('name', '工区不存在');
             return false;
         }
 
@@ -98,7 +98,7 @@ class WorkAreaAR extends \app\models\ar\BaseAR
         $model->code = $this->code;
         $model->workshop_id = $this->workshop_id;
 
-        //todo::触发修改对应产线下面的车间信息
+        //todo::触发修改对应工区下面的车间信息
 
         if(!$model->save(false)){
             $this->addError('code', '网络问题，稍后重试');

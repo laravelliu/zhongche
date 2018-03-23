@@ -9,7 +9,7 @@
 use app\widgets\JsBlock;
 use yii\helpers\Url;
 
-$this->title = '产线列表';
+$this->title = '工区列表';
 
 //面包屑
 $this->params['breadcrumbs'][] = '厂房管理';
@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <h3 class="box-title"></h3>
                     <div class="box-tools">
                         <a href="<?=Url::to(['workshop/add-work-area'])?>" class="btn btn-default btn-sm">
-                            <i class="fa fa-play"></i>添加产线
+                            <i class="fa fa-play"></i>添加工区
                         </a>
 
                     </div>
@@ -76,14 +76,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'language':{
             "sProcessing": "处理中...",
             "sLengthMenu": "显示 _MENU_ 项结果",
-            "sZeroRecords": "没有匹配产线信息",
+            "sZeroRecords": "没有匹配工区信息",
             "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
             "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
             "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
             "sInfoPostFix": "",
             "sSearch": "搜索:",
             "sUrl": "",
-            "sEmptyTable": "暂无产线信息",
+            "sEmptyTable": "暂无工区信息",
             "sLoadingRecords": "载入中...",
             "sInfoThousands": ",",
             "oPaginate": {

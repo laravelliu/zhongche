@@ -492,7 +492,7 @@ class QualityController extends BaseController
     }
 
     /**
-     * 选择能做此质检类型的产线
+     * 选择能做此质检类型的工区
      * @author: liuFangShuo
      */
     public function actionDistributionArea()

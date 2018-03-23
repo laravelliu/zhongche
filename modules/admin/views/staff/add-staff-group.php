@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ])?>
                 <div class="box-body">
 
-                    <?=$form->field($model,'name')->textInput(['placeholder' => '请输入员工组名称：产线001'])->label('工位组名称：');?>
+                    <?=$form->field($model,'name')->textInput(['placeholder' => '请输入员工组名称：工区001'])->label('工位组名称：');?>
                     <?=$form->field($model,'station_id')->dropDownList($station, ['placeholder' => '请选择工位'])->label('所属工位：');?>
 
                 </div>

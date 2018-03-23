@@ -115,7 +115,7 @@ class WorkshopController extends BaseController
     }
 
     /**
-     * 产线管理
+     * 工区管理
      * @return string
      * @author: liuFangShuo
      */
@@ -126,14 +126,14 @@ class WorkshopController extends BaseController
 
 
     /**
-     * 获取产线列表
+     * 获取工区列表
      * @author: liuFangShuo
      */
     public function actionGetWorkArea()
     {
         $model = new WorkshopModel();
 
-        //获取产线列表
+        //获取工区列表
         $workAreaListInfo = $model->getWorkAreaList();
         $workAreaList = [];
 
@@ -152,7 +152,7 @@ class WorkshopController extends BaseController
     }
 
     /**
-     * 添加产线
+     * 添加工区
      * @author: liuFangShuo
      */
     public function actionAddWorkArea()
@@ -165,7 +165,7 @@ class WorkshopController extends BaseController
         if (empty($workshopList)) {
             $data = [
                 'title' => '缺少车间信息',
-                'content' => '没有车间信息，产线需要车间信息作为前置条件，请添加车间信息。',
+                'content' => '没有车间信息，工区需要车间信息作为前置条件，请添加车间信息。',
                 'button' => '添加车间',
                 'url' => Url::to(['workshop/add-workshop'])
             ];
@@ -200,7 +200,7 @@ class WorkshopController extends BaseController
     }
 
     /**
-     * 编辑产线
+     * 编辑工区
      * @author: liuFangShuo
      */
     public function actionEditWorkArea()
@@ -257,7 +257,7 @@ class WorkshopController extends BaseController
         //获取车间信息
         $workshop = $model->getWorkshop();
 
-        //获取产线信息
+        //获取工区信息
         $workAreaList = $model->getWorkAreaList();
         $workArea = ArrayHelper::map($workAreaList,'id','name');
         $stationList = [];
@@ -283,15 +283,15 @@ class WorkshopController extends BaseController
      */
     public function actionAddStation()
     {
-        //获取产线
+        //获取工区
         $wsModel = new WorkshopModel();
         $workAreaList = $wsModel->getWorkAreaList();
 
         if (empty($workAreaList)) {
             $data = [
-                'title' => '缺少产线信息',
-                'content' => '没有产线信息，工位需要产线信息作为前置条件，请添加产线信息。',
-                'button' => '添加产线',
+                'title' => '缺少工区信息',
+                'content' => '没有工区信息，工位需要工区信息作为前置条件，请添加工区信息。',
+                'button' => '添加工区',
                 'url' => Url::to(['workshop/add-work-area'])
             ];
             return $this->render('empty', ['data' => $data]);
@@ -363,7 +363,7 @@ class WorkshopController extends BaseController
 
 
     /**
-     * 根据车间获取产线列表(用于三级联动)
+     * 根据车间获取工区列表(用于三级联动)
      * @author: liuFangShuo
      */
     public function actionGetWorkAreaList()
@@ -380,14 +380,14 @@ class WorkshopController extends BaseController
     }
 
     /**
-     * 根据产线获取工位列表(用于三级联动)
+     * 根据工区获取工位列表(用于三级联动)
      * @author: liuFangShuo
      */
     public function actionGetStationList()
     {
         $waId = Yii::$app->request->get('waid', null);
         if (empty($waId)) {
-            return $this->ajaxReturn([],1,'没有产线id');
+            return $this->ajaxReturn([],1,'没有工区id');
         }
 
         $model = new WorkshopModel();

@@ -28,7 +28,7 @@ class WorkshopModel extends Model
     }
 
     /**
-     * 获取产线列表
+     * 获取工区列表
      * @return array|\yii\db\ActiveRecord[]
      * @author: liuFangShuo
      */
@@ -60,7 +60,7 @@ class WorkshopModel extends Model
     }
 
     /**
-     * 三级联动-获取产线列表
+     * 三级联动-获取工区列表
      * @param int $wsId
      * @return array
      * @author: liuFangShuo

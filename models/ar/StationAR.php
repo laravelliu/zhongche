@@ -12,7 +12,7 @@ use Yii;
  * @property string $code 工位编码
  * @property int $pid 上一工位id
  * @property int $sort 工位位置
- * @property int $work_area_id 产线ID
+ * @property int $work_area_id 工区ID
  * @property int $workshop_id 车间id
  * @property int $is_deleted 是否删除
  * @property int $create_time
@@ -55,7 +55,7 @@ class StationAR extends \app\models\ar\BaseAR
             [['pid', 'sort', 'work_area_id', 'workshop_id', 'is_deleted'], 'integer', 'on' => 'default'],
             [['name', 'code'], 'string', 'max' => 64, 'on' => ['default', 'create', 'update']],
             [['name', 'code', 'work_area_id', 'workshop_id'], 'required', 'message' => '不能为空', 'on' => ['create','update']],
-            ['work_area_id', 'compare', 'compareValue' => 0, 'operator' => '>', 'message' =>'请先选择产线', 'on' => ['create','update']],
+            ['work_area_id', 'compare', 'compareValue' => 0, 'operator' => '>', 'message' =>'请先选择工区', 'on' => ['create','update']],
             ['workshop_id', 'compare', 'compareValue' => 0,  'operator' => '>', 'message' => '请先选择车间', 'on' => ['create','update']]
         ];
     }
@@ -91,13 +91,13 @@ class StationAR extends \app\models\ar\BaseAR
 
         //创建时必须不能存在
         if($this->getScenario() == 'create' && !empty($model)){
-            $this->addError('code', '该产线工位编号已存在');
+            $this->addError('code', '该工区工位编号已存在');
             return false;
         }
 
         //更新时必须存在
         if($this->getScenario() == 'update' && empty($model)){
-            $this->addError('name', '该产线工位不存在');
+            $this->addError('name', '该工区工位不存在');
             return false;
         }
 

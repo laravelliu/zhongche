@@ -102,7 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
             {data: "update_time"},
             {
                 render:function (data,type,full) {
-                    return '<a href="edit-quality-type?id=' + full['id'] + '">编辑</a>&nbsp;<a href="distribution-area?id=' + full['id'] + '">配置产线</a>';
+                    return '<a href="edit-quality-type?id=' + full['id'] + '">编辑</a>&nbsp;<a href="distribution-area?id=' + full['id'] + '">配置工区</a>';
                 }
             }
         ]

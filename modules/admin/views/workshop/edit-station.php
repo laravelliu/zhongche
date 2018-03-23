@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?=$form->field($model,'name')->textInput(['placeholder' => '请输入工位名称：除锈车间'])->label('工位名称：');?>
                     <?=$form->field($model,'code')->textInput(['placeholder' => '请输入工位编号：ba123','disabled' => 'disabled'])->label('工位编号：');?>
                     <?=$form->field($model,'workshop_id')->dropDownList($wsModel->getWorkshop(),['prompt' =>'--请选择车间--', 'disabled' => 'disabled'])->label('所属车间：');?>
-                    <?=$form->field($model,'work_area_id')->dropDownList($wsModel->getWorkArea($model->workshop_id),['prompt' =>'--请选择产线--', 'disabled' => 'disabled'])->label('所属产线：');?>
+                    <?=$form->field($model,'work_area_id')->dropDownList($wsModel->getWorkArea($model->workshop_id),['prompt' =>'--请选择工区--', 'disabled' => 'disabled'])->label('所属工区：');?>
                     <?=$form->field($model,'pid')->dropDownList($stationList,['prompt' =>'--请选择上一工位--'])->label('上一工位：');?>
 
                 </div>

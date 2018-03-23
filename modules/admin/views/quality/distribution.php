@@ -6,7 +6,7 @@
  * Time: 18:18
  */
 
-$this->title = '质检类型选择产线';
+$this->title = '质检类型选择工区';
 
 //面包屑
 $this->params['breadcrumbs'][] = '质检管理';

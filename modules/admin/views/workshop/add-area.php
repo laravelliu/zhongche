@@ -10,7 +10,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
-$this->title = '添加产线';
+$this->title = '添加工区';
 
 //面包屑
 $this->params['breadcrumbs'][] = '厂房管理';
@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <h3 class="box-title"></h3>
                     <div class="box-tools">
                         <a href="<?=Url::to(['workshop/work-area'])?>" class="btn btn-default btn-sm">
-                            <i class="fa fa-play"></i>产线列表
+                            <i class="fa fa-play"></i>工区列表
                         </a>
                     </div>
                 </div>
@@ -40,8 +40,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 ])?>
                 <div class="box-body">
 
-                    <?=$form->field($model,'name')->textInput(['placeholder' => '请输入产线名称：产线001'])->label('产线名称：');?>
-                    <?=$form->field($model,'code')->textInput(['placeholder' => '请输入产线编号：123'])->label('产线编号：');?>
+                    <?=$form->field($model,'name')->textInput(['placeholder' => '请输入工区名称：工区001'])->label('工区名称：');?>
+                    <?=$form->field($model,'code')->textInput(['placeholder' => '请输入工区编号：123'])->label('工区编号：');?>
                     <?=$form->field($model,'workshop_id')->dropDownList($workshop, ['placeholder' => '请选择车间'])->label('所属车间：');?>
 
                 </div>
