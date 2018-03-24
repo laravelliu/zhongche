@@ -37,7 +37,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <th>id</th>
                             <th>名称</th>
-                            <th>所在工位</th>
                             <th>创建时间</th>
                             <th>更新时间</th>
                             <th>操作</th>
@@ -100,7 +99,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns': [
             {data: "id"},
             {data: "name"},
-            {data: "station"},
             {data: "create_time"},
             {data: "update_time"},
             {

@@ -5,6 +5,7 @@ namespace app\modules\admin\controllers;
 use app\models\ar\StationAR;
 use app\models\ar\WorkAreaAR;
 use app\models\ar\WorkshopAR;
+use app\models\StaffModel;
 use app\models\WorkshopModel;
 use yii\helpers\ArrayHelper;
 use Yii;
@@ -394,5 +395,94 @@ class WorkshopController extends BaseController
         $station = $model->getStation($waId);
 
         return $this->ajaxReturn(['station' => $station ]);
+    }
+
+    /**
+     * 工位分配人员组
+     * @author: liuFangShuo
+     */
+    public function actionUserGroupStation()
+    {
+        $id = Yii::$app->request->get('id',null);
+        $model = new WorkshopModel();
+        $station = $model->getStationById($id);
+
+        if(empty($station)){
+            return $this->redirect(Url::to(['workshop/station']));
+        }
+
+        //获取车间
+        $workshop = $model->getWorkshopById($station['workshop_id']);
+
+        //获取工区
+        $workArea = $model->getWorkAreaById($station['work_area_id']);
+
+        $name = $workshop->name.'-'.$workArea->name.'-'.$station['name'];
+
+        //
+        $staffModel = new StaffModel();
+        $group = $staffModel->getStaffGroup();
+        $all = ArrayHelper::map($group,'id','name');
+
+        $selectedGroup = $model->getUserGroupByStation($id);
+        $selected = [];
+        $unSelect = [];
+
+        if(empty($selectedGroup)){
+            $unSelect = $all;
+        } else {
+            //已经选择的类型
+            foreach ($selectedGroup as $k => $v) {
+                $selected[$v['user_group_id']] = $all[$v['user_group_id']];
+            }
+
+            $unSelect = array_diff($all,$selected);
+
+        }
+
+        return $this->render('distribution-user-group',['name' => $name,'qualityItem' => ['all' => $all, 'selected' => $selected, 'unSelect' => $unSelect, 'id'=>$id, 'url'=>Url::to(['workshop/group-station-distribution'])]]);
+    }
+
+    /**
+     *  工位分配员工组
+     * @author: liuFangShuo
+     */
+    public function actionGroupStationDistribution()
+    {
+        if (Yii::$app->request->isAjax) {
+            $select = Yii::$app->request->post('selected',null);
+            $unSelect = Yii::$app->request->post('unSelect',null);
+            $id = Yii::$app->request->post('id', null);
+
+            if (empty($id)) {
+                return $this->ajaxReturn([],1,'不存在id');
+            }
+
+            $selectId = [];
+            $unSelectId = [];
+
+            if (!empty($select)) {
+                foreach ($select as $k => $v) {
+                    $selectId[] =  $v['0'];
+                }
+            }
+
+            if (!empty($unSelect)) {
+                foreach ($unSelect as $k => $v) {
+                    $unSelectId[] =  $v['0'];
+                }
+            }
+
+            $model = new WorkshopModel();
+            $res = $model->saveStationGroup($id,$selectId,$unSelectId);
+
+            if($res){
+                return $this->ajaxReturn([]);
+            }
+
+            return $this->ajaxReturn([],1, $model->getFirstError('name'));
+        }
+
+        return false;
     }
 }

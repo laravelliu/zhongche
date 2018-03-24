@@ -88,6 +88,7 @@ class AdminAsset extends AssetBundle
             case "admin/quality/add-item":
             case "admin/role/distribution":
             case "admin/admin/distribution-role":
+            case "admin/workshop/user-group-station":
                 $js = [
                     '/js/select.js'
                 ];

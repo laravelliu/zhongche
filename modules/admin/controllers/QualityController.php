@@ -7,6 +7,7 @@ use app\models\ar\QualityInspectionGroupAR;
 use app\models\ar\QualityInspectionItemAR;
 use app\models\ar\TypeAR;
 use app\models\QualityModel;
+use app\models\WorkshopModel;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
@@ -497,7 +498,57 @@ class QualityController extends BaseController
      */
     public function actionDistributionArea()
     {
-        return $this->render('distribution');
+        //获取质检类型
+        $id = Yii::$app->request->get('id',null);
+        $type = TypeAR::findOne(['id' => $id, 'is_deleted' => STATUS_FALSE]);
+
+        //获取车间
+        $model = new WorkshopModel();
+        $workshopList = $model->getWorkshopList();
+
+        //获取车间
+        $workArea = $model->getWorkAreaList();
+
+        //获取工位
+        $station = $model->getStationByCondition([],['work_area_id' => SORT_ASC,'sort' => SORT_ASC]);
+
+        $stationArr=[];
+        if (!empty($station)) {
+            foreach ($station as $sk => $sv){
+                $stationArr[$sv['work_area_id']][] = $sv;
+            }
+        }
+
+        $workAreaArr=[];
+        if (!empty($workArea)) {
+            foreach ($workArea as $wak => $wav){
+                $wav['station'] = isset($stationArr[$wav['id']]) ? $stationArr[$wav['id']]:[];
+                $workAreaArr[$wav['workshop_id']][] = $wav;
+            }
+        }
+
+        $data=[];
+        if (!empty($workshopList)) {
+            foreach ($workshopList as $wsk => $wsv) {
+                $wsv['workArea'] = isset($workAreaArr[$wsv['id']])?$workAreaArr[$wsv['id']]:[];
+                $data[$wsv['id']] = $wsv;
+            }
+        }
+
+        //数据不全
+        if(empty($data)){
+            $data = [
+                'title' => '缺少厂房基础数据',
+                'content' => '没有厂房基础数据，质检项组选择产线需要厂房基础数据作为前置条件，请添加厂房基础数据。',
+                'button' => '车间信息',
+                'url' => Url::to(['workshop/workshop'])
+            ];
+            return $this->render('/workshop/empty', ['data' => $data]);
+
+        }
+
+        //print_r($data);exit;
+        return $this->render('distribution',['data' => $data,'type' => $type]);
     }
 }
 

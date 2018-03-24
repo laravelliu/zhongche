@@ -114,10 +114,10 @@ $g = [
 
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
-            <li <?php if(in_array($url,['admin/index/index','admin'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['index/index'])?>"><i class="fa fa-circle-o"></i>控制台</a></li>
+            <li <?php if(in_array($url,['admin/index/index','admin'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['index/index'])?>"><i class="fa fa-dashboard"></i><span>控制台</span></a></li>
             <li class="treeview <?php if(in_array($url,$a)):?>active<?php endif;?>">
                 <a href="#">
-                    <i class="fa fa-dashboard"></i>
+                    <i class="fa fa-address-book"></i>
                     <span>人员管理</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
@@ -125,32 +125,24 @@ $g = [
                 </a>
                 <ul class="treeview-menu">
                     <li <?php if(in_array($url,['admin/admin/index'])):?>class="active"<?php endif;?>>
-                        <a href="<?=Url::to(['admin/index'])?>"><i class="fa fa-circle-o"></i>人员列表</a>
+                        <a href="<?=Url::to(['admin/index'])?>"><i class="glyphicon glyphicon-user"></i>人员列表</a>
                     </li>
 
-                    <li class="treeview <?php if(in_array($url,$a1)):?>menu-open<?php endif?>">
-                        <a href="#"><i class="fa fa-circle-o"></i>员工管理
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu" <?php if(in_array($url,$a1)):?>style="display: block;"<?php endif;?>>
-                            <li <?php if(in_array($url,['admin/staff/staff-group','admin/staff/add-group','admin/staff/edit-staff-group'])):?>class="active"<?php endif;?>>
-                                <a href="<?=Url::to(['staff/staff-group'])?>"><i class="fa fa-circle-o"></i>员工组管理</a>
-                            </li>
-                        </ul>
+                    <li <?php if(in_array($url,['admin/staff/staff-group','admin/staff/add-group','admin/staff/edit-staff-group'])):?>class="active"<?php endif;?>>
+                        <a href="<?=Url::to(['staff/staff-group'])?>"><i class="fa fa-group"></i>员工组管理</a>
                     </li>
+
 
                     <li class="treeview <?php if(in_array($url,$a2)):?>menu-open<?php endif?>">
-                        <a href="#"><i class="fa fa-circle-o"></i>其他管理
+                        <a href="#"><i class="fa fa-ellipsis-h"></i>其他管理
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
                         <ul class="treeview-menu" <?php if(in_array($url,$a2)):?>style="display: block;"<?php endif;?>>
-                            <li <?php if(in_array($url,['admin/department/index','admin/department/add-department','admin/department/edit-department'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['department/index'])?>"><i class="fa fa-circle-o"></i>部门管理</a></li>
-                            <li <?php if(in_array($url,['admin/role/index','admin/role/edit-role','admin/role/add-role'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['role/index'])?>"><i class="fa fa-circle-o"></i>角色管理</a></li>
-                            <li <?php if(in_array($url,['admin/permission/index','admin/permission/add-permission','admin/permission/edit-permission'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['permission/index'])?>"><i class="fa fa-circle-o"></i>权限管理</a></li>
+                            <li <?php if(in_array($url,['admin/department/index','admin/department/add-department','admin/department/edit-department'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['department/index'])?>"><i class="fa fa-sitemap"></i>部门管理</a></li>
+                            <li <?php if(in_array($url,['admin/role/index','admin/role/edit-role','admin/role/add-role'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['role/index'])?>"><i class="fa fa-address-card"></i>角色管理</a></li>
+                            <li <?php if(in_array($url,['admin/permission/index','admin/permission/add-permission','admin/permission/edit-permission'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['permission/index'])?>"><i class="fa fa-folder-open"></i>权限管理</a></li>
                         </ul>
                     </li>
 
@@ -159,22 +151,22 @@ $g = [
 
             <li class="treeview <?php if(in_array($url,$b)):?>active<?php endif;?>">
                 <a href="#">
-                    <i class="fa fa-pie-chart"></i>
+                    <i class="glyphicon glyphicon-home"></i>
                     <span>厂房管理</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li <?php if(in_array($url, ['admin/workshop/workshop', 'admin/workshop/add-workshop', 'admin/workshop/edit-workshop'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['workshop/workshop'])?>"><i class="fa fa-circle-o"></i>车间管理</a></li>
-                    <li <?php if(in_array($url, ['admin/workshop/work-area', 'admin/workshop/add-work-area', 'admin/workshop/edit-work-area'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['workshop/work-area'])?>"><i class="fa fa-circle-o"></i>工区管理</a></li>
-                    <li <?php if(in_array($url, ['admin/workshop/station', 'admin/workshop/add-station', 'admin/workshop/edit-station'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['workshop/station'])?>"><i class="fa fa-circle-o"></i>工位管理</a></li>
+                    <li <?php if(in_array($url, ['admin/workshop/workshop', 'admin/workshop/add-workshop', 'admin/workshop/edit-workshop'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['workshop/workshop'])?>"><i class="fa fa-home"></i>车间管理</a></li>
+                    <li <?php if(in_array($url, ['admin/workshop/work-area', 'admin/workshop/add-work-area', 'admin/workshop/edit-work-area'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['workshop/work-area'])?>"><i class="fa fa-road"></i>工区管理</a></li>
+                    <li <?php if(in_array($url, ['admin/workshop/station', 'admin/workshop/add-station', 'admin/workshop/edit-station'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['workshop/station'])?>"><i class="fa fa-tty"></i>工位管理</a></li>
                 </ul>
             </li>
 
             <li class="treeview <?php if(in_array($url,$c)):?>active<?php endif;?>">
                 <a href="#">
-                    <i class="fa fa-edit"></i>
+                    <i class="fa fa-random"></i>
                     <span>流程管理</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
@@ -187,7 +179,7 @@ $g = [
 
             <li class="treeview <?php if(in_array($url,$f)):?>active<?php endif;?>">
                 <a href="#">
-                    <i class="fa fa-table"></i> <span>质检任务管理</span>
+                    <i class="fa fa-tasks"></i> <span>质检任务管理</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
@@ -211,21 +203,10 @@ $g = [
                 </ul>
             </li>
 
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-table"></i><span>配置管理</span>
-                    <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="#"><i class="fa fa-circle-o"></i>配置质检类型拥有工区</a></li>
-                </ul>
-            </li>
 
             <li class="treeview <?php if(in_array($url, $g)):?>active<?php endif;?>">
                 <a href="#">
-                    <i class="fa fa-table"></i><span>车辆管理</span>
+                    <i class="fa fa-subway"></i><span>车辆管理</span>
                     <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                     </span>
@@ -239,7 +220,7 @@ $g = [
 
             <li class="treeview">
                 <a href="#">
-                    <i class="fa fa-laptop"></i>
+                    <i class="fa fa-area-chart"></i>
                     <span>质检统计</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>

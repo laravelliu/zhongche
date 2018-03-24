@@ -241,4 +241,5 @@ class StaffModel extends Model
             return false;
         }
     }
+
 }

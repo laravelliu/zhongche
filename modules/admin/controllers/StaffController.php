@@ -43,15 +43,9 @@ class StaffController extends BaseController
 
         if(!empty($staffGroupList)){
 
-            //获取工位
-            $stationModel = new WorkshopModel();
-            $stationList = $stationModel->getStationList();
-            $stations = ArrayHelper::map($stationList,'id', 'name');
-
             foreach ($staffGroupList as $k => $v){
                 $staffGroupList[$k]['create_time'] = date('Y-m-d H:i:s', $v['create_time']);
                 $staffGroupList[$k]['update_time'] = date('Y-m-d H:i:s', $v['update_time']);
-                $staffGroupList[$k]['station'] = $stations[$v['station_id']];
             }
         }
 
@@ -64,28 +58,9 @@ class StaffController extends BaseController
      */
     public function actionAddGroup()
     {
-        $workshopModel = new WorkshopModel();
-        $stationList = $workshopModel->getStationList();
-
-        if(empty($stationList)){
-            $data = [
-                'title' => '缺少工位信息',
-                'content' => '没有工位信息，员工组需要工位信息作为前置条件，请添加员工组信息。',
-                'button' => '添加工位',
-                'url' => Url::to(['workshop/add-station'])
-            ];
-
-            return $this->render('/workshop/empty',['data' => $data]);
-        }
 
         $model = new UserGroupAR();
         $model->setScenario('create');
-        $station = ArrayHelper::map($stationList,'id','name');
-
-        $sId = Yii::$app->request->get('id', null);
-        if(!empty($sId) && isset($station[$sId])){
-            $model->station_id = $sId;
-        }
 
         if(Yii::$app->request->isPost){
 
@@ -100,7 +75,7 @@ class StaffController extends BaseController
 
         }
 
-        return $this->render('add-staff-group',['model' => $model, 'station' => $station]);
+        return $this->render('add-staff-group',['model' => $model]);
     }
 
     /**
@@ -128,11 +103,7 @@ class StaffController extends BaseController
             $model->getErrors();
         }
 
-        $workshopModel = new WorkshopModel();
-        $stationList = $workshopModel->getStationList();
-        $station = ArrayHelper::map($stationList,'id','name');
-
-        return $this->render('edit-staff-group',['model' => $model, 'station' => $station]);
+        return $this->render('edit-staff-group',['model' => $model]);
     }
 }
 
