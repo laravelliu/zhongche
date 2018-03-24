@@ -26,8 +26,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     <table id="type-table" class="table table-bordered table-striped">
                         <thead>
                         <tr>
-                            <th>id</th>
-                            <th>质检任务</th>
+                            <th>任务id</th>
+                            <th>质检类型</th>
+                            <th>车辆信息</th>
+                            <th>所在状态</th>
                             <th>创建时间</th>
                             <th>更新时间</th>
                             <th>操作</th>
@@ -58,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'autoWidth'   : false,
         "bLengthChange": true,
         ajax: {
-            url: "<?=Url::to(['quality/quality-type-list'])?>",
+            url: "<?=Url::to(['quality/get-task-list'])?>",
             type: "post",
             dataType : "json"
         },
@@ -89,12 +91,14 @@ $this->params['breadcrumbs'][] = $this->title;
         "rowId": 'id',
         'columns': [
             {data: "id"},
-            {data: "name"},
+            {data: "type"},
+            {data: "vehicle"},
+            {data: "status"},
             {data: "create_time"},
             {data: "update_time"},
             {
                 render:function (data,type,full) {
-                    return '<a href="edit-quality-type?id=' + full['id'] + '">编辑</a>';
+                    return '<a href="edit-quality-type?id=' + full['id'] + '">查看信息</a>';
                 }
             }
         ]

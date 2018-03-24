@@ -13,6 +13,7 @@ use app\models\ar\ProcessAR;
 use app\models\ar\QualityInspectionGroupAR;
 use app\models\ar\QualityInspectionItemAR;
 use app\models\ar\QualityInspectionGroupItemAR;
+use app\models\ar\TaskAR;
 use app\models\ar\TypeAR;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
@@ -161,5 +162,15 @@ class QualityModel extends Model
             $this->addError('name',$e->getMessage());
             return false;
         }
+    }
+
+    /**
+     * 获取任务列表
+     * @return array|\yii\db\ActiveRecord[]
+     * @author: liuFangShuo
+     */
+    public function getTaskList()
+    {
+        return TaskAR::find()->asArray()->all();
     }
 }

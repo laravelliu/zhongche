@@ -409,6 +409,30 @@ class QualityController extends BaseController
 
 
     /**
+     *
+     * @author: liuFangShuo
+     */
+    public function actionGetTaskList()
+    {
+        $model = new QualityModel();
+        $taskList = $model->getTaskList();
+
+        //查询车辆信息
+
+        //查询质检类型
+
+        //查询
+        if (!empty($taskList)) {
+            foreach ($taskList as $k => $v) {
+                $taskList[$k]['create_time'] = date('Y-m-d H:i:s',$v['create_time']);
+                $taskList[$k]['update_time'] = date('Y-m-d H:i:s',$v['update_time']);
+            }
+        }
+
+        return $this->ajaxReturn($taskList);
+    }
+
+    /**
      * 给质检项组分配质检项
      * @author: liuFangShuo
      */
