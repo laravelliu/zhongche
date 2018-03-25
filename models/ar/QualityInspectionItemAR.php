@@ -99,7 +99,7 @@ class QualityInspectionItemAR extends \app\models\ar\BaseAR
                 unset($standard[count($standard)-1]);
             }
 
-            $model->standard = json_encode($standard);
+            $model->standard = json_encode($standard,JSON_UNESCAPED_UNICODE);
         }
 
         $model->type = $this->type;

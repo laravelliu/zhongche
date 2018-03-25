@@ -5,8 +5,9 @@
  * Date: 2018/3/22
  * Time: 18:18
  */
+use app\widgets\JsBlock;
 
-$this->title = '质检类型选择工区';
+$this->title = '选择可做此质检类型的工区';
 
 //面包屑
 $this->params['breadcrumbs'][] = '质检管理';
@@ -46,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php foreach ($data as $k => $workshop):?>
     <!-- COLOR PALETTE -->
-    <div class="box box-default color-palette-box">
+    <div class="box box-default color-palette-box" data-workshop="<?=$workshop['id']?>">
         <div class="box-header with-border">
             <h3 class="box-title"><i class="fa fa-home"></i><?=$workshop['name']?></h3>
         </div>
@@ -54,7 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php if(!empty($workshop['workArea'])):?>
             <?php foreach ($workshop['workArea'] as $workArea):?>
                 <div class="box-body">
-                    <input type="checkbox"/>&nbsp;&nbsp;<label><?=$workArea['name']?></label>
+                    <input type="checkbox" class="work-area" value="<?=$workArea['id']?>"/>&nbsp;&nbsp;<label><?=$workArea['name']?></label>
 
                     <?php if(!empty($workArea['station'])):?>
                         <div class="row">
@@ -63,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <h4 class="text-center"><?=$station['code']?></h4>
 
                                     <div class="color-palette-set">
-                                        <div class="bg-teal color-palette" title="选择工位"><span> <input type="checkbox"/>&nbsp;&nbsp;<?=$station['name']?></span></div>
+                                        <div class="bg-teal color-palette" title="选择工位"><span> <input class="station" type="checkbox" value="<?=$station['id']?>"/>&nbsp;&nbsp;<?=$station['name']?></span></div>
                                     </div>
                                 </div>
                             <?php endforeach;?>
@@ -79,3 +80,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php endforeach;?>
 
 </section>
+<?php JsBlock::begin()?>
+<script>
+    choose.init({});
+</script>
+<?php JsBlock::end();?>

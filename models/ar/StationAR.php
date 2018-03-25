@@ -87,7 +87,7 @@ class StationAR extends \app\models\ar\BaseAR
     {
 
         //查找一下
-        $model = static::findOne(['work_area_id' => $this->work_area_id,'code' => $this->code, 'is_deleted' => STATUS_FALSE]);
+        $model = static::findOne(['work_area_id' => $this->work_area_id,'code' => trim($this->code), 'is_deleted' => STATUS_FALSE]);
 
         //创建时必须不能存在
         if($this->getScenario() == 'create' && !empty($model)){
@@ -116,7 +116,7 @@ class StationAR extends \app\models\ar\BaseAR
         }
 
         $model->name = $this->name;
-        $model->code = $this->code;
+        $model->code = trim($this->code);
         $model->workshop_id = $this->workshop_id;
         $model->work_area_id = $this->work_area_id;
 

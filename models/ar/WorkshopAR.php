@@ -77,7 +77,7 @@ class WorkshopAR extends \app\models\ar\BaseAR
     public function saveWorkshop()
     {
         //查找一下
-        $model = static::findOne(['code' => $this->code, 'is_deleted' => STATUS_FALSE]);
+        $model = static::findOne(['code' => trim($this->code), 'is_deleted' => STATUS_FALSE]);
 
         //创建时必须不能存在
         if($this->getScenario() == 'create' && !empty($model)){
@@ -103,8 +103,8 @@ class WorkshopAR extends \app\models\ar\BaseAR
             $model->sort = 1;
         }
 
-        $model->name = $this->name;
-        $model->code = $this->code;
+        $model->name = trim($this->name);
+        $model->code = trim($this->code);
         $model->pid = $this->pid;
 
         if(!$model->save(false)){

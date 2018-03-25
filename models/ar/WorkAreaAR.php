@@ -76,7 +76,7 @@ class WorkAreaAR extends \app\models\ar\BaseAR
     public function saveWorkArea()
     {
         //查找一下
-        $model = static::findOne(['code' => $this->code, 'workshop_id' => $this->workshop_id, 'is_deleted' => STATUS_FALSE]);
+        $model = static::findOne(['code' => trim($this->code), 'workshop_id' => $this->workshop_id, 'is_deleted' => STATUS_FALSE]);
 
         //创建时必须不能存在
         if($this->getScenario() == 'create' && !empty($model)){
@@ -94,8 +94,8 @@ class WorkAreaAR extends \app\models\ar\BaseAR
             $model = new static();
         }
 
-        $model->name = $this->name;
-        $model->code = $this->code;
+        $model->name = trim($this->name);
+        $model->code = trim($this->code);
         $model->workshop_id = $this->workshop_id;
 
         //todo::触发修改对应工区下面的车间信息
