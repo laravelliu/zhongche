@@ -1,24 +1,34 @@
 var choose = function () {
 
+    var type;
     var data = [];
-
+    var url = 'post-type-work-area';
     var init = function (obj) {
+        //初始化数据
+        initValue(obj);
+
         $('.work-area').bind('click',workArea);
         $('.station').bind('click',station);
-
-        //初始化数据
+        $('#save').bind('click',saveInfo)
+console.log(data);
     };
 
     //初始化数据
-    var initValue = function(){
+    var initValue = function(obj){
+        type = obj.type;
 
+        for (var wp in obj.workshop) {
+            var k = {'workshop':obj.workshop[wp], 'value':[]};
+            data.push(k);
+        }
     };
 
     //工区选择
     var workArea = function () {
         var $this = $(this);
         var workArea = $(this).val();
-        var obj = {key:workArea};
+        var workshop = $this.parents('.box').attr('data-workshop');
+        var obj = {workarea:workArea};
 
         if ($this.prop('checked')) {
             var waArr = [];
@@ -27,15 +37,25 @@ var choose = function () {
                 waArr.push($(this).val());
             });
             obj.value = waArr;
-            data.push(obj);
+
+            for (var mn in data) {
+                if (data[mn].workshop == workshop) {
+                    data[mn].value.push(obj);
+                }
+            }
+
         } else {
             $this.parent('.box-body').find('.station').each(function () {
                 $(this).prop('checked',false);
             });
 
             for(var wp in data){
-                if(data[wp].key == workArea){
-                    data.splice(wp,1);
+                if(data[wp].workshop == workshop){
+                    for (var mna in data[wp].value){
+                        if(data[wp].value[mna].workarea == workArea){
+                            data[wp].value.splice(mna,1);
+                        }
+                    }
                 }
             }
         }
@@ -49,33 +69,41 @@ var choose = function () {
         var station = $(this).val();
 
         var workArea =  $workAreaHtml.val();
-        var dataKey = checkDataKey(workArea);
+        var workshop = $this.parents('.box').attr('data-workshop');
+
+        var workshopKey = checkWorkshopKey(workshop);
+
+        if(workshopKey === false){
+            alert('数据错误,请刷新页面');
+        }
+        var areaKey = checkDataKey(workshopKey,workArea);
 
         if ($this.prop('checked')) {
 
             $workAreaHtml.prop('checked',true);
 
-            if (dataKey === false) {
-                var obj = {key:workArea};
+            if (areaKey === false) {
+                var obj = {'workarea':workArea};
                 obj.value = [station];
-                data.push(obj);
+                data[workshopKey].value.push(obj);
             } else {
-                data[dataKey].value.push(station);
+                data[workshopKey]['value'][areaKey].value.push(station);
             }
+
         } else {
-            if(dataKey === false){
+            if (areaKey === false) {
                 alert('数据错误,请刷新页面');
             }
 
-            for(var wp in data[dataKey].value){
-                if(data[dataKey].value[wp] == station){
-                    data[dataKey].value.splice(wp,1);
+            for(var mnb in data[workshopKey]['value'][areaKey].value){
+                if(data[workshopKey]['value'][areaKey].value[mnb] == station){
+                    data[workshopKey]['value'][areaKey].value.splice(mnb,1);
                 }
             }
 
             //检查产线是否有工位
-            if(data[dataKey].value.length == 0){
-                data.splice(dataKey,1);
+            if(data[workshopKey]['value'][areaKey].value.length == 0){
+                data[workshopKey].value.splice(areaKey,1);
                 $workAreaHtml.prop('checked',false);
             }
         }
@@ -83,9 +111,21 @@ var choose = function () {
     };
 
     //检查是否有此产线
-    var checkDataKey = function (id) {
-        for(var wp in data){
-            if(data[wp].key == id){
+    var checkDataKey = function (workshopKey, id) {
+        if (data[workshopKey].value .length>0) {
+            for (var mn in data[workshopKey].value) {
+                if(data[workshopKey].value[mn].workarea == id){
+                    return mn;
+                }
+            }
+        }
+
+        return false;
+    };
+
+    var checkWorkshopKey = function (workshopId) {
+        for (var wp in data) {
+            if (data[wp].workshop == workshopId){
                 return wp;
             }
         }
@@ -93,11 +133,77 @@ var choose = function () {
         return false;
     };
 
+    //提交数据
+    var postData = function () {
+        $.ajax({
+            'url' : url,
+            'data' : {'data':data, 'type':type},
+            'type' : 'post',
+            'dataType' : 'json',
+            'success' : function (data) {
+                if(data.code == 0){
+                    alert(data.message);
+                }
+            }
+        });
+    };
 
+    //检查信息是否正确
+    var checkDataInfo = function () {
+        var $have = false;
+        var $data = [];
+        var $workshopNu = [];
+
+        for (var wp in data) {
+            var workshopId = data[wp].workshop;
+
+            if (data[wp].value.length > 0) {
+                $workshopNu.push(workshopId);
+                var $num = 0;
+                //工区
+                for(var mn in data[wp].value){
+                    if (mn == 0) {
+                        $num = data[wp]['value'][mn].value.length;
+                    } else {
+                        if($num != data[wp]['value'][mn].value.length){
+                            $data.push(workshopId);
+                        }
+                    }
+                }
+
+                $have = true;
+            }
+        }
+
+        if ($have === false) {
+            alert('请先选择工区和工位');
+            return false;
+        }
+
+        if($workshopNu.length != data.length){
+            alert('每个车间都需要选择一个工区');
+            return false;
+        }
+
+        if($data.length > 0) {
+            alert('所选工区的工位数量要一致');
+            return false;
+        }
+
+        return true;
+    };
+
+    var saveInfo = function () {
+        var $status = checkDataInfo();
+
+        if($status){
+            postData();
+        }
+    };
 
     return {
         init : function (obj) {
-            init(obj);
+            init($.parseJSON(obj));
         }
 
     }

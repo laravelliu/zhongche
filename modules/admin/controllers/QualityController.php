@@ -6,6 +6,7 @@ use app\models\ar\ProcessAR;
 use app\models\ar\QualityInspectionGroupAR;
 use app\models\ar\QualityInspectionItemAR;
 use app\models\ar\TypeAR;
+use app\models\ar\TypeWorkAreaAR;
 use app\models\QualityModel;
 use app\models\WorkshopModel;
 use Yii;
@@ -571,8 +572,44 @@ class QualityController extends BaseController
 
         }
 
+        $workshopJs = array_column($workshopList,'id');
         //print_r($data);exit;
-        return $this->render('distribution',['data' => $data,'type' => $type]);
+        return $this->render('distribution',['data' => $data,'type' => $type, 'workshopJs' => $workshopJs]);
     }
+
+    public function actionPostTypeWorkArea()
+    {
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $type = $data['type'];
+            $data = $data['data'];
+            $cao = [];
+
+            //组装数据
+            foreach ($data as $k => $v) {
+                $workshop = $v['workshop'];
+
+                foreach ($v['value'] as $a => $b) {
+                    $workArea = $b['workarea'];
+
+                    foreach ($b['value'] as $st) {
+                        $cao[]=[$workshop, $workArea, $st, $type, time(), time()];
+                    }
+                }
+            }
+
+            $model = new TypeWorkAreaAR();
+            $res = $model->saveBatch($cao);
+
+            if ($res) {
+                return $this->ajaxReturn('',0,'添加成功');
+            }
+
+            return $this->ajaxReturn('',1,'添加失败');
+
+        }
+
+    }
+
 }
 

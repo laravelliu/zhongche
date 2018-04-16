@@ -49,4 +49,28 @@ class TypeWorkAreaAR extends \app\models\ar\BaseAR
             'update_time' => 'Update Time',
         ];
     }
+
+    //批量添加
+    public function saveBatch($data)
+    {
+        if ( empty($data) ) {
+            return false;
+        }
+
+        $str = '';
+        foreach ($data as $v) {
+            $arr[] = '('.implode(',',$v).')';
+        }
+        $str = implode(',', $arr);
+
+        $sql = "insert into " . TypeWorkAreaAR::tableName() . " (workshop_id, work_area_id, station_id, type_id, create_time, update_time) VALUES " . $str;
+
+        $connection  = Yii::$app->db;
+        $command = $connection->createCommand($sql);
+        $res = $command->query($sql);
+
+        if ($res) {
+            return true;
+        }
+    }
 }

@@ -12,6 +12,8 @@ $this->title = '选择可做此质检类型的工区';
 //面包屑
 $this->params['breadcrumbs'][] = '质检管理';
 $this->params['breadcrumbs'][] = $this->title;
+
+$obj = ['workshop' => $workshopJs, 'type' => Yii::$app->request->get('id')];
 ?>
 <style>
     .color-palette {
@@ -79,9 +81,10 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <?php endforeach;?>
 
+    <div class="text-center"><button class="btn btn-info" id="save" type="button">保存</button></div>
 </section>
 <?php JsBlock::begin()?>
 <script>
-    choose.init({});
+    choose.init('<?=json_encode($obj)?>');
 </script>
 <?php JsBlock::end();?>
