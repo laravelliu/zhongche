@@ -527,6 +527,16 @@ class QualityController extends BaseController
         $id = Yii::$app->request->get('id',null);
         $type = TypeAR::findOne(['id' => $id, 'is_deleted' => STATUS_FALSE]);
 
+        //获取质检type对应的物理工位
+        $typeStationModel = new QualityModel();
+        $chooseStations = $typeStationModel->getTypeArea($type);
+
+        //
+        $chooseArr = [];
+        foreach ($chooseStations as $k => $v) {
+            $chooseArr[$v['workshop_id']][$v['work_area_id']][] = $v['station_id'];
+        }
+
         //获取车间
         $model = new WorkshopModel();
         $workshopList = $model->getWorkshopList();
@@ -540,13 +550,25 @@ class QualityController extends BaseController
         $stationArr=[];
         if (!empty($station)) {
             foreach ($station as $sk => $sv){
+                $sv['status'] = 0;
+
+                if (isset($chooseArr[$sv['workshop_id']][$sv['work_area_id']]) && in_array( $sv['id'], $chooseArr[$sv['workshop_id']][$sv['work_area_id']])) {
+                    $sv['status'] = 1;
+                }
+
                 $stationArr[$sv['work_area_id']][] = $sv;
             }
         }
 
         $workAreaArr=[];
         if (!empty($workArea)) {
-            foreach ($workArea as $wak => $wav){
+            foreach ($workArea as $wak => $wav) {
+                $wav['status'] = 0;
+
+                if(isset($chooseArr[$wav['workshop_id']][$wav['id']])){
+                    $wav['status'] = 1;
+                }
+
                 $wav['station'] = isset($stationArr[$wav['id']]) ? $stationArr[$wav['id']]:[];
                 $workAreaArr[$wav['workshop_id']][] = $wav;
             }
@@ -574,9 +596,14 @@ class QualityController extends BaseController
 
         $workshopJs = array_column($workshopList,'id');
         //print_r($data);exit;
-        return $this->render('distribution',['data' => $data,'type' => $type, 'workshopJs' => $workshopJs]);
+        return $this->render('distribution',['data' => $data,'type' => $type, 'workshopJs' => $workshopJs, 'chooseStation' => $chooseArr]);
     }
 
+    /**
+     * 保存信息
+     * @return object
+     * @author: liuFangShuo
+     */
     public function actionPostTypeWorkArea()
     {
         if (Yii::$app->request->isAjax) {
@@ -584,6 +611,20 @@ class QualityController extends BaseController
             $type = $data['type'];
             $data = $data['data'];
             $cao = [];
+
+            //获取已经选择
+            $model = new QualityModel();
+            $choose = $model->getTypeArea($type);
+
+            //更改数据
+            $getStaArr = [];
+            $chooseStaArr = [];
+            $insertStaArr = [];
+            $deleStaArr = [];
+
+            if (!empty($choose)) {
+                $chooseStaArr = array_column($choose,'station_id');
+            }
 
             //组装数据
             foreach ($data as $k => $v) {
@@ -593,13 +634,31 @@ class QualityController extends BaseController
                     $workArea = $b['workarea'];
 
                     foreach ($b['value'] as $st) {
-                        $cao[]=[$workshop, $workArea, $st, $type, time(), time()];
+                        $getStaArr[] = $st;
+
+                        if (!empty($chooseStaArr) && in_array($st,$chooseStaArr)) {
+                                continue;
+                        } else {
+                            $insertStaArr[] = $st;
+                            $cao[]=[$workshop, $workArea, $st, $type, time(), time()];
+                        }
+
                     }
                 }
             }
 
+            //要删除的数组
+            if(!empty($chooseStaArr)){
+                foreach ($chooseStaArr as $k => $v) {
+                    if (!in_array($v, $getStaArr)) {
+                        $deleStaArr[] = $v;
+                    }
+                }
+            }
+
+
             $model = new TypeWorkAreaAR();
-            $res = $model->saveBatch($cao);
+            $res = $model->saveBatch($cao, $deleStaArr, $type);
 
             if ($res) {
                 return $this->ajaxReturn('',0,'添加成功');

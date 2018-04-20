@@ -13,7 +13,7 @@ $this->title = '选择可做此质检类型的工区';
 $this->params['breadcrumbs'][] = '质检管理';
 $this->params['breadcrumbs'][] = $this->title;
 
-$obj = ['workshop' => $workshopJs, 'type' => Yii::$app->request->get('id')];
+$obj = ['workshop' => $workshopJs, 'type' => Yii::$app->request->get('id'), 'chooseStation' => $chooseStation];
 ?>
 <style>
     .color-palette {
@@ -57,7 +57,7 @@ $obj = ['workshop' => $workshopJs, 'type' => Yii::$app->request->get('id')];
         <?php if(!empty($workshop['workArea'])):?>
             <?php foreach ($workshop['workArea'] as $workArea):?>
                 <div class="box-body">
-                    <input type="checkbox" class="work-area" value="<?=$workArea['id']?>"/>&nbsp;&nbsp;<label><?=$workArea['name']?></label>
+                    <input type="checkbox" <?php if($workArea['status']):?>checked="checked"<?php endif;?> class="work-area" value="<?=$workArea['id']?>"/>&nbsp;&nbsp;<label><?=$workArea['name']?></label>
 
                     <?php if(!empty($workArea['station'])):?>
                         <div class="row">
@@ -66,7 +66,7 @@ $obj = ['workshop' => $workshopJs, 'type' => Yii::$app->request->get('id')];
                                     <h4 class="text-center"><?=$station['code']?></h4>
 
                                     <div class="color-palette-set">
-                                        <div class="bg-teal color-palette" title="选择工位"><span> <input class="station" type="checkbox" value="<?=$station['id']?>"/>&nbsp;&nbsp;<?=$station['name']?></span></div>
+                                        <div class="bg-teal color-palette" title="选择工位"><span> <input class="station" type="checkbox" <?php if($station['status']):?>checked="checked"<?php endif;?>  value="<?=$station['id']?>"/>&nbsp;&nbsp;<?=$station['name']?></span></div>
                                     </div>
                                 </div>
                             <?php endforeach;?>

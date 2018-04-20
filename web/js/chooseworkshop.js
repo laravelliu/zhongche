@@ -3,6 +3,7 @@ var choose = function () {
     var type;
     var data = [];
     var url = 'post-type-work-area';
+
     var init = function (obj) {
         //初始化数据
         initValue(obj);
@@ -10,17 +11,36 @@ var choose = function () {
         $('.work-area').bind('click',workArea);
         $('.station').bind('click',station);
         $('#save').bind('click',saveInfo)
-console.log(data);
     };
 
     //初始化数据
     var initValue = function(obj){
         type = obj.type;
 
+        //初始化车间
         for (var wp in obj.workshop) {
             var k = {'workshop':obj.workshop[wp], 'value':[]};
             data.push(k);
         }
+
+        //没做选择
+        if (obj.chooseStation.length == 0) {
+            return false;
+        }
+
+        //初始化选中数据
+        for (var wn in obj.chooseStation) {
+            for (var mn in obj.chooseStation[parseInt(wn)]) {
+                var nObj = {workarea:mn,value:obj.chooseStation[parseInt(wn)][parseInt(mn)]};
+
+                for(var mb in data){
+                    if(data[mb]['workshop'] == wn){
+                        data[mb].value.push(nObj);
+                    }
+                }
+            }
+        }
+
     };
 
     //工区选择
@@ -59,6 +79,7 @@ console.log(data);
                 }
             }
         }
+        console.log(data);
 
     };
 
@@ -107,6 +128,8 @@ console.log(data);
                 $workAreaHtml.prop('checked',false);
             }
         }
+
+        console.log(data);
 
     };
 

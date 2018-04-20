@@ -15,6 +15,7 @@ use app\models\ar\QualityInspectionItemAR;
 use app\models\ar\QualityInspectionGroupItemAR;
 use app\models\ar\TaskAR;
 use app\models\ar\TypeAR;
+use app\models\ar\TypeWorkAreaAR;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use Yii;
@@ -172,5 +173,17 @@ class QualityModel extends Model
     public function getTaskList()
     {
         return TaskAR::find()->asArray()->all();
+    }
+
+    /**
+     * 根据质检类型获取所有设计物理工位
+     * @param $typeId
+     * @return static[]
+     * @author: liuFangShuo
+     */
+    public function getTypeArea($typeId)
+    {
+        $stations = TypeWorkAreaAR::find()->where(['type_id' => $typeId])->asArray()->all();
+        return $stations;
     }
 }
