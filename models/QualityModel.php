@@ -9,6 +9,9 @@
 namespace app\models;
 
 
+use app\models\ar\JobProcessAR;
+use app\models\ar\JobStationAR;
+use app\models\ar\JobStationItemAR;
 use app\models\ar\ProcessAR;
 use app\models\ar\QualityInspectionGroupAR;
 use app\models\ar\QualityInspectionItemAR;
@@ -191,11 +194,20 @@ class QualityModel extends Model
     /**
      * 根据质检类型获取职能工位
      * @param $type
+     * @return array|\yii\db\ActiveRecord[]
      * @author: liuFangShuo
      */
     public function getJobStation($type)
     {
+        if ($type == 0) {
+            $where = ['is_deleted' => STATUS_FALSE];
 
+        } else {
+            $where = ['type_id' => $type, 'is_deleted' => STATUS_FALSE];
+        }
+
+        $typeWorkArea = JobStationAR::find()->where($where)->asArray()->all();
+        return $typeWorkArea;
     }
 
     /**
@@ -218,35 +230,51 @@ class QualityModel extends Model
                 $data[$st['workshop_id']][$st['work_area_id']][] = $st['station_id'];
             }
 
+            //每个车间工位数量
+            $workshopNum = [];
             //去除每个车间多余的产线
             foreach ($data as $k => $v) {
-                if(count($v) == 1){
-                    continue;
+
+                foreach ($v as $m) {
+                    $workshopNum[$k] = count($m);
                 }
-
-                //拿出一个所有key
-                $keys = array_keys($data[$k]);
-                $chooseKey = rand(0,count($keys));
-
-                //随机拿一个工区
-                $data[$k] = [$keys[$chooseKey] =>$data[$k][$keys[$chooseKey] ]];
             }
 
-        print_r($data);
             //查询一下职能工位
             $jobStation = $this->getJobStation($type);
-
             //职能工位不为空，清除职能工位的质检流程和质检项
             if (!empty($jobStation)) {
+                $jobstations = array_column($jobStation,'id');
+
                 //清除质检流程
+                JobProcessAR::deleteAll(['job_station_id' => $jobstations]);
 
                 //清除质检项
+                JobStationItemAR::deleteAll(['job_station_id' => $jobstations]);
+
+                //删除原有职能工位
+                JobStationAR::deleteAll(['id' => $jobstations]);
             }
 
-            //删除原有职能工位
+            $arr = [];
+            $time = time();
+            foreach ($workshopNum as $k => $v) {
+                for($i=1; $i<=$v; $i++) {
+                    $arr[] = "($type,$k,$time,$time)";
+                }
+            }
 
+            $str = implode(',',$arr);
             //新增职能工位
+            $sql = 'insert into zc_job_station (type_id, workshop_id,create_time,update_time) values '.$str;
+            $res= \Yii::$app->db->createCommand($sql)->query();
 
+            if(!$res){
+                throw new NotFoundHttpException('新增失败');
+            }
+
+            $trans->commit();
+            return true;
 
         }catch (\Exception $e){
             $trans->rollBack();
@@ -255,4 +283,18 @@ class QualityModel extends Model
         }
 
     }
+
+    /**
+     * 根据车间获取职能工位
+     * @param $type
+     * @param $workshop
+     * @return array|\yii\db\ActiveRecord[]
+     * @author: liuFangShuo
+     */
+    public function getJobStationByWorkshop($type,$workshop)
+    {
+        $stations = JobStationAR::find()->where(['type_id' => $type, 'workshop_id' => $workshop, 'is_deleted' => STATUS_FALSE])->asArray()->all();
+        return $stations;
+    }
+
 }

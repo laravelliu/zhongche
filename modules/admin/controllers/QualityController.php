@@ -2,11 +2,13 @@
 
 namespace app\modules\admin\controllers;
 
+use app\models\ar\JobStationAR;
 use app\models\ar\ProcessAR;
 use app\models\ar\QualityInspectionGroupAR;
 use app\models\ar\QualityInspectionItemAR;
 use app\models\ar\TypeAR;
 use app\models\ar\TypeWorkAreaAR;
+use app\models\ar\WorkshopAR;
 use app\models\QualityModel;
 use app\models\WorkshopModel;
 use Yii;
@@ -684,12 +686,118 @@ class QualityController extends BaseController
             }
 
             $model = new QualityModel();
-            $model->changeJobQuality($type);
+            $res = $model->changeJobQuality($type);
 
+            if ($res) {
+               return $this->ajaxReturn('',0);
+            } else {
+                return $this->ajaxReturn('',1,$model->getErrors());
+            }
         }
 
         return false;
 
+    }
+
+    /**
+     * 职能工位
+     * @author: liuFangShuo
+     */
+    public function actionJobStation()
+    {
+        return $this->render('job-station');
+    }
+
+    /**
+     * 获取职能工位列表
+     * @return array|\yii\db\ActiveRecord[]
+     * @author: liuFangShuo
+     */
+    public function actionGetJobStation()
+    {
+        $model = new QualityModel();
+        $workModel = new WorkshopModel();
+        $jobStation = $model->getJobStation(0);
+
+        $jobArr = ArrayHelper::map($jobStation,'id','name');
+
+        //获取质检类型
+        $typeListArr = $model->getQualityType();
+        $typeList = ArrayHelper::map($typeListArr,'id','name');
+
+        //获取车间列表
+        $workshopListArr = $workModel->getWorkshopList();
+        $workshopList = ArrayHelper::map($workshopListArr,'id','name');
+
+
+        if (!empty($jobStation)) {
+            foreach ($jobStation as $k => $v){
+                $jobStation[$k]['name'] = empty($v['name']) ? '无' : $v['name'];
+                $jobStation[$k]['type'] = isset($typeList[$v['type_id']])?$typeList[$v['type_id']]:'错误数据';
+                $jobStation[$k]['workshop'] = isset($workshopList[$v['workshop_id']])?$workshopList[$v['workshop_id']]:'错误数据';
+                $jobStation[$k]['pName'] = isset($jobArr[$v['pid']]) ? $jobArr[$v['pid']]: '无';
+                $jobStation[$k]['sName'] = isset($jobArr[$v['sid']]) ? $jobArr[$v['sid']]: '无';
+                $jobStation[$k]['create_time'] = date('Y-m-d H:i:s', $v['create_time']);
+                $jobStation[$k]['update_time'] = date('Y-m-d H:i:s', $v['update_time']);
+            }
+        }
+
+        return $this->ajaxReturn($jobStation);
+    }
+
+    /**
+     * 编辑职能工位
+     * @author: liuFangShuo
+     */
+    public function actionEditJobStation()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = JobStationAR::findOne(['id' => $id, 'is_deleted' => STATUS_FALSE]);
+
+        //获取同一车间的职能工位
+        $qualitModel = new QualityModel();
+        $stations = $qualitModel->getJobStationByWorkshop($model->type_id,$model->workshop_id);
+
+        //过滤没有名字的
+        $stArr = [];
+        foreach ($stations as $v) {
+            if(empty($v['name']) || $v['id'] == $id){
+                continue;
+            }
+
+            $stArr[$v['id']] = $v['name'];
+        }
+
+        $stationArr = [0 => '无'] + $stArr;
+
+        //获取车间
+        $workshop = WorkshopAR::findOne(['id' => $model->workshop_id, 'is_deleted' => STATUS_FALSE]);
+        $workshopName = $workshop->name;
+
+        if (Yii::$app->request->isPost) {
+            if ($model->load($post = Yii::$app->request->post()) && $model->validate()) {
+                if ($model->save(false)) {
+
+                    if ($model->pid == 0) {
+                        return $this->redirect(Url::to(['quality/job-station']));
+                    } else {
+                        $pModel = JobStationAR::findOne(['id' => $model->pid, 'is_deleted' => STATUS_FALSE]);
+                        $pModel->sid = $model->id;
+
+                        if($pModel->save(false)){
+                            return $this->redirect(Url::to(['quality/job-station']));
+                        } else {
+                            $model->addError('name', '网络错误，请重试');
+                        }
+                    }
+
+                }
+            }
+
+            $model->getErrors();
+        }
+
+        return $this->render('edit-job-station',['model' => $model, 'station' => $stationArr, 'workshop' => $workshopName]);
     }
 
 }
