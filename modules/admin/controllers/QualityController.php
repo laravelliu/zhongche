@@ -545,7 +545,7 @@ class QualityController extends BaseController
         $workArea = $model->getWorkAreaList();
 
         //获取工位
-        $station = $model->getStationByCondition([],['work_area_id' => SORT_ASC,'sort' => SORT_ASC]);
+        $station = $model->getStationByCondition([],['work_area_id' => SORT_ASC]);
 
         $stationArr=[];
         if (!empty($station)) {
