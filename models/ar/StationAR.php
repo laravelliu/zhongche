@@ -11,7 +11,7 @@ use Yii;
  * @property string $name 工位名称
  * @property string $code 工位编码
  * @property int $pid 上一工位id
- * @property int $sort 工位位置
+ * @property int $sid 下一工位ID
  * @property int $work_area_id 工区ID
  * @property int $workshop_id 车间id
  * @property int $is_deleted 是否删除
@@ -52,7 +52,7 @@ class StationAR extends \app\models\ar\BaseAR
     {
         return [
             [['pid', 'work_area_id', 'workshop_id'], 'required', 'on' => 'default'],
-            [['pid', 'sort', 'work_area_id', 'workshop_id', 'is_deleted'], 'integer', 'on' => 'default'],
+            [['pid', 'sid', 'work_area_id', 'workshop_id', 'is_deleted'], 'integer', 'on' => 'default'],
             [['name', 'code'], 'string', 'max' => 64, 'on' => ['default', 'create', 'update']],
             [['name', 'code', 'work_area_id', 'workshop_id'], 'required', 'message' => '不能为空', 'on' => ['create','update']],
             ['work_area_id', 'compare', 'compareValue' => 0, 'operator' => '>', 'message' =>'请先选择工区', 'on' => ['create','update']],
@@ -70,7 +70,7 @@ class StationAR extends \app\models\ar\BaseAR
             'name' => 'Name',
             'code' => 'Code',
             'pid' => 'Pid',
-            'sort' => 'Sort',
+            'sid' => 'Sid',
             'work_area_id' => 'Work Area ID',
             'workshop_id' => 'Workshop ID',
             'is_deleted' => 'Is Deleted',
@@ -105,13 +105,9 @@ class StationAR extends \app\models\ar\BaseAR
             $model = new static();
         }
 
-        //查找一下上一级车间
         if(!empty($this->pid)){
-            $pStation = static::findOne(['id' => $this->pid, 'is_deleted' => STATUS_FALSE]);
-            $model->sort = $pStation->sort + 1;
             $model->pid = $this->pid;
         } else {
-            $model->sort = 1;
             $model->pid = 0;
         }
 
@@ -122,9 +118,21 @@ class StationAR extends \app\models\ar\BaseAR
 
 
         if(!$model->save(false)){
+
             $this->addError('code', '网络问题，稍后重试');
             return false;
         } else {
+
+            $pStation = static::findOne(['id' => $this->pid, 'is_deleted' => STATUS_FALSE]);
+            if(!empty($pStation)){
+                $pStation->sid = $model->id;
+
+                if(!$pStation->save(false)){
+                    $this->addError('name', '网络问题，稍后重试');
+                    return false;
+                }
+            }
+
             return true;
         }
     }

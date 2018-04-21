@@ -37,8 +37,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             <th>id</th>
                             <th>名称</th>
                             <th>编号</th>
-                            <th>上一级车间</th>
-                            <th>所处位置</th>
+                            <th>上一车间</th>
+                            <th>下一车间</th>
                             <th>创建时间</th>
                             <th>更新时间</th>
                             <th>操作</th>
@@ -102,22 +102,8 @@ $this->params['breadcrumbs'][] = $this->title;
             {data: "id"},
             {data: "name"},
             {data: "code"},
-            {data: "pid", render: function (data,type,full) {
-                if(data == 0){
-                    return '无';
-                }
-
-                var dataList = $('#workshop-table').DataTable().data();
-                for(var wp in dataList){
-                    if(dataList[wp]['id'] == data){
-                        return dataList[wp]['name']
-                    }
-                }
-
-                return '车间不存在';
-
-            }},
-            {data: "sort"},
+            {data: "pWorkshop"},
+            {data: "sWorkshop"},
             {data: "create_time"},
             {data: "update_time"},
             {

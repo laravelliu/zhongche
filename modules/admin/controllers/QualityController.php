@@ -670,5 +670,27 @@ class QualityController extends BaseController
 
     }
 
+    /**
+     * 自动生成职能工位
+     * @author: liuFangShuo
+     */
+    public function actionDoJobStation()
+    {
+        if (Yii::$app->request->isAjax) {
+            $type = Yii::$app->request->post('type',0);
+
+            if ($type == 0) {
+                return $this->ajaxReturn('',1,'请传输质检类型');
+            }
+
+            $model = new QualityModel();
+            $model->changeJobQuality($type);
+
+        }
+
+        return false;
+
+    }
+
 }
 

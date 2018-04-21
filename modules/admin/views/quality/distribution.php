@@ -42,10 +42,10 @@ $obj = ['workshop' => $workshopJs, 'type' => Yii::$app->request->get('id'), 'cho
         z-index: 7;
     }
 </style>
-
 <!-- Main content -->
 <section class="content">
-    <div><span><h4><?=$type->name?></h4></span></div>
+    <div><span><h4><?=$type->name?></h4></span></div><div><button class="btn btn-info" id="saveJobStation" type="button">生成职能工位</button>
+    </div>
 
     <?php foreach ($data as $k => $workshop):?>
     <!-- COLOR PALETTE -->

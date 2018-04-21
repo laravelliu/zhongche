@@ -26,7 +26,7 @@ class WorkshopModel extends Model
      */
     public function getWorkshopList()
     {
-        $workshopList = WorkshopAR::find()->where(['is_deleted' => STATUS_FALSE])->orderBy(['sort' => SORT_ASC])->asArray()->all();
+        $workshopList = WorkshopAR::find()->where(['is_deleted' => STATUS_FALSE])->asArray()->all();
         return $workshopList;
     }
 

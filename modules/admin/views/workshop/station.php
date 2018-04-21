@@ -37,8 +37,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             <th>id</th>
                             <th>名称</th>
                             <th>编号</th>
-                            <th>上一级工位</th>
-                            <th>所处位置</th>
+                            <th>上一工位</th>
+                            <th>下一工位</th>
                             <th>所属工区</th>
                             <th>所属车间</th>
                             <th>创建时间</th>
@@ -105,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
             {data: "name"},
             {data: "code"},
             {data: "pStation"},
-            {data: "sort"},
+            {data: "sStation"},
             {data: "workArea"},
             {data: "workshop"},
             {data: "create_time"},

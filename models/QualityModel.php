@@ -17,6 +17,7 @@ use app\models\ar\TaskAR;
 use app\models\ar\TypeAR;
 use app\models\ar\TypeWorkAreaAR;
 use yii\base\Model;
+use yii\db\Exception;
 use yii\helpers\ArrayHelper;
 use Yii;
 use yii\web\NotFoundHttpException;
@@ -185,5 +186,73 @@ class QualityModel extends Model
     {
         $stations = TypeWorkAreaAR::find()->where(['type_id' => $typeId])->asArray()->all();
         return $stations;
+    }
+
+    /**
+     * 根据质检类型获取职能工位
+     * @param $type
+     * @author: liuFangShuo
+     */
+    public function getJobStation($type)
+    {
+
+    }
+
+    /**
+     *  重新生成职能工位
+     * @author: liuFangShuo
+     */
+    public function changeJobQuality($type)
+    {
+        $trans = Yii::$app->db->beginTransaction();
+
+        try{
+            //查询一下物理工位
+            $stations = $this->getTypeArea($type);
+            if (empty($stations)) {
+                throw new Exception('请给质检类型分配物理工位');
+            }
+
+            //每个车间选出一条产线
+            foreach ($stations as $st) {
+                $data[$st['workshop_id']][$st['work_area_id']][] = $st['station_id'];
+            }
+
+            //去除每个车间多余的产线
+            foreach ($data as $k => $v) {
+                if(count($v) == 1){
+                    continue;
+                }
+
+                //拿出一个所有key
+                $keys = array_keys($data[$k]);
+                $chooseKey = rand(0,count($keys));
+
+                //随机拿一个工区
+                $data[$k] = [$keys[$chooseKey] =>$data[$k][$keys[$chooseKey] ]];
+            }
+
+        print_r($data);
+            //查询一下职能工位
+            $jobStation = $this->getJobStation($type);
+
+            //职能工位不为空，清除职能工位的质检流程和质检项
+            if (!empty($jobStation)) {
+                //清除质检流程
+
+                //清除质检项
+            }
+
+            //删除原有职能工位
+
+            //新增职能工位
+
+
+        }catch (\Exception $e){
+            $trans->rollBack();
+            $this->addError('name',$e->getMessage());
+            return false;
+        }
+
     }
 }

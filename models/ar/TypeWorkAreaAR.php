@@ -3,6 +3,7 @@
 namespace app\models\ar;
 
 use Yii;
+use yii\db\Exception;
 
 /**
  * This is the model class for table "zc_type_work_area".
@@ -60,32 +61,50 @@ class TypeWorkAreaAR extends \app\models\ar\BaseAR
      */
     public function saveBatch($data, $del,$type)
     {
-        $res = true;
-
         if (empty($data)  && empty($del)) {
-            return $res;
+            return true;
         }
 
-        //要插入数据
-        if ( !empty($data) ) {
-            foreach ($data as $v) {
-                $arr[] = '('.implode(',',$v).')';
+        $connection  = Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+
+        try {
+
+            //要插入数据
+            if ( !empty($data) ) {
+                foreach ($data as $v) {
+                    $arr[] = '('.implode(',',$v).')';
+                }
+
+                $str = implode(',', $arr);
+
+                $sql = "insert into " . TypeWorkAreaAR::tableName() . " (workshop_id, work_area_id, station_id, type_id, create_time, update_time) VALUES " . $str;
+
+
+                $command = $connection->createCommand($sql);
+                $status = $command->execute();
+
+                if (!$status) {
+                    throw new Exception('错误');
+                }
             }
 
-            $str = implode(',', $arr);
+            //要删除的数据
+            if (!empty($del)) {
+                $res = $connection->createCommand()->delete(TypeWorkAreaAR::tableName(),'type_id='.$type.' and station_id in('.implode(',', $del).')')->execute();
 
-            $sql = "insert into " . TypeWorkAreaAR::tableName() . " (workshop_id, work_area_id, station_id, type_id, create_time, update_time) VALUES " . $str;
+                if (!$res) {
+                    throw new Exception('错误');
+                }
+            }
 
-            $connection  = Yii::$app->db;
-            $command = $connection->createCommand($sql);
-            $res = $res & $command->execute();
+            $transaction->commit();
+
+            return true;
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            return false;
         }
 
-        //要删除的数据
-        if (!empty($del)) {
-           $res = $res & static::deleteAll(['type_id' => $type, 'station_id'=>$del]);
-        }
-
-        return $res;
     }
 }

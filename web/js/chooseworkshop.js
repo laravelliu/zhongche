@@ -3,6 +3,7 @@ var choose = function () {
     var type;
     var data = [];
     var url = 'post-type-work-area';
+    var jobUrl = 'do-job-station';
 
     var init = function (obj) {
         //初始化数据
@@ -10,7 +11,8 @@ var choose = function () {
 
         $('.work-area').bind('click',workArea);
         $('.station').bind('click',station);
-        $('#save').bind('click',saveInfo)
+        $('#save').bind('click',saveInfo);
+        $('#saveJobStation').bind('click',jobStation);
     };
 
     //初始化数据
@@ -161,6 +163,20 @@ var choose = function () {
         $.ajax({
             'url' : url,
             'data' : {'data':data, 'type':type},
+            'type' : 'post',
+            'dataType' : 'json',
+            'success' : function (data) {
+                if(data.code == 0){
+                    alert(data.message);
+                }
+            }
+        });
+    };
+
+    var jobStation = function () {
+        $.ajax({
+            'url' : jobUrl,
+            'data' : {'type':type},
             'type' : 'post',
             'dataType' : 'json',
             'success' : function (data) {

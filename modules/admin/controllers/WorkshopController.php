@@ -37,10 +37,11 @@ class WorkshopController extends BaseController
         foreach ($workshopListInfo as $workshop){
             $workshop['create_time'] = date('Y-m-d H:i:s', $workshop['create_time']);
             $workshop['update_time'] = date('Y-m-d H:i:s', $workshop['update_time']);
-            $workshop['pWorkshop'] = $workshops[$workshop['id']];
+            $workshop['pWorkshop'] = isset($workshops[$workshop['pid']])?$workshops[$workshop['pid']]:'无';
+            $workshop['sWorkshop'] = isset($workshops[$workshop['sid']])?$workshops[$workshop['sid']]:'无';
             $workshopList[] = $workshop;
         }
-
+//print_r($workshopList)
         return $this->ajaxReturn($workshopList);
     }
 
@@ -270,6 +271,7 @@ class WorkshopController extends BaseController
                 $station['workshop'] = $workshop[$station['workshop_id']];
                 $station['workArea'] = $workArea[$station['work_area_id']];
                 $station['pStation'] = $stations[$station['pid']];
+                $station['sStation'] = $stations[$station['sid']];
 
                 $stationList[] = $station;
             }
