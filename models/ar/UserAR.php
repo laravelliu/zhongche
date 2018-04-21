@@ -23,7 +23,7 @@ use yii\web\IdentityInterface;
  * @property int $create_time 创建时间
  * @property int $update_time 更新时间
  */
-class UserAR extends BaseAr implements IdentityInterface
+class UserAR extends BaseAR implements IdentityInterface
 {
     /**
      * @inheritdoc
