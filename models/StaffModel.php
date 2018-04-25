@@ -242,4 +242,38 @@ class StaffModel extends Model
         }
     }
 
+    /**
+     * 判断是否拥有此权限
+     * @param $id
+     * @param array $role
+     * @return bool
+     * @author: liuFangShuo
+     */
+    public function isHaveRole($id,$role = [])
+    {
+           $return = UserRoleAR::find()->where(['user_id' => $id, 'role_id' => $role])->asArray()->all();
+
+           if(!empty($return)){
+               return true;
+           }
+
+           return false;
+    }
+
+    //判断是否为员工或者员工长
+    public function isStaffOrStaffLeader($id)
+    {
+        return $this->isHaveRole($id,[ROLE_STAFF,ROLE_STAFF_LEADER]);
+    }
+
+    /**
+     * 判断是否需要车间信息
+     * 调度|分解|专检|监造
+     * @author: liuFangShuo
+     */
+    public function isNeedWorkshop($id)
+    {
+        return $this->isHaveRole($id,[ROLE_DISPATCHER,ROLE_RESOLVE,ROLE_INSPECTION,ROLE_SUPERVISOR]);
+
+    }
 }

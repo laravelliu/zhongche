@@ -5,6 +5,7 @@ namespace app\modules\admin\controllers;
 use app\common\filters\PermissionFilter;
 use app\models\StaffModel;
 use app\models\UserModel;
+use app\models\WorkshopModel;
 use yii\helpers\ArrayHelper;
 use Yii;
 use yii\helpers\Url;
@@ -48,13 +49,38 @@ class AdminController extends BaseController
             $department = $deModel->getDepartmentList();
             $departmentMap = ArrayHelper::map($department, 'id', 'name');
 
+            //获取车间
+            $workModel = new WorkshopModel();
+            $workshop = $workModel->getWorkshopList();
+            $workshopArr = ArrayHelper::map($workshop, 'id', 'name');
+
             //获取员工组
             $group = $deModel->getStaffGroup();
             $groupMap = ArrayHelper::map($group, 'id', 'name');
 
-            foreach ($userList as $k => $v){
+            //获取角色信息
+            $roles = $deModel->getRole();
+            $rolesArr = ArrayHelper::map($roles, 'id', 'name');
+
+            foreach ($userList as $k => $v) {
+                $haveRoles = [];
+
+                //获取此人拥有的角色
+                $haveRolesArr = $deModel->getRoleByUserId($v['id']);
+                if (empty($haveRolesArr)) {
+                    $userList[$k]['roles'] = '未分配角色';
+                } else {
+                    foreach ($haveRolesArr as $m => $n){
+                        $haveRoles[] = $rolesArr[$n['role_id']];
+                    }
+
+                    $userList[$k]['roles'] = implode(',',$haveRoles);
+                }
+
+
                 $userList[$k]['group'] = ($v['is_admin'] == 0 && isset($groupMap[$v['group_id']])) ? $groupMap[$v['group_id']] : '-';
                 $userList[$k]['department'] = isset($departmentMap[$v['department_id']])?$departmentMap[$v['department_id']] : '无';
+                $userList[$k]['workshop'] = isset($workshopArr[$v['workshop_id']]) ? $workshopArr[$v['workshop_id']] : '无';
                 $userList[$k]['create_time'] = date('Y-m-d H:i:s', $v['create_time']);
                 $userList[$k]['update_time'] = date('Y-m-d H:i:s', $v['update_time']);
             }
@@ -161,6 +187,32 @@ class AdminController extends BaseController
 
         $model->setScenario('update');
 
+        //是否是员工或者员工长
+        $isStaff = $staffModel->isStaffOrStaffLeader($id);
+        $groupList = [];
+
+        //员工获取员工组
+        if ($isStaff) {
+            $model->setScenario('updateWithGroup');
+            //获取员工组
+            $group = $staffModel->getStaffGroup();
+            $groupList = [0=>'无'] + ArrayHelper::map($group, 'id', 'name');
+        }
+
+
+
+        //是否需要车间信息
+        $isNeedWorkshop = $staffModel->isNeedWorkshop($id);
+        $workshopArr = [];
+        if($isNeedWorkshop){
+            //车间信息
+            $model->setScenario('updateWithWorkshop');
+            $workModel = new WorkshopModel();
+            $workshop = $workModel->getWorkshopList();
+            $workshopArr = ArrayHelper::map($workshop,'id','name');
+        }
+
+
         if (Yii::$app->request->isPost) {
             if($model->load($post = Yii::$app->request->post()) && $model->validate()){
                 if ($model->saveUser()) {
@@ -172,20 +224,11 @@ class AdminController extends BaseController
             $model->getErrors();
         }
 
-        //员工获取员工组
-        if (!$model->is_admin) {
-            //获取员工组
-            $group = $staffModel->getStaffGroup();
-            $groupList = [0=>'无'] + ArrayHelper::map($group, 'id', 'name');
-        } else {
-            $groupList = [0=>'无'];
-        }
-
         //部门信息
         $department = $staffModel->getDepartmentList();
         $departmentList = ArrayHelper::map($department, 'id', 'name');
 
-        return $this->render('edit-user', ['group' => $groupList, 'department' => $departmentList, 'model' => $model]);
+        return $this->render('edit-user', ['group' => $groupList, 'department' => $departmentList, 'workshop' => $workshopArr, 'model' => $model, 'isStaff' => $isStaff, 'isNeedWorkshop' => $isNeedWorkshop]);
     }
 
 

@@ -23,8 +23,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <th>姓名</th>
                             <th>手机号</th>
                             <th>所在部门</th>
+                            <th>所在车间</th>
                             <th>所在员工组</th>
                             <th>是否能访问后台</th>
+                            <th>拥有角色</th>
                             <th>创建时间</th>
                             <th>更改时间</th>
                             <th>操作</th>
@@ -90,6 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 {data: "name"},
                 {data: "phone"},
                 {data: "department"},
+                {data: "workshop"},
                 {data: "group"},
                 {data: "is_admin", render:function (data,type,full) {
                    if (data == 0) {
@@ -98,6 +101,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                    return '是';
                 }},
+                {data: "roles"},
                 {data: "create_time"},
                 {data: "update_time"},
                 {

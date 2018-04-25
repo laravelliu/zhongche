@@ -30,3 +30,14 @@ define('QUALITY_PROCESS_GROUP',2);
 define('QUALITY_ITEM_TYPE_BEGIN',1);    //入厂
 define('QUALITY_ITEM_TYPE_DURING',2);   //质检
 define('QUALITY_ITEM_TYPE_OVER',3);     //整车质检
+
+//必要角色字典
+define('ROLE_DISPATCHER',  3);      //调度员
+define('ROLE_IDENTIFY',    4);      //入场检定员
+define('ROLE_STAFF',       5);      //员工
+define('ROLE_STAFF_LEADER',6);      //员工长
+define('ROLE_RESOLVE',     7);      //分解员
+define('ROLE_INSPECTION',  8);      //专检
+define('ROLE_ALL_INSPECTION',9);    //整车质检
+define('ROLE_SUPERVISOR',  10);     //监造
+

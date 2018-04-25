@@ -42,11 +42,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     <?=$form->field($model,'name')->textInput(['disabled' => 'disabled'])->label('名称：');?>
                     <?=$form->field($model,'department_id')->dropDownList($department,['prompt'=>'请选择部门'])->label('部门：');?>
-                    <?php if($model->is_admin == 1):?>
-                        <?=$form->field($model,'group_id')->dropDownList($group,['disabled'=>'disabled'])->label('员工组：');?>
-                    <?php else:?>
+
+                    <?php if($isStaff):?>
                         <?=$form->field($model,'group_id')->dropDownList($group,['prompt'=>'请选择员工组'])->label('员工组：');?>
                     <?php endif;?>
+
+                    <?php if($isNeedWorkshop):?>
+                    <?=$form->field($model,'workshop_id')->dropDownList($workshop, ['prompt'=>'请选择车间'])->label('车间：');?>
+                    <?php endif;?>
+
                     <?=$form->field($model,'is_admin')->radioList([0 => '否', 1 => '是'])->label('能否访问后台：');?>
 
                 </div>
