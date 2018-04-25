@@ -181,7 +181,7 @@ var choose = function () {
             'dataType' : 'json',
             'success' : function (data) {
                 if(data.code == 0){
-                    alert('生成职能工位陈工');
+                    alert('生成职能工位成功');
                 } else {
                     alert(data.message);
                 }

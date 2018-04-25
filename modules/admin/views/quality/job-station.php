@@ -113,7 +113,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     if (full['name'] == '无' && full['pName'] == '无' && full['sName'] == '无') {
                         return '<a href="edit-job-station?id=' + full['id'] + '">初始职能工位</a>'
                     } else {
-                        return '<a href="edit-job-station?id=' + full['id'] + '">编辑职能工位</a>&nbsp;<a href="edit-quality-type?id=' + full['id'] + '">分配质检流程</a>&nbsp;<br><a href="distribution-area?id=' + full['id'] + '">分配质检项</a>&nbsp;<a href="edit-quality-type?id=' + full['id'] + '">分配质检流程</a>';
+                        return '<a href="edit-job-station?id=' + full['id'] + '">编辑职能工位</a>&nbsp;&nbsp;<a href="distribution-process?id=' + full['id'] + '">分配质检流程</a>&nbsp;&nbsp;<br><a href="distribution-item?id=' + full['id'] + '">分配质检项</a>&nbsp;&nbsp;<a href="relate-station?id=' + full['id'] + '">关联物理工位</a>';
                     }
                 }
             }

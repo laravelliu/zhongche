@@ -82,7 +82,9 @@ $d = [
 
 
     'admin/quality/job-station',
-    'admin/quality/edit-job-station'
+    'admin/quality/edit-job-station',
+    'admin/quality/distribution-process',
+    'admin/quality/distribution-item'
 
 ];
 $f = [
@@ -204,7 +206,7 @@ $g = [
                     <li <?php if(in_array($url, ['admin/quality/quality-type', 'admin/quality/add-quality-type', 'admin/quality/edit-quality-type'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['quality/quality-type'])?>"><i class="fa fa-circle-o"></i>质检类型管理</a></li>
                     <li <?php if(in_array($url, ['admin/quality/quality-group', 'admin/quality/add-quality-group', 'admin/quality/edit-quality-group', 'admin/quality/add-item'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['quality/quality-group'])?>"><i class="fa fa-circle-o"></i>质检项组管理</a></li>
                     <li <?php if(in_array($url, ['admin/quality/index', 'admin/quality/add-quality-item', 'admin/quality/edit-quality-item'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['quality/index'])?>"><i class="fa fa-circle-o"></i>质检项管理</a></li>
-                    <li <?php if(in_array($url, ['admin/quality/job-station', 'admin/quality/edit-job-station'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['quality/job-station'])?>"><i class="fa fa-circle-o"></i>职能工位管理</a></li>
+                    <li <?php if(in_array($url, ['admin/quality/job-station', 'admin/quality/edit-job-station', 'admin/quality/distribution-process', 'admin/quality/distribution-item'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['quality/job-station'])?>"><i class="fa fa-circle-o"></i>职能工位管理</a></li>
                 </ul>
             </li>
 

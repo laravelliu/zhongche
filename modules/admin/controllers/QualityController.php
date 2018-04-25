@@ -3,11 +3,14 @@
 namespace app\modules\admin\controllers;
 
 use app\models\ar\JobStationAR;
+use app\models\ar\JobStationRelateStationAR;
 use app\models\ar\ProcessAR;
 use app\models\ar\QualityInspectionGroupAR;
 use app\models\ar\QualityInspectionItemAR;
+use app\models\ar\StationAR;
 use app\models\ar\TypeAR;
 use app\models\ar\TypeWorkAreaAR;
+use app\models\ar\WorkAreaAR;
 use app\models\ar\WorkshopAR;
 use app\models\QualityModel;
 use app\models\WorkshopModel;
@@ -800,5 +803,254 @@ class QualityController extends BaseController
         return $this->render('edit-job-station',['model' => $model, 'station' => $stationArr, 'workshop' => $workshopName]);
     }
 
+    /**
+     * 分配质检流程
+     * @author: liuFangShuo
+     */
+    public function actionDistributionProcess()
+    {
+        $id = Yii::$app->request->get('id',null);
+
+        $model = new QualityModel();
+        $jobStation = $model->getJobStationById($id);
+
+        //分配质检流程
+        if (empty($id)|| empty($jobStation)) {
+            $this->redirect(Url::to(['quality/job-station']));
+        }
+
+        //获取质检流程
+        $processList = $model->qualityProcessList();
+        $all = ArrayHelper::map($processList,'id','name');
+
+        //获取已选择的质检流程
+        $selectedProcess = $model->getProcessByJob($id);
+
+        $selected = [];
+        $unSelect = [];
+
+        if(empty($selectedProcess)){
+            $unSelect = $all;
+        } else {
+            //已经选择的类型
+            foreach ($selectedProcess as $k => $v) {
+                $selected[$v['process_id']] = $all[$v['process_id']];
+            }
+
+            $unSelect = array_diff($all,$selected);
+
+        }
+
+
+        return $this->render('distribution-process',['station' => $jobStation, 'qualityItem' => ['all' => $all, 'selected' => $selected, 'unSelect' => $unSelect, 'id'=>$id, 'url'=>Url::to(['quality/save-job-process'])]]);
+
+    }
+
+    /**
+     * 编辑质检流程
+     * @author: liuFangShuo
+     */
+    public function actionSaveJobProcess()
+    {
+        if (Yii::$app->request->isAjax) {
+            $select = Yii::$app->request->post('selected',null);
+            $unSelect = Yii::$app->request->post('unSelect',null);
+            $id = Yii::$app->request->post('id', null);
+
+            if (empty($id)) {
+                return $this->ajaxReturn([],1,'不存在id');
+            }
+
+            $selectId = [];
+            $unSelectId = [];
+
+            if (!empty($select)) {
+                foreach ($select as $k => $v) {
+                    $selectId[] =  $v[0];
+                }
+            }
+
+            if (!empty($unSelect)) {
+                foreach ($unSelect as $k => $v) {
+                    $unSelectId[] =  $v[0];
+                }
+            }
+
+            $model = new QualityModel();
+            $res = $model->saveJobProcess($id,$selectId,$unSelectId);
+
+            if($res){
+                return $this->ajaxReturn([]);
+            }
+
+            return $this->ajaxReturn([],1, $model->getFirstError('name'));
+
+        }
+
+        return false;
+
+    }
+
+    /**
+     * 分配质检项
+     * @author: liuFangShuo
+     */
+    public function actionDistributionItem()
+    {
+        $id = Yii::$app->request->get('id',null);
+
+        $model = new QualityModel();
+        $jobStation = $model->getJobStationById($id);
+
+        //分配质检流程
+        if (empty($id)|| empty($jobStation)) {
+            $this->redirect(Url::to(['quality/job-station']));
+        }
+
+        //获取质检项
+        $itemList = $model->getQualityList();
+        $all = ArrayHelper::map($itemList,'id','title');
+
+        //获取已选择的质检流程
+        $selectedItems = $model->getItemByJob($id);
+
+        $selected = [];
+        $unSelect = [];
+
+        if(empty($selectedItems)){
+            $unSelect = $all;
+        } else {
+            //已经选择的类型
+            foreach ($selectedItems as $k => $v) {
+                $selected[$v['item_id']] = $all[$v['item_id']];
+            }
+
+            $unSelect = array_diff($all,$selected);
+
+        }
+
+        return $this->render('distribution-item',['station' => $jobStation, 'qualityItem' => ['all' => $all, 'selected' => $selected, 'unSelect' => $unSelect, 'id'=>$id, 'url'=>Url::to(['quality/save-job-item'])]]);
+
+    }
+
+
+    /**
+     * 保存职能工位质检项
+     * @author: liuFangShuo
+     */
+    public function actionSaveJobItem()
+    {
+        if (Yii::$app->request->isAjax) {
+            $select = Yii::$app->request->post('selected',null);
+            $unSelect = Yii::$app->request->post('unSelect',null);
+            $id = Yii::$app->request->post('id', null);
+
+            if (empty($id)) {
+                return $this->ajaxReturn([],1,'不存在id');
+            }
+
+            $selectId = [];
+            $unSelectId = [];
+
+            if (!empty($select)) {
+                foreach ($select as $k => $v) {
+                    $selectId[] =  $v[0];
+                }
+            }
+
+            if (!empty($unSelect)) {
+                foreach ($unSelect as $k => $v) {
+                    $unSelectId[] =  $v[0];
+                }
+            }
+
+            $model = new QualityModel();
+            $res = $model->saveJobItem($id,$selectId,$unSelectId);
+
+            if($res){
+                return $this->ajaxReturn([]);
+            }
+
+            return $this->ajaxReturn([],1, $model->getFirstError('name'));
+
+        }
+
+        return false;
+    }
+
+    /**
+     *  关联职位
+     * @author: liuFangShuo
+     */
+    public function actionRelateStation()
+    {
+        $id = Yii::$app->request->get('id',null);
+
+        $model = new QualityModel();
+        $jobStation = $model->getJobStationById($id);
+
+        //分配质检流程
+        if (empty($id)|| empty($jobStation)) {
+            $this->redirect(Url::to(['quality/job-station']));
+        }
+
+        //获取职能工位所在车间的物理工位
+        $stations = TypeWorkAreaAR::findAll(['workshop_id' => $jobStation->workshop_id, 'type_id' => $jobStation->type_id]);
+
+        $canChoose = [];
+        foreach ($stations as $k => $v) {
+            $canChoose[] = $v->station_id;
+        }
+
+        //获取对应物理工位
+        $stationsList = StationAR::find()->where(['id' => $canChoose, 'is_deleted' => STATUS_FALSE])->asArray()->all();
+
+        $data = [];
+        foreach ($stationsList as $m => $n) {
+            $data[$n['work_area_id']][$n['id']] = $n;
+        }
+
+        //获取工区
+        $workArea = WorkAreaAR::find()->where(['workshop_id' => $jobStation->workshop_id])->asArray()->all();
+        $workAreaArr = ArrayHelper::map($workArea, 'id', 'name');
+
+        //获取已选择的物理工位
+        $chooseStations = JobStationRelateStationAR::find()->where(['job_station_id' => $id])->asArray()->all();
+        $chooseStationsArr = array_column($chooseStations,'station_id');
+
+        return $this->render('relate-station',['data' => $data,'station' => $jobStation, 'workArea' => $workAreaArr, 'id' => $id, 'chooseStations' => $chooseStationsArr]);
+
+    }
+
+    /**
+     * 编辑关联工位
+     * @author: liuFangShuo
+     */
+    public function actionEditRelateStation()
+    {
+        $id = Yii::$app->request->get('id', null);
+        $post = Yii::$app->request->post('choose',null);
+
+        //获取职能工位
+        $model = new QualityModel();
+        $jobStation = $model->getJobStationById($id);
+
+        //职能不存在
+        if (empty($jobStation) || empty($post)) {
+            return $this->redirect(Url::to(['quality/job-station']));
+        }
+
+        //查一下在type_work_area里面有没有
+        $stationList = $model->getTypeArea($jobStation->type_id,['station_id' => $post]);
+
+        if (empty($stationList)) {
+            return $this->redirect(Url::to(['quality/job-station']));
+        }
+
+        if($model->saveJobStation($jobStation,$stationList)){
+            return $this->redirect(Url::to(['quality/job-station']));
+        }
+
+    }
 }
 

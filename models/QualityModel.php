@@ -12,6 +12,7 @@ namespace app\models;
 use app\models\ar\JobProcessAR;
 use app\models\ar\JobStationAR;
 use app\models\ar\JobStationItemAR;
+use app\models\ar\JobStationRelateStationAR;
 use app\models\ar\ProcessAR;
 use app\models\ar\QualityInspectionGroupAR;
 use app\models\ar\QualityInspectionItemAR;
@@ -185,11 +186,19 @@ class QualityModel extends Model
      * @return static[]
      * @author: liuFangShuo
      */
-    public function getTypeArea($typeId)
+    public function getTypeArea($typeId,$condition = [])
     {
-        $stations = TypeWorkAreaAR::find()->where(['type_id' => $typeId])->asArray()->all();
+        if(empty($condition)){
+            $where = ['type_id' => $typeId];
+        } else {
+            $where['type_id'] = $typeId;
+            $where = array_merge($where,$condition);
+        }
+
+        $stations = TypeWorkAreaAR::find()->where($where)->asArray()->all();
         return $stations;
     }
+
 
     /**
      * 根据质检类型获取职能工位
@@ -252,6 +261,8 @@ class QualityModel extends Model
                 //清除质检项
                 JobStationItemAR::deleteAll(['job_station_id' => $jobstations]);
 
+                //清除职能工位和物理工位的关系
+
                 //删除原有职能工位
                 JobStationAR::deleteAll(['id' => $jobstations]);
             }
@@ -295,6 +306,187 @@ class QualityModel extends Model
     {
         $stations = JobStationAR::find()->where(['type_id' => $type, 'workshop_id' => $workshop, 'is_deleted' => STATUS_FALSE])->asArray()->all();
         return $stations;
+    }
+
+    /**
+     * 根据id获取职能工位
+     * @param $id
+     * @return null|static
+     * @author: liuFangShuo
+     */
+    public function getJobStationById($id)
+    {
+
+        return JobStationAR::findOne(['id' => $id, 'is_deleted' => STATUS_FALSE]);
+    }
+
+    /**
+     * 获取职能工位对应的质检流程
+     * @param $id
+     * @return array|\yii\db\ActiveRecord[]
+     * @author: liuFangShuo
+     */
+    public function getProcessByJob($id)
+    {
+        $Station = JobProcessAR::find()->where(['job_station_id' => $id])->asArray()->all();
+        return $Station;
+    }
+
+    public function saveJobProcess($id, $select = [], $delete = []){
+        $trans = Yii::$app->db->beginTransaction();
+
+        try{
+            $station = $this->getJobStationById($id);
+
+            if (empty($station)) {
+                throw new NotFoundHttpException('职能工位不存在');
+            }
+
+            if (!empty($delete)) {
+                $arrDel = [];
+                foreach ($delete as $k => $v){
+                    $arrDel[] = [$id,$v];
+                }
+
+                $sql = "delete from zc_job_process where job_station_id=$id and process_id in (" .implode(',',$delete).")";
+
+                $res= \Yii::$app->db->createCommand($sql)->query();
+
+                if(!$res){
+                    throw new NotFoundHttpException('删除失败');
+                }
+            }
+
+            if (!empty($select)) {
+
+                $haveSelect = JobProcessAR::find()->where(['job_station_id' => $id, 'process_id' => $select])->asArray()->all();
+
+                if (!empty($haveSelect)) {
+                    $haveSelect = array_column($haveSelect,'process_id');
+                }
+
+                $diff = array_diff($select, $haveSelect);
+
+
+                if (!empty($diff)) {
+                    $arrSelect = [];
+                    foreach ($diff as $k => $v){
+                        $arrSelect[] = [$id,$v,time(),time()];
+                    }
+
+                    $res= \Yii::$app->db->createCommand()->batchInsert(JobProcessAR::tableName(), ['job_station_id', 'process_id', 'create_time', 'update_time'], $arrSelect)->execute();
+
+                    if (!$res) {
+                        throw new NotFoundHttpException('新增失败');
+                    }
+                }
+
+            }
+
+            $trans->commit();
+            return true;
+
+        } catch (\Exception $e){
+            $trans->rollBack();
+            $this->addError('name', $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * 根据职能工位获取质检项
+     * @author: liuFangShuo
+     */
+    public function getItemByJob($id)
+    {
+        $items = JobStationItemAR::find()->where(['job_station_id' => $id])->asArray()->all();
+        return $items;
+    }
+
+    /**
+     * 保存配置的质检项
+     * @author: liuFangShuo
+     */
+    public function saveJobItem($id, $select = [], $delete = [])
+    {
+        $trans = Yii::$app->db->beginTransaction();
+
+        try{
+            $station = $this->getJobStationById($id);
+
+            if (empty($station)) {
+                throw new NotFoundHttpException('职能工位不存在');
+            }
+
+            if (!empty($delete)) {
+                $arrDel = [];
+                foreach ($delete as $k => $v){
+                    $arrDel[] = [$id,$v];
+                }
+
+                $sql = "delete from zc_job_station_item where job_station_id=$id and item_id in (" .implode(',',$delete).")";
+
+                $res= \Yii::$app->db->createCommand($sql)->query();
+
+                if(!$res){
+                    throw new NotFoundHttpException('删除失败');
+                }
+            }
+
+            if (!empty($select)) {
+
+                $haveSelect = JobStationItemAR::find()->where(['job_station_id' => $id, 'item_id' => $select])->asArray()->all();
+
+                if (!empty($haveSelect)) {
+                    $haveSelect = array_column($haveSelect,'item_id');
+                }
+
+                $diff = array_diff($select, $haveSelect);
+
+
+                if (!empty($diff)) {
+                    $arrSelect = [];
+                    foreach ($diff as $k => $v){
+                        $arrSelect[] = [$id,$v,time(),time()];
+                    }
+
+                    $res= \Yii::$app->db->createCommand()->batchInsert(JobStationItemAR::tableName(), ['job_station_id', 'item_id', 'create_time', 'update_time'], $arrSelect)->execute();
+
+                    if (!$res) {
+                        throw new NotFoundHttpException('新增失败');
+                    }
+                }
+
+            }
+
+            $trans->commit();
+            return true;
+
+        } catch (\Exception $e){
+            $trans->rollBack();
+            $this->addError('name', $e->getMessage());
+            return false;
+        }
+    }
+
+
+    /**
+     * 保存职能工位和物理工位的关系
+     * @param $jobStation
+     * @param $stationList
+     * @author: liuFangShuo
+     */
+    public function saveJobStation($jobStation,$stationList)
+    {
+        //组织数据
+        $data = [];
+        foreach ($stationList as $k => $v){
+            $data[] = [$jobStation->id,$jobStation->type_id,$v['workshop_id'],$v['work_area_id'],$v['station_id'],time(),time()];
+        }
+
+        $res = \Yii::$app->db->createCommand()->batchInsert(JobStationRelateStationAR::tableName(), ['job_station_id', 'type_id','workshop_id','work_area_id','station_id', 'create_time', 'update_time'], $data)->execute();
+
+        return $res;
     }
 
 }

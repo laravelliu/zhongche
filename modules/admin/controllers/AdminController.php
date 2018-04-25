@@ -134,8 +134,8 @@ class AdminController extends BaseController
             $model = new StaffModel();
             $res = $model->saveUserRole($id,$selectId,$unSelectId);
 
-            if($res){
-                return $this->ajaxReturn([]);
+            if ($res) {
+                return $this->ajaxReturn([],0);
             }
 
             return $this->ajaxReturn([],1, $model->getFirstError('name'));
@@ -176,7 +176,7 @@ class AdminController extends BaseController
         if (!$model->is_admin) {
             //获取员工组
             $group = $staffModel->getStaffGroup();
-            $groupList = ArrayHelper::map($group, 'id', 'name');
+            $groupList = [0=>'无'] + ArrayHelper::map($group, 'id', 'name');
         } else {
             $groupList = [0=>'无'];
         }
