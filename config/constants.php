@@ -19,6 +19,7 @@ define('STATUS_FALSE', 0);
 define('QUALITY_TYPE_JUDGE', 0);    //判断
 define('QUALITY_TYPE_CHOOSE', 1);   //选择
 define('QUALITY_TYPE_FILL', 2);     //填空
+define('QUALITY_TYPE_SELECT', 3);   //多选
 
 //车辆参数
 define('PARAM_TYPE_VEHICLE_TYPE', 1);
