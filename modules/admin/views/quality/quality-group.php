@@ -107,7 +107,7 @@ $this->params['breadcrumbs'][] = $this->title;
             {data: "update_time"},
             {
                 render:function (data,type,full) {
-                    return '<a href="edit-quality-group?id=' + full['id'] + '">编辑</a>   &nbsp;<a href="add-item?id=' + full['id'] + '">分配质检项</a>';
+                    return '<a href="edit-quality-group?id=' + full['id'] + '">编辑</a>&nbsp;<a href="add-item?id=' + full['id'] + '">分配质检项</a>&nbsp;<a href="group-distribution-process?id=' + full['id'] + '">分配质检流程</a>';
                 }
             }
         ]

@@ -44,7 +44,8 @@ class QualityInspectionItemAR extends \app\models\ar\BaseAR
     {
         return [
             [['pid', 'type', 'is_deleted'], 'integer', 'on'=>['default']],
-            [['title', 'standard'], 'string', 'max' => 255, 'on' => ['default', 'create', 'update']],
+            [['title'], 'string', 'max' => 255, 'on' => ['default', 'create', 'update']],
+            [['standard'], 'string', 'max' => 2048, 'on' => ['default', 'create', 'update']],
             [['title', 'type'], 'required', 'message'=>'不能为空', 'on'=>['create', 'update']],
             ['standard' , 'default', 'value' => '', 'on'=>['create','update']],
             ['type','in', 'range' => array_keys(Yii::$app->params['quality_type']), 'message'=>'不在规定范围', 'on'=>'create']

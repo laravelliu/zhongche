@@ -14,6 +14,7 @@ use app\models\ar\JobStationAR;
 use app\models\ar\JobStationItemAR;
 use app\models\ar\JobStationRelateStationAR;
 use app\models\ar\ProcessAR;
+use app\models\ar\QualityGroupProcessAR;
 use app\models\ar\QualityInspectionGroupAR;
 use app\models\ar\QualityInspectionItemAR;
 use app\models\ar\QualityInspectionGroupItemAR;
@@ -487,6 +488,17 @@ class QualityModel extends Model
         $res = \Yii::$app->db->createCommand()->batchInsert(JobStationRelateStationAR::tableName(), ['job_station_id', 'type_id','workshop_id','work_area_id','station_id', 'create_time', 'update_time'], $data)->execute();
 
         return $res;
+    }
+
+    /**
+     * 根据质检项组获取质检流程
+     * @param $id
+     * @author: liuFangShuo
+     */
+    public function getProcessByGroup($id)
+    {
+        $Station = QualityGroupProcessAR::find()->where(['quality_group_id' => $id])->asArray()->all();
+        return $Station;
     }
 
 }

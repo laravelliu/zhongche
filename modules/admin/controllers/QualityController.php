@@ -1052,5 +1052,56 @@ class QualityController extends BaseController
         }
 
     }
+
+    /**
+     * 质检项组分配流程
+     * @return string
+     * @author: liuFangShuo
+     */
+    public function actionGroupDistributionProcess()
+    {
+        $id = Yii::$app->request->get('id',null);
+
+        $model = new QualityModel();
+        $group = $model->getQualityGroupById($id);
+
+        //分配质检流程
+        if (empty($id)|| empty($group)) {
+            $this->redirect(Url::to(['quality/quality-group']));
+        }
+
+        //获取质检流程
+        $processList = $model->qualityProcessList();
+        $all = ArrayHelper::map($processList,'id','name');
+
+        //获取已选择的质检流程
+        $selectedProcess = $model->getProcessByGroup($id);
+
+        $selected = [];
+        $unSelect = [];
+
+        if(empty($selectedProcess)){
+            $unSelect = $all;
+        } else {
+            //已经选择的类型
+            foreach ($selectedProcess as $k => $v) {
+                $selected[$v['process_id']] = $all[$v['process_id']];
+            }
+
+            $unSelect = array_diff($all,$selected);
+
+        }
+
+        return $this->render('group-distribution-process',['group' => $group, 'qualityItem' => ['all' => $all, 'selected' => $selected, 'unSelect' => $unSelect, 'id'=>$id, 'url'=>Url::to(['quality/save-group-process'])]]);
+    }
+
+    /**
+     * 保存质检项组分配质检流程
+     * @author: liuFangShuo
+     */
+    public function actionSaveGroupProcess()
+    {
+
+    }
 }
 
