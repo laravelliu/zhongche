@@ -338,7 +338,7 @@ class QualityController extends BaseController
     public function actionGetQualityProcess()
     {
         $model = new QualityModel();
-        $process = $model->qualityProcessList();
+        $process = $model->qualityProcessList(0);
 
         if(!empty($process)){
             foreach ($process as $k => $v){
@@ -778,7 +778,9 @@ class QualityController extends BaseController
         $workshopName = $workshop->name;
 
         if (Yii::$app->request->isPost) {
+
             if ($model->load($post = Yii::$app->request->post()) && $model->validate()) {
+
                 if ($model->save(false)) {
 
                     if ($model->pid == 0) {
@@ -820,7 +822,7 @@ class QualityController extends BaseController
         }
 
         //获取质检流程
-        $processList = $model->qualityProcessList();
+        $processList = $model->qualityProcessList(QUALITY_PROCESS_ITEM);
         $all = ArrayHelper::map($processList,'id','name');
 
         //获取已选择的质检流程
@@ -909,7 +911,25 @@ class QualityController extends BaseController
 
         //获取质检项
         $itemList = $model->getQualityList();
-        $all = ArrayHelper::map($itemList,'id','title');
+
+        //获取同一种质检流程 其他职能工位已分配的问题
+        $otherItem = $model->getOtherSelectItem($jobStation);
+
+        $all = [];
+        if (!empty($otherItem)) {
+            $otherItemIds = array_column($otherItem, 'item_id');
+
+            foreach ($itemList as $k => $v){
+
+                if (in_array($v['id'],$otherItemIds)) {
+                    continue;
+                }
+
+                $all[$v['id']] = $v['title'];
+            }
+        } else {
+            $all = ArrayHelper::map($itemList,'id','title');
+        }
 
         //获取已选择的质检流程
         $selectedItems = $model->getItemByJob($id);
@@ -1071,7 +1091,7 @@ class QualityController extends BaseController
         }
 
         //获取质检流程
-        $processList = $model->qualityProcessList();
+        $processList = $model->qualityProcessList(QUALITY_PROCESS_GROUP);
         $all = ArrayHelper::map($processList,'id','name');
 
         //获取已选择的质检流程
@@ -1101,7 +1121,42 @@ class QualityController extends BaseController
      */
     public function actionSaveGroupProcess()
     {
+        if (Yii::$app->request->isAjax) {
+            $select = Yii::$app->request->post('selected',null);
+            $unSelect = Yii::$app->request->post('unSelect',null);
+            $id = Yii::$app->request->post('id', null);
 
+            if (empty($id)) {
+                return $this->ajaxReturn([],1,'不存在id');
+            }
+
+            $selectId = [];
+            $unSelectId = [];
+
+            if (!empty($select)) {
+                foreach ($select as $k => $v) {
+                    $selectId[] =  $v[0];
+                }
+            }
+
+            if (!empty($unSelect)) {
+                foreach ($unSelect as $k => $v) {
+                    $unSelectId[] =  $v[0];
+                }
+            }
+
+            $model = new QualityModel();
+            $res = $model->saveGroupProcess($id,$selectId,$unSelectId);
+
+            if($res){
+                return $this->ajaxReturn([]);
+            }
+
+            return $this->ajaxReturn([],1, $model->getFirstError('name'));
+
+        }
+
+        return false;
     }
 }
 

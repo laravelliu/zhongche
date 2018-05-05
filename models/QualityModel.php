@@ -40,6 +40,26 @@ class QualityModel extends Model
     }
 
     /**
+     * 获取职能工位所属质检流程的其他职能工位配置的质检项
+     * @param $station
+     * @return array|\yii\db\ActiveRecord[]
+     * @author: liuFangShuo
+     */
+    public function getOtherSelectItem($station)
+    {
+        $itemsList = JobStationAR::find()->where(['type_id' => $station->type_id, 'is_deleted' => STATUS_FALSE])->asArray()->all();
+        $ids = array_column($itemsList,'id');
+
+        //去掉本职能工位
+        $otherIds = array_diff($ids, [$station->id]);
+
+        $items = JobStationItemAR::find()->where(['job_station_id' => $otherIds])->asArray()->all();
+
+        return $items;
+    }
+
+
+    /**
      * 获取质量类别
      * @author: liuFangShuo
      */
@@ -76,9 +96,21 @@ class QualityModel extends Model
      * 质检流程
      * @author: liuFangShuo
      */
-    public function qualityProcessList()
+    public function qualityProcessList($type = 0)
     {
-        $qualityProcess = ProcessAR::find()->where(['is_deleted' =>STATUS_FALSE])->asArray()->all();
+        switch ($type){
+            case 1:
+                $where = ['is_deleted' => STATUS_FALSE, 'type' => QUALITY_PROCESS_ITEM];
+                break;
+            case 2:
+                $where = ['is_deleted' => STATUS_FALSE, 'type' => QUALITY_PROCESS_GROUP];
+                break;
+            default:
+                $where = ['is_deleted' =>STATUS_FALSE];
+                break;
+        }
+
+        $qualityProcess = ProcessAR::find()->where($where)->asArray()->all();
         return $qualityProcess;
     }
 
@@ -263,9 +295,10 @@ class QualityModel extends Model
                 JobStationItemAR::deleteAll(['job_station_id' => $jobstations]);
 
                 //清除职能工位和物理工位的关系
+                JobStationRelateStationAR::deleteAll(['job_station_id' => $jobstations]);
 
                 //删除原有职能工位
-                JobStationAR::deleteAll(['id' => $jobstations]);
+                JobStationAR::updateAll(['is_deleted' => STATUS_TRUE],['id' => $jobstations]);
             }
 
             $arr = [];
@@ -404,6 +437,13 @@ class QualityModel extends Model
         return $items;
     }
 
+
+    public function getOtherItemByJob()
+    {
+
+    }
+
+
     /**
      * 保存配置的质检项
      * @author: liuFangShuo
@@ -475,6 +515,7 @@ class QualityModel extends Model
      * 保存职能工位和物理工位的关系
      * @param $jobStation
      * @param $stationList
+     * @return int
      * @author: liuFangShuo
      */
     public function saveJobStation($jobStation,$stationList)
@@ -493,12 +534,76 @@ class QualityModel extends Model
     /**
      * 根据质检项组获取质检流程
      * @param $id
+     * @return array|\yii\db\ActiveRecord[]
      * @author: liuFangShuo
      */
     public function getProcessByGroup($id)
     {
         $Station = QualityGroupProcessAR::find()->where(['quality_group_id' => $id])->asArray()->all();
         return $Station;
+    }
+
+
+    public function saveGroupProcess($id, $select = [], $delete = [])
+    {
+        $trans = Yii::$app->db->beginTransaction();
+
+        try{
+            $group = $this->getQualityGroupById($id);
+
+            if (empty($group)) {
+                throw new NotFoundHttpException('质检项组不存在');
+            }
+
+            if (!empty($delete)) {
+                $arrDel = [];
+                foreach ($delete as $k => $v){
+                    $arrDel[] = [$id,$v];
+                }
+
+                $sql = "delete from zc_quality_group_process where quality_group_id=$id and process_id in (" .implode(',',$delete).")";
+
+                $res= \Yii::$app->db->createCommand($sql)->query();
+
+                if(!$res){
+                    throw new NotFoundHttpException('删除失败');
+                }
+            }
+
+            if (!empty($select)) {
+
+                $haveSelect = QualityGroupProcessAR::find()->where(['quality_group_id' => $id, 'process_id' => $select])->asArray()->all();
+
+                if (!empty($haveSelect)) {
+                    $haveSelect = array_column($haveSelect,'process_id');
+                }
+
+                $diff = array_diff($select, $haveSelect);
+
+
+                if (!empty($diff)) {
+                    $arrSelect = [];
+                    foreach ($diff as $k => $v){
+                        $arrSelect[] = [$id,$v,time(),time()];
+                    }
+
+                    $res= \Yii::$app->db->createCommand()->batchInsert(QualityGroupProcessAR::tableName(), ['quality_group_id', 'process_id', 'create_time', 'update_time'], $arrSelect)->execute();
+
+                    if (!$res) {
+                        throw new NotFoundHttpException('新增失败');
+                    }
+                }
+
+            }
+
+            $trans->commit();
+            return true;
+
+        } catch (\Exception $e){
+            $trans->rollBack();
+            $this->addError('name', $e->getMessage());
+            return false;
+        }
     }
 
 }

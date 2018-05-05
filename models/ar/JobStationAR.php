@@ -33,7 +33,7 @@ class JobStationAR extends \app\models\ar\BaseAR
     public function rules()
     {
         return [
-            [['type_id', 'workshop_id', 'create_time', 'update_time'], 'required'],
+            [['name','type_id', 'workshop_id', 'create_time', 'update_time'], 'required', 'message' => '不能为空'],
             [['type_id', 'workshop_id', 'sid', 'pid', 'is_deleted', 'create_time', 'update_time'], 'integer'],
             [['name'], 'string', 'max' => 255],
         ];

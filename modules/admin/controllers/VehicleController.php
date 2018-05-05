@@ -31,12 +31,20 @@ class VehicleController extends BaseController
         $vehicleModel = new VehicleModel();
         $vehicleList = $vehicleModel->getVehicleList();
 
+        //获取车辆型号
+        $vehicleType = $vehicleModel->getVehicleType();
+        $typeList = ArrayHelper::map($vehicleType, 'id','name');
+        //获取车辆类型
+        $vehicleModelList = $vehicleModel->getVehicleModel();
+        $modelList = ArrayHelper::map($vehicleModelList, 'id','name');
+
+
         if(!empty($vehicleList)){
             foreach ($vehicleList as $k => $v) {
                 $vehicleList[$k]['create_time'] = date('Y-m-d H:i:s', $v['create_time']);
                 $vehicleList[$k]['update_time'] = date('Y-m-d H:i:s', $v['update_time']);
-                $vehicleList[$k]['vehicle_type'] = $v['vehicle_type_id'];
-                $vehicleList[$k]['vehicle_model'] = $v['vehicle_model_id'];
+                $vehicleList[$k]['vehicle_type'] = isset($typeList[$v['vehicle_type_id']]) ? $typeList[$v['vehicle_type_id']] : '无';
+                $vehicleList[$k]['vehicle_model'] = isset($modelList[$v['vehicle_model_id']]) ? $modelList[$v['vehicle_model_id']] : '无';
             }
         }
 

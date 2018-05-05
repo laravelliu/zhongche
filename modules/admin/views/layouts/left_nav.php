@@ -29,11 +29,14 @@ $a = [
     'admin/permission/edit-permission',
 
     'admin/admin/index',
+    'admin/admin/edit-user',
+    'admin/admin/distribution-role',
+    'admin/role/distribution'
 ];
 $a1 = [
     'admin/staff/staff-group',
     'admin/staff/add-group',
-    'admin/staff/edit-staff-group'
+    'admin/staff/edit-staff-group',
 ];
 $a2 = [
     'admin/department/index',
@@ -43,6 +46,7 @@ $a2 = [
     'admin/role/index',
     'admin/role/edit-role',
     'admin/role/add-role',
+    'admin/role/distribution',
 
     'admin/permission/index',
     'admin/permission/add-permission',
@@ -84,7 +88,11 @@ $d = [
     'admin/quality/job-station',
     'admin/quality/edit-job-station',
     'admin/quality/distribution-process',
-    'admin/quality/distribution-item'
+    'admin/quality/distribution-item',
+
+    'admin/quality/group-distribution-process',
+    'admin/quality/distribution-area',
+    'admin/quality/relate-station'
 
 ];
 $f = [
@@ -130,7 +138,7 @@ $g = [
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li <?php if(in_array($url,['admin/admin/index'])):?>class="active"<?php endif;?>>
+                    <li <?php if(in_array($url,['admin/admin/index', 'admin/admin/edit-user', 'admin/admin/distribution-role'])):?>class="active"<?php endif;?>>
                         <a href="<?=Url::to(['admin/index'])?>"><i class="glyphicon glyphicon-user"></i>人员列表</a>
                     </li>
 
@@ -147,7 +155,7 @@ $g = [
                         </a>
                         <ul class="treeview-menu" <?php if(in_array($url,$a2)):?>style="display: block;"<?php endif;?>>
                             <li <?php if(in_array($url,['admin/department/index','admin/department/add-department','admin/department/edit-department'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['department/index'])?>"><i class="fa fa-sitemap"></i>部门管理</a></li>
-                            <li <?php if(in_array($url,['admin/role/index','admin/role/edit-role','admin/role/add-role'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['role/index'])?>"><i class="fa fa-address-card"></i>角色管理</a></li>
+                            <li <?php if(in_array($url,['admin/role/index','admin/role/edit-role','admin/role/add-role', 'admin/role/distribution'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['role/index'])?>"><i class="fa fa-address-card"></i>角色管理</a></li>
                             <li <?php if(in_array($url,['admin/permission/index','admin/permission/add-permission','admin/permission/edit-permission'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['permission/index'])?>"><i class="fa fa-folder-open"></i>权限管理</a></li>
                         </ul>
                     </li>
@@ -203,10 +211,10 @@ $g = [
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li <?php if(in_array($url, ['admin/quality/quality-type', 'admin/quality/add-quality-type', 'admin/quality/edit-quality-type'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['quality/quality-type'])?>"><i class="fa fa-circle-o"></i>质检类型管理</a></li>
-                    <li <?php if(in_array($url, ['admin/quality/quality-group', 'admin/quality/add-quality-group', 'admin/quality/edit-quality-group', 'admin/quality/add-item'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['quality/quality-group'])?>"><i class="fa fa-circle-o"></i>质检项组管理</a></li>
+                    <li <?php if(in_array($url, ['admin/quality/quality-type', 'admin/quality/add-quality-type', 'admin/quality/edit-quality-type', 'admin/quality/distribution-area'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['quality/quality-type'])?>"><i class="fa fa-circle-o"></i>质检类型管理</a></li>
+                    <li <?php if(in_array($url, ['admin/quality/quality-group', 'admin/quality/add-quality-group', 'admin/quality/edit-quality-group', 'admin/quality/add-item', 'admin/quality/group-distribution-process'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['quality/quality-group'])?>"><i class="fa fa-circle-o"></i>质检项组管理</a></li>
                     <li <?php if(in_array($url, ['admin/quality/index', 'admin/quality/add-quality-item', 'admin/quality/edit-quality-item'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['quality/index'])?>"><i class="fa fa-circle-o"></i>质检项管理</a></li>
-                    <li <?php if(in_array($url, ['admin/quality/job-station', 'admin/quality/edit-job-station', 'admin/quality/distribution-process', 'admin/quality/distribution-item'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['quality/job-station'])?>"><i class="fa fa-circle-o"></i>职能工位管理</a></li>
+                    <li <?php if(in_array($url, ['admin/quality/job-station', 'admin/quality/edit-job-station', 'admin/quality/distribution-process', 'admin/quality/distribution-item', 'admin/quality/relate-station'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['quality/job-station'])?>"><i class="fa fa-circle-o"></i>职能工位管理</a></li>
                 </ul>
             </li>
 
