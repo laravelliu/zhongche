@@ -606,4 +606,23 @@ class QualityModel extends Model
         }
     }
 
+    /**
+     * 获取在同一质检流程中不同质检项组已分配的质检项
+     * @param $obj
+     * @return array|\yii\db\ActiveRecord[]
+     * @author: liuFangShuo
+     */
+    public function getOtherGroupSelectItem($obj)
+    {
+        $groupList = QualityInspectionGroupAR::find()->where(['type_id' => $obj->type_id, 'is_deleted' => STATUS_FALSE])->asArray()->all();
+        $ids = array_column($groupList,'id');
+
+        //去掉本职能工位
+        $otherIds = array_diff($ids, [$obj->id]);
+
+        $items = QualityInspectionGroupItemAR::find()->where(['group_id' => $otherIds])->asArray()->all();
+
+        return $items;
+    }
+
 }

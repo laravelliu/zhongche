@@ -88,6 +88,7 @@ class QualityInspectionGroupAR extends \app\models\ar\BaseAR
 
         $model->name = $this->name;
         $model->type_id = $this->type_id;
+        $model->item_type = $this->item_type;
 
         if(!$model->save(false)){
             $this->addError('name', '网络问题，稍后重试');

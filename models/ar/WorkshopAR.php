@@ -106,7 +106,7 @@ class WorkshopAR extends \app\models\ar\BaseAR
             $pws = static::findOne(['id' => $this->pid, 'is_deleted' => STATUS_FALSE]);
 
             if(!empty($pws)){
-                $pws->sid = $this->id;
+                $pws->sid = $model->id;
 
                 if(!$pws->save(false)){
                     $this->addError('code', '网络问题，稍后重试');

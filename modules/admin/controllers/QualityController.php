@@ -439,7 +439,7 @@ class QualityController extends BaseController
     }
 
     /**
-     * 给质检项组分配质检项
+     * 质检项组分配质检项
      * @author: liuFangShuo
      */
     public function actionAddItem()
@@ -450,13 +450,32 @@ class QualityController extends BaseController
         $model = new QualityModel();
         $qualityGroup = $model->getQualityGroupById($id);
 
-        if(empty($id) || empty($model)){
+        if(empty($id) || empty($qualityGroup)){
             return $this->redirect(Url::to(['quality/quality-group']));
         }
 
         //获取所有质检项
         $qualityListAll = $model->getQualityList();
-        $all = ArrayHelper::map($qualityListAll,'id','title');
+
+        //获取当前质检流程已分配的质检项
+        $otherSelect = $model->getOtherGroupSelectItem($qualityGroup);
+
+        $all = [];
+        if (!empty($otherSelect)) {
+            $otherItemIds = array_column($otherSelect, 'item_id');
+
+            foreach ($qualityListAll as $k => $v){
+
+                if (in_array($v['id'],$otherItemIds)) {
+                    continue;
+                }
+
+                $all[$v['id']] = $v['title'];
+            }
+        } else {
+            $all = ArrayHelper::map($qualityListAll,'id','title');
+        }
+
 
         $selected = [];
         $unSelect = [];
@@ -550,7 +569,7 @@ class QualityController extends BaseController
         $workArea = $model->getWorkAreaList();
 
         //获取工位
-        $station = $model->getStationByCondition([],['work_area_id' => SORT_ASC]);
+        $station = $model->getStationByCondition([],['work_area_id' => SORT_ASC,'pid' => SORT_ASC]);
 
         $stationArr=[];
         if (!empty($station)) {

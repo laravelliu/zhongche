@@ -72,6 +72,7 @@ class DepartmentController extends BaseController
         if(empty($id) || empty($model)){
             return $this->redirect(Url::to(['department/index']));
         }
+        $model->setScenario('update');
 
         if (Yii::$app->request->isPost) {
             if($model->load($post = Yii::$app->request->post()) && $model->validate()){
