@@ -92,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns': [
             {data: "id"},
             {data: "type"},
-            {data: "vehicle"},
+            {data: "vehicle_info"},
             {data: "status"},
             {data: "create_time"},
             {data: "update_time"},

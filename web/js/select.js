@@ -58,6 +58,12 @@ var selectInfo = function () {
             deleteAll();
         });
 
+        //筛选
+        $('#choose-group').change(function (obj) {
+            var $group =  $('#choose-group').val();
+            selectItem($group);
+        });
+
         //保存数据
         $('#save_info').click(function () {
            saveInfo();
@@ -173,6 +179,29 @@ var selectInfo = function () {
             $('#unSelect').append("<option value='"+value[0]+"'>"+value[1]+"</option>");
         })
 
+    };
+
+    var selectItem = function ($group) {
+        $.ajax({
+            url : '/admin/quality/get-item',
+            data : {job_station_id:id,group_id:$group},
+            type:'post',
+            dataType:'json',
+            success:function (data) {
+
+                if (data.code == 0) {
+                    //渲染
+                    $('#unSelect').empty();
+
+                    for(var wm in data.data){
+                        $('#unSelect').append("<option value=\""+wm+"\">"+data.data[wm]+"</option>");
+                    }
+
+                } else {
+                    alert(data.message);
+                }
+            }
+        });
     };
 
     var saveInfo = function () {

@@ -71,7 +71,7 @@ class RoleController extends BaseController
     public function actionEditRole()
     {
         $id = Yii::$app->request->get('id', null);
-        $model = RoleAR::findOne(['is_deleted' => STATUS_FALSE, 'id' => $id]);
+        $model = RoleAR::findOne(['is_deleted' => STATUS_FALSE, 'is_sys' => STATUS_FALSE, 'id' => $id]);
 
         if(empty($id) || empty($model)){
             return $this->redirect(Url::to(['role/index']));

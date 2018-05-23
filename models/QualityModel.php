@@ -126,6 +126,16 @@ class QualityModel extends Model
     }
 
     /**
+     * 根据质检类型获取质检项组
+     * @author: liuFangShuo
+     */
+    public function getQualityGroupByTypeId($typeId)
+    {
+        $return = QualityInspectionGroupAR::find()->where(['type_id' => $typeId])->asArray()->all();
+        return $return;
+    }
+
+    /**
      * 根据质检项组获取质检项
      * @param string $groupId
      * @return array|\yii\db\ActiveRecord[]
@@ -520,6 +530,8 @@ class QualityModel extends Model
      */
     public function saveJobStation($jobStation,$stationList)
     {
+        JobStationRelateStationAR::deleteAll(['job_station_id' => $jobStation->id]);
+
         //组织数据
         $data = [];
         foreach ($stationList as $k => $v){
@@ -621,6 +633,17 @@ class QualityModel extends Model
         $otherIds = array_diff($ids, [$obj->id]);
 
         $items = QualityInspectionGroupItemAR::find()->where(['group_id' => $otherIds])->asArray()->all();
+
+        return $items;
+    }
+
+    /**
+     * 根据ID数组获取质检项
+     * @author: liuFangShuo
+     */
+    public function getQualityItemByIds($ids)
+    {
+        $items = QualityInspectionItemAR::find()->where(['is_deleted' => STATUS_FALSE, 'id' => $ids])->asArray()->all();
 
         return $items;
     }

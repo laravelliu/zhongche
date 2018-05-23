@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     <?=$form->field($model,'name')->textInput(['placeholder' => '请输入工区名称：工区001'])->label('工区名称：');?>
                     <?=$form->field($model,'code')->textInput(['placeholder' => '请输入工区编号：123', 'disabled'=>'disabled'])->label('工区编号：');?>
-                    <?=$form->field($model,'workshop_id')->dropDownList($workshop, ['placeholder' => '请选择车间','disabled'=>'disabled'])->label('所属车间：');?>
+                    <?=$form->field($model,'workshop_id')->dropDownList($workshop, ['placeholder' => '请选择车间'])->label('所属车间：');?>
 
                 </div>
                 <div class="box-footer">

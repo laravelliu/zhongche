@@ -76,7 +76,7 @@ class WorkAreaAR extends \app\models\ar\BaseAR
     public function saveWorkArea()
     {
         //查找一下
-        $model = static::findOne(['code' => trim($this->code), 'workshop_id' => $this->workshop_id, 'is_deleted' => STATUS_FALSE]);
+        $model = static::findOne(['code' => trim($this->code),  'is_deleted' => STATUS_FALSE]);
 
         //创建时必须不能存在
         if($this->getScenario() == 'create' && !empty($model)){

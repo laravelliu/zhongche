@@ -260,20 +260,20 @@ class StaffModel extends Model
            return false;
     }
 
-    //判断是否为员工或者员工长
+    //判断是否为员工或者员工长或者分解员
     public function isStaffOrStaffLeader($id)
     {
-        return $this->isHaveRole($id,[ROLE_STAFF,ROLE_STAFF_LEADER]);
+        return $this->isHaveRole($id,[ROLE_STAFF,ROLE_STAFF_LEADER,ROLE_RESOLVE]);
     }
 
     /**
      * 判断是否需要车间信息
-     * 调度|分解|专检|监造
+     * 调度|专检|监造
      * @author: liuFangShuo
      */
     public function isNeedWorkshop($id)
     {
-        return $this->isHaveRole($id,[ROLE_DISPATCHER,ROLE_RESOLVE,ROLE_INSPECTION,ROLE_SUPERVISOR]);
+        return $this->isHaveRole($id,[ROLE_DISPATCHER,ROLE_INSPECTION,ROLE_SUPERVISOR]);
 
     }
 }

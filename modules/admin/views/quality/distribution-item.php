@@ -31,6 +31,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
 
                 <div class="box-body">
+                    <div class="col-md-12">
+                        <select id="choose-group">
+                            <?php foreach ($group as $m => $n): ?>
+                                <option value="<?=$m?>"><?=$n?></option>
+                            <?php endforeach;?>
+                        </select>
+                    </div>
                     <div class="col-md-6 pull-left">
                         <h5>未选择质检项</h5>
                         <select multiple="multiple" id="unSelect" style="width:100%;height: 350px;">

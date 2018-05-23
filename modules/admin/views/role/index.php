@@ -102,7 +102,14 @@ $this->params['breadcrumbs'][] = $this->title;
             {data: "update_time"},
             {
                 render:function (data,type,full) {
-                    return '<a href="edit-role?id=' + full['id'] + '">编辑</a>&nbsp<a href="<?=Url::to(['role/distribution'])?>?id=' + full['id'] + '">分配权限</a>';
+
+                    if (full['is_sys'] == 1) {
+                        return '<a href="<?=Url::to(['role/distribution'])?>?id=' + full['id'] + '">分配权限</a>';
+
+                    } else {
+                        return '<a href="edit-role?id=' + full['id'] + '">编辑</a>&nbsp<a href="<?=Url::to(['role/distribution'])?>?id=' + full['id'] + '">分配权限</a>';
+
+                    }
                 }
             }
         ]

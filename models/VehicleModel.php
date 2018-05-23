@@ -45,4 +45,17 @@ class VehicleModel extends Model
         $vehicleList = VehicleInfoAR::find()->where(['is_deleted' => STATUS_FALSE])->asArray()->all();
         return $vehicleList;
     }
+
+    /**
+     * 根据ID获取车辆信息
+     * @param $ids
+     * @return array|\yii\db\ActiveRecord[]
+     * @author: liuFangShuo
+     */
+    public function getVehicleById($ids)
+    {
+        $vehicleList = VehicleInfoAR::find()->where(['is_deleted' => STATUS_FALSE, 'id' =>$ids])->asArray()->all();
+        return $vehicleList;
+    }
+
 }

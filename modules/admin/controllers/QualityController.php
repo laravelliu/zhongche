@@ -2,6 +2,7 @@
 
 namespace app\modules\admin\controllers;
 
+use app\common\helpers\WebHelper;
 use app\models\ar\JobStationAR;
 use app\models\ar\JobStationRelateStationAR;
 use app\models\ar\ProcessAR;
@@ -13,6 +14,7 @@ use app\models\ar\TypeWorkAreaAR;
 use app\models\ar\WorkAreaAR;
 use app\models\ar\WorkshopAR;
 use app\models\QualityModel;
+use app\models\VehicleModel;
 use app\models\WorkshopModel;
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -429,9 +431,16 @@ class QualityController extends BaseController
 
         //查询
         if (!empty($taskList)) {
+
+            $vehicleModel = new VehicleModel();
+            $vehicleArr = array_column($taskList, 'vehicle_id');
+            $vehicleInfoArr = $vehicleModel->getVehicleById($vehicleArr);
+            $vehicleInfo = WebHelper::arrayChangeKey($vehicleInfoArr, 'id');
+
             foreach ($taskList as $k => $v) {
                 $taskList[$k]['create_time'] = date('Y-m-d H:i:s',$v['create_time']);
                 $taskList[$k]['update_time'] = date('Y-m-d H:i:s',$v['update_time']);
+                $taskList[$k]['vehicle_info'] = "车辆牌照：{$vehicleInfo[$v['vehicle_id']]}<br>自重：{$v['vehicle_weight']}吨<br>载重：{$v['vehicle_full_weight']}吨";
             }
         }
 
@@ -564,8 +573,9 @@ class QualityController extends BaseController
         //获取车间
         $model = new WorkshopModel();
         $workshopList = $model->getWorkshopList();
+        $workshopList = WebHelper::arraySortBySid(WebHelper::arrayChangeKey($workshopList,'id'));
 
-        //获取车间
+        //获取工区
         $workArea = $model->getWorkAreaList();
 
         //获取工位
@@ -922,7 +932,6 @@ class QualityController extends BaseController
 
         $model = new QualityModel();
         $jobStation = $model->getJobStationById($id);
-
         //分配质检流程
         if (empty($id)|| empty($jobStation)) {
             $this->redirect(Url::to(['quality/job-station']));
@@ -931,10 +940,14 @@ class QualityController extends BaseController
         //获取质检项
         $itemList = $model->getQualityList();
 
-        //获取同一种质检流程 其他职能工位已分配的问题
-        $otherItem = $model->getOtherSelectItem($jobStation);
+        //获取质检项组
+        $group = $model->getQualityGroupByTypeId($jobStation->type_id);
+        $groupList = [0 => '全部质检项组'] + ArrayHelper::map($group, 'id', 'name');
 
-        $all = [];
+        //获取同一种质检流程 其他职能工位已分配的问题
+        //$otherItem = $model->getOtherSelectItem($jobStation);
+
+        /*$all = [];
         if (!empty($otherItem)) {
             $otherItemIds = array_column($otherItem, 'item_id');
 
@@ -946,9 +959,9 @@ class QualityController extends BaseController
 
                 $all[$v['id']] = $v['title'];
             }
-        } else {
+        } else {*/
             $all = ArrayHelper::map($itemList,'id','title');
-        }
+        /*}*/
 
         //获取已选择的质检流程
         $selectedItems = $model->getItemByJob($id);
@@ -968,10 +981,48 @@ class QualityController extends BaseController
 
         }
 
-        return $this->render('distribution-item',['station' => $jobStation, 'qualityItem' => ['all' => $all, 'selected' => $selected, 'unSelect' => $unSelect, 'id'=>$id, 'url'=>Url::to(['quality/save-job-item'])]]);
-
+        return $this->render('distribution-item',['station' => $jobStation, 'group'=>$groupList, 'qualityItem' => ['all' => $all, 'selected' => $selected, 'unSelect' => $unSelect, 'id'=>$id, 'url'=>Url::to(['quality/save-job-item'])]]);
     }
 
+    /**
+     * 根据质检项组获取质检项（职能工位）
+     * @author: liuFangShuo
+     */
+    public function actionGetItem()
+    {
+        if(Yii::$app->request->isAjax){
+            $groupId = Yii::$app->request->post('group_id');
+            $jobStationId = Yii::$app->request->post('job_station_id');
+
+            //根据质检项组获取质检项
+            $model = new QualityModel();
+
+            if ($groupId == 0) {
+                $items =$model->getQualityList();
+                $itemList = array_column($items,'id');
+
+            } else {
+                $items =$model->getQualityItemByGroupId($groupId);
+                $itemList = array_column($items,'item_id');
+            }
+
+            //根据职能工位获取质检项
+            $selectItem = $model->getItemByJob($jobStationId);
+            $itemListHave =  array_column($selectItem, 'item_id');
+
+            $itemHave = array_diff($itemList,$itemListHave);
+
+            $itemInfo = [];
+
+            if(!empty($itemHave)){
+                $itemInfo = $model->getQualityItemByIds($itemHave);
+                $itemInfo = ArrayHelper::map($itemInfo, 'id', 'title');
+            }
+
+            return $this->ajaxReturn($itemInfo);
+        }
+
+    }
 
     /**
      * 保存职能工位质检项
