@@ -86,19 +86,27 @@ class StationAR extends \app\models\ar\BaseAR
     public function saveStation()
     {
 
-        //查找一下
-        $model = static::findOne(['work_area_id' => $this->work_area_id,'code' => trim($this->code), 'is_deleted' => STATUS_FALSE]);
 
         //创建时必须不能存在
-        if($this->getScenario() == 'create' && !empty($model)){
-            $this->addError('code', '该工区工位编号已存在');
-            return false;
+        if($this->getScenario() == 'create'){
+            //查找一下
+            $model = static::findOne(['work_area_id' => $this->work_area_id,'code' => trim($this->code), 'is_deleted' => STATUS_FALSE]);
+
+            if (!empty($model)) {
+                $this->addError('code', '该工区工位编号已存在');
+                return false;
+            }
+
         }
 
         //更新时必须存在
-        if($this->getScenario() == 'update' && empty($model)){
-            $this->addError('name', '该工区工位不存在');
-            return false;
+        if($this->getScenario() == 'update'){
+            $model = static::findOne(['id' => $this->id, 'is_deleted' => STATUS_FALSE]);
+
+            if(empty($model)){
+                $this->addError('name', '该工区工位不存在');
+                return false;
+            }
         }
 
         if(empty($model)){

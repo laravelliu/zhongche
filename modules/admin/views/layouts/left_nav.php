@@ -96,7 +96,8 @@ $d = [
 
 ];
 $f = [
-    'admin/quality/task'
+    'admin/quality/task',
+    'admin/quality/task-info'
 ];
 $g = [
     'admin/vehicle/index',
@@ -199,7 +200,7 @@ $g = [
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li <?php if(in_array($url, ['admin/quality/task'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['quality/task'])?>"><i class="fa fa-circle-o"></i>质检任务</a></li>
+                    <li <?php if(in_array($url, ['admin/quality/task','admin/quality/task-info'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['quality/task'])?>"><i class="fa fa-circle-o"></i>质检任务</a></li>
                 </ul>
             </li>
 

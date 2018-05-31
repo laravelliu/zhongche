@@ -41,9 +41,35 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-body">
 
                     <?=$form->field($model,'name')->textInput(['placeholder' => '请输入工位名称：除锈车间'])->label('工位名称：');?>
-                    <?=$form->field($model,'code')->textInput(['placeholder' => '请输入工位编号：ba123','disabled' => 'disabled'])->label('工位编号：');?>
-                    <?=$form->field($model,'workshop_id')->dropDownList($wsModel->getWorkshop(),['prompt' =>'--请选择车间--', 'disabled' => 'disabled'])->label('所属车间：');?>
-                    <?=$form->field($model,'work_area_id')->dropDownList($wsModel->getWorkArea($model->workshop_id),['prompt' =>'--请选择工区--', 'disabled' => 'disabled'])->label('所属工区：');?>
+                    <?=$form->field($model,'code')->textInput(['placeholder' => '请输入工位编号：ba123'])->label('工位编号：');?>
+                    <?=$form->field($model,'workshop_id')->dropDownList($wsModel->getWorkshop(),['prompt' =>'--请选择车间--', 'onchange' => '
+                        $.post("'.yii::$app->urlManager->createUrl('admin/workshop/get-work-area-list').'?wsid="+$(this).val(),function(data){
+                            if (data.code == 0) {
+                                var htmlInfo = "<option value=\"\">--请选择工区--</option>";
+                                for(var wp in data.data.workArea){
+                                    htmlInfo = htmlInfo + "<option value=\""+wp+"\">"+data.data.workArea[wp]+"</option>"
+                                }
+                                $("select#stationar-work_area_id").html(htmlInfo);
+                            } else {
+                                alert(data.message)
+                            } 
+                            
+                        });'
+                    ])->label('所属车间：');?>
+                    <?=$form->field($model,'work_area_id')->dropDownList($wsModel->getWorkArea($model->workshop_id),['prompt' =>'--请选择工区--','onchange' => '
+                        $.post("'.yii::$app->urlManager->createUrl('admin/workshop/get-station-list').'?waid="+$(this).val(),function(data){
+                            if (data.code == 0) {
+                                var htmlInfo = "<option value=\"\">--请选择上一工位--</option>";
+                                for(var wp in data.data.station){
+                                    htmlInfo = htmlInfo + "<option value=\""+wp+"\">"+data.data.station[wp]+"</option>"
+                                }
+                                
+                                $("select#stationar-pid").html(htmlInfo);
+                            } else {
+                                alert(data.message)
+                            } 
+                            
+                        });'])->label('所属工区：');?>
                     <?=$form->field($model,'pid')->dropDownList($stationList,['prompt' =>'--请选择上一工位--'])->label('上一工位：');?>
 
                 </div>

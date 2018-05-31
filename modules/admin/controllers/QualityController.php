@@ -425,26 +425,41 @@ class QualityController extends BaseController
         $model = new QualityModel();
         $taskList = $model->getTaskList();
 
-        //查询车辆信息
-
-        //查询质检类型
-
         //查询
         if (!empty($taskList)) {
 
+            //查询车辆信息
             $vehicleModel = new VehicleModel();
             $vehicleArr = array_column($taskList, 'vehicle_id');
             $vehicleInfoArr = $vehicleModel->getVehicleById($vehicleArr);
             $vehicleInfo = WebHelper::arrayChangeKey($vehicleInfoArr, 'id');
 
+            //查询质检类型
+            $qualityModel = new QualityModel();
+            $type = $qualityModel->getQualityType();
+            $typeList = ArrayHelper::map($type,'id', 'name');
+
             foreach ($taskList as $k => $v) {
+                $taskList[$k]['type'] = $typeList[$v['type_id']];
                 $taskList[$k]['create_time'] = date('Y-m-d H:i:s',$v['create_time']);
                 $taskList[$k]['update_time'] = date('Y-m-d H:i:s',$v['update_time']);
-                $taskList[$k]['vehicle_info'] = "车辆牌照：{$vehicleInfo[$v['vehicle_id']]}<br>自重：{$v['vehicle_weight']}吨<br>载重：{$v['vehicle_full_weight']}吨";
+                $taskList[$k]['vehicle_info'] = "车辆牌照：{$vehicleInfo[$v['vehicle_id']]['plate']}<br>自重：{$v['vehicle_weight']}吨<br>载重：{$v['vehicle_full_weight']}吨";
             }
+
+
         }
 
         return $this->ajaxReturn($taskList);
+    }
+
+    /**
+     * @author: liuFangShuo
+     */
+    public function actionTaskInfo()
+    {
+        $taskId = Yii::$app->request->get('id');
+
+        return $this->render('task-info');
     }
 
     /**

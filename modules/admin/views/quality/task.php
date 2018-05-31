@@ -93,12 +93,22 @@ $this->params['breadcrumbs'][] = $this->title;
             {data: "id"},
             {data: "type"},
             {data: "vehicle_info"},
-            {data: "status"},
+            {data: "finish",render:function (data,type,full) {
+                if(data == 1){
+                    return '已结束';
+                } else {
+                    return '正在进行';
+                }
+            }},
             {data: "create_time"},
             {data: "update_time"},
             {
                 render:function (data,type,full) {
-                    return '<a href="edit-quality-type?id=' + full['id'] + '">查看信息</a>';
+                    if (full['finish'] == 0) {
+                        return '<a href="task-info?id=' + full['id'] + '">查看信息</a>';
+                    }else{
+                        return null;
+                    }
                 }
             }
         ]

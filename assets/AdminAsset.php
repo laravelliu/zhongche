@@ -21,7 +21,7 @@ class AdminAsset extends AssetBundle
     ];
 
     public $js = [
-        YII_ENV_DEV ? 'bower_components/fastclick/lib/fastclick.js' : 'bower_components/fastclick/lib/fastclick.min.js',
+        'bower_components/fastclick/lib/fastclick.js',
         YII_ENV_DEV ? 'dist/js/adminlte.js' : 'dist/js/adminlte.min.js',
         YII_ENV_DEV ? 'dist/js/demo.js' : 'dist/js/demo.js',
     ];

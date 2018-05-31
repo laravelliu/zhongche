@@ -222,7 +222,7 @@ var selectInfo = function () {
 
     return {
         init:function (obj) {
-            init(JSON.parse(obj));
+            init(JSON.parse(obj.replace(/\s+/g, "")));
         }
     }
 }();
