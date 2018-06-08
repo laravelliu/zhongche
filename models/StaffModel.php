@@ -138,6 +138,9 @@ class StaffModel extends Model
             }
 
             $trans->commit();
+
+            //清空缓存
+            Yii::$app->cache->flush();
             return true;
 
         } catch (\Exception $e){
@@ -233,6 +236,9 @@ class StaffModel extends Model
             }
 
             $trans->commit();
+
+            //删除用户角色缓存
+            Yii::$app->cache->delete($id.'roles');
             return true;
 
         } catch (\Exception $e){
