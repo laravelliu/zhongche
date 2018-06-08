@@ -3,6 +3,7 @@
 namespace app\modules\admin\controllers;
 
 use app\common\filters\LoginFilter;
+use app\common\filters\PermissionFilter;
 use Yii;
 use yii\web\Response;
 
@@ -34,7 +35,11 @@ class BaseController extends \yii\web\Controller
             'login' => [
                 'class' => LoginFilter::className(),
                 'failUrl' => '/login'
-            ]
+            ],
+            /*'permission' => [
+                'class' => PermissionFilter::className(),
+                'failUrl' => '/login'
+            ],*/
         ];
 
         $append = $this->appendBehaviors();

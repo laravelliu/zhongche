@@ -15,7 +15,7 @@ $userInfo = $this->params['userInfo'];
     <!-- Logo -->
     <a href="<?=Url::to(['/admin'])?>" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>啦</b></span>
+        <span class="logo-mini"><b>中车</b></span>
         <!-- logo for regular state and mobile devices -->
         <span class="logo-lg"><b><?=Yii::$app->name?></b></span>
     </a>
@@ -33,7 +33,7 @@ $userInfo = $this->params['userInfo'];
             <ul class="nav navbar-nav">
 
                 <!-- Notifications: style can be found in dropdown.less -->
-                <li class="dropdown notifications-menu">
+                <!--<li class="dropdown notifications-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-bell-o"></i>
                         <span class="label label-warning">10</span>
@@ -41,7 +41,6 @@ $userInfo = $this->params['userInfo'];
                     <ul class="dropdown-menu">
                         <li class="header">You have 10 notifications</li>
                         <li>
-                            <!-- inner menu: contains the actual data -->
                             <ul class="menu">
                                 <li>
                                     <a href="#">
@@ -73,26 +72,25 @@ $userInfo = $this->params['userInfo'];
                         </li>
                         <li class="footer"><a href="#">View all</a></li>
                     </ul>
-                </li>
+                </li>-->
 
                 <!-- User Account: style can be found in dropdown.less -->
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="/images/admin/user2-160x160.jpg" class="user-image" title="用户头像">
+                        <img src="<?=$userInfo->admin_photo?>" class="user-image" title="用户头像">
                         <span class="hidden-xs"><?=$userInfo->name?></span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header">
-                            <img src="/images/admin/user2-160x160.jpg" class="img-circle" title="用户头像">
-
+                            <img src="<?=$userInfo->admin_photo?>" class="img-circle" title="用户头像">
                             <p>
                                 <?=$userInfo->name?> - Web Developer
-                                <small>Member since Nov. 2012</small>
+                                <small>登录时间 <?=date('Y-m-d H:i:s',$userInfo->last_time)?></small>
                             </p>
                         </li>
                         <!-- Menu Body -->
-                        <li class="user-body">
+                       <!-- <li class="user-body">
                             <div class="row">
                                 <div class="col-xs-4 text-center">
                                     <a href="#">Followers</a>
@@ -104,12 +102,11 @@ $userInfo = $this->params['userInfo'];
                                     <a href="#">Friends</a>
                                 </div>
                             </div>
-                            <!-- /.row -->
-                        </li>
+                        </li>-->
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a href="#" class="btn btn-default btn-flat">详细信息</a>
+                                <a href="<?=Url::to(['user-info/index'])?>" class="btn btn-default btn-flat">详细信息</a>
                             </div>
                             <div class="pull-right">
                                 <a href="<?=Url::to(['/logout'])?>" class="btn btn-default btn-flat">退出</a>
@@ -118,9 +115,9 @@ $userInfo = $this->params['userInfo'];
                     </ul>
                 </li>
                 <!-- Control Sidebar Toggle Button -->
-                <li>
+                <!--<li>
                     <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-                </li>
+                </li>-->
             </ul>
         </div>
     </nav>

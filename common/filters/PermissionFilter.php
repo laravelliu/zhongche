@@ -7,10 +7,12 @@
  */
 
 namespace app\common\filters;
+use app\models\ar\UserRoleAR;
 use Yii;
 
 class PermissionFilter extends BaseFilter
 {
+    private $_user = null;
     /**
      * 操作之前
      * @param \yii\base\Action $action
@@ -19,11 +21,31 @@ class PermissionFilter extends BaseFilter
      */
     public function beforeAction($action)
     {
-        //根据用户查询一下对应的权限
-
-
         if(Yii::$app->user->isGuest){
             $this->fail('/login');
+            return false;
+        }
+
+        $this->_user = Yii::$app->user->identity;
+
+        //超管
+        if($this->_user->isSuperAdmin()){
+            return true;
+        }
+
+        //获取拥有的权限
+        $pathArr = $this->_user->getUserPermission();
+
+        if (empty($pathArr)) {
+            $this->fail();
+            return false;
+        }
+
+        //获取当前url
+        $path = Yii::$app->request->getUrl();
+
+        if (!in_array($path, $pathArr)) {
+            $this->fail();
             return false;
         }
 

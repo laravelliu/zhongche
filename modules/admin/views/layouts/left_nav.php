@@ -119,7 +119,7 @@ $g = [
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="/images/admin/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <img src="<?=$user->admin_photo?>" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
                 <p><?=$user->name?></p>
@@ -243,18 +243,13 @@ $g = [
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="../UI/general.html"><i class="fa fa-circle-o"></i> General</a></li>
-                    <li><a href="../UI/icons.html"><i class="fa fa-circle-o"></i> Icons</a></li>
-                    <li><a href="../UI/buttons.html"><i class="fa fa-circle-o"></i> Buttons</a></li>
-                    <li><a href="../UI/sliders.html"><i class="fa fa-circle-o"></i> Sliders</a></li>
-                    <li><a href="../UI/timeline.html"><i class="fa fa-circle-o"></i> Timeline</a></li>
-                    <li><a href="../UI/modals.html"><i class="fa fa-circle-o"></i> Modals</a></li>
+                    <li><a href="#"><i class="fa fa-circle-o"></i>等待需求</a></li>
                 </ul>
             </li>
 
 
 
-            <li class="treeview">
+           <!-- <li class="treeview">
                 <a href="#">
                     <i class="fa fa-folder"></i> <span>参数管理</span>
                     <span class="pull-right-container">
@@ -270,7 +265,7 @@ $g = [
                     <li><a href="blank.html"><i class="fa fa-circle-o"></i> Blank Page</a></li>
                     <li><a href="pace.html"><i class="fa fa-circle-o"></i> Pace Page</a></li>
                 </ul>
-            </li>
+            </li>-->
         </ul>
     </section>
     <!-- /.sidebar -->

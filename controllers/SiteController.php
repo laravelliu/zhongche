@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\ar\UserAR;
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
@@ -77,6 +78,7 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+
             $re = Yii::$app->request->get('re', null);
 
             if (!empty($re)) {
