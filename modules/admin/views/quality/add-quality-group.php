@@ -43,7 +43,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?=$form->field($model,'name')->textInput(['placeholder' => '请输入质检项组名称'])->label('质检项组：');?>
                     <?=$form->field($model,'type_id')->dropDownList($qualityType)->label('质检项类别：');?>
                     <?=$form->field($model,'item_type')->dropDownList(Yii::$app->params['quality_item_type'])->label('质检组类型：');?>
-
+                    <?php $model->is_split = 0?>
+                    <?=$form->field($model, 'is_split')->radioList(Yii::$app->params['quality_group_need_decomposition'])->label('需要分解员参与：');?>
                 </div>
                 <div class="box-footer">
                     <div class="col-xs-3 col-sm-2 text-right"></div>

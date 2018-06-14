@@ -15,4 +15,5 @@ return [
     'param_type' => [PARAM_TYPE_VEHICLE_TYPE => '车辆类别参数'],
     'quality_process' => [QUALITY_PROCESS_ITEM => '质检项',QUALITY_PROCESS_GROUP => '质检项组'],
     'quality_item_type' => [QUALITY_ITEM_TYPE_BEGIN => '入厂鉴定',QUALITY_ITEM_TYPE_DURING=>'有工位质检',QUALITY_ITEM_TYPE_OVER=>'整车质检'],
+    'quality_group_need_decomposition' => [STATUS_FALSE => '否', STATUS_TRUE => '是']
 ];

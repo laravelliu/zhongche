@@ -9,6 +9,7 @@ use app\models\ar\ProcessAR;
 use app\models\ar\QualityInspectionGroupAR;
 use app\models\ar\QualityInspectionItemAR;
 use app\models\ar\StationAR;
+use app\models\ar\TaskAR;
 use app\models\ar\TypeAR;
 use app\models\ar\TypeWorkAreaAR;
 use app\models\ar\WorkAreaAR;
@@ -458,8 +459,18 @@ class QualityController extends BaseController
     public function actionTaskInfo()
     {
         $taskId = Yii::$app->request->get('id');
+        //根据task 获取质检项组
+        $taskInfo = TaskAR::findOne(['id' => $taskId/*, 'finish' => STATUS_TRUE*/]);
 
-        return $this->render('task-info');
+        if(empty($taskInfo)){
+            return $this->redirect(Url::to(['quality/task']));
+        }
+
+        $model = new QualityModel();
+        $itemGroupList = $model->getQualityGroupByTypeId($taskInfo->type_id);
+
+
+        return $this->render('task-info',['group' => $itemGroupList, 'task' => $taskInfo]);
     }
 
     /**
@@ -1239,6 +1250,22 @@ class QualityController extends BaseController
 
             return $this->ajaxReturn([],1, $model->getFirstError('name'));
 
+        }
+
+        return false;
+    }
+
+    /**
+     * @author: liuFangShuo
+     */
+    public function getTaskInfoDetail()
+    {
+        if (Yii::$app->request->isAjax) {
+            $taskId = Yii::$app->request->post('taskId', null);
+            $groupId = Yii::$app->request->post('groupId', null);
+
+
+            return $this->renderAjax('task-detail');
         }
 
         return false;

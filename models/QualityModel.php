@@ -131,7 +131,7 @@ class QualityModel extends Model
      */
     public function getQualityGroupByTypeId($typeId)
     {
-        $return = QualityInspectionGroupAR::find()->where(['type_id' => $typeId])->asArray()->all();
+        $return = QualityInspectionGroupAR::find()->where(['type_id' => $typeId])->orderBy(['item_type' => SORT_ASC])->asArray()->all();
         return $return;
     }
 

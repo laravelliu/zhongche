@@ -99,9 +99,13 @@ class AdminAsset extends AssetBundle
                 break;
             case "admin/quality/distribution-area":
                 $js = [
-                    '/js/chooseworkshop.js'
+                    '/js/choose-workshop.js'
                 ];
                 break;
+            case "admin/quality/task-info":
+                $js = [
+                    '/js/task-info.js'
+                ];
             default:
                 break;
 

@@ -62,7 +62,8 @@ $b = [
     'admin/workshop/edit-work-area',
     'admin/workshop/station',
     'admin/workshop/add-station',
-    'admin/workshop/edit-station'
+    'admin/workshop/edit-station',
+    'admin/workshop/user-group-station'
 ];
 $c = [
     'admin/quality/quality-process',
@@ -175,7 +176,7 @@ $g = [
                 <ul class="treeview-menu">
                     <li <?php if(in_array($url, ['admin/workshop/workshop', 'admin/workshop/add-workshop', 'admin/workshop/edit-workshop'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['workshop/workshop'])?>"><i class="fa fa-home"></i>车间管理</a></li>
                     <li <?php if(in_array($url, ['admin/workshop/work-area', 'admin/workshop/add-work-area', 'admin/workshop/edit-work-area'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['workshop/work-area'])?>"><i class="fa fa-road"></i>工区管理</a></li>
-                    <li <?php if(in_array($url, ['admin/workshop/station', 'admin/workshop/add-station', 'admin/workshop/edit-station'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['workshop/station'])?>"><i class="fa fa-tty"></i>工位管理</a></li>
+                    <li <?php if(in_array($url, ['admin/workshop/station', 'admin/workshop/add-station', 'admin/workshop/edit-station','admin/workshop/user-group-station'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['workshop/station'])?>"><i class="fa fa-tty"></i>工位管理</a></li>
                 </ul>
             </li>
 
