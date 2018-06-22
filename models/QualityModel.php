@@ -9,6 +9,7 @@
 namespace app\models;
 
 
+use app\models\ar\AnswerAR;
 use app\models\ar\JobProcessAR;
 use app\models\ar\JobStationAR;
 use app\models\ar\JobStationItemAR;
@@ -19,6 +20,7 @@ use app\models\ar\QualityInspectionGroupAR;
 use app\models\ar\QualityInspectionItemAR;
 use app\models\ar\QualityInspectionGroupItemAR;
 use app\models\ar\TaskAR;
+use app\models\ar\TaskExecuteRecordAR;
 use app\models\ar\TypeAR;
 use app\models\ar\TypeWorkAreaAR;
 use yii\base\Model;
@@ -648,4 +650,25 @@ class QualityModel extends Model
         return $items;
     }
 
+    /**
+     * 获取答案
+     * @author: liuFangShuo
+     */
+    public  function getAnswer($taskId,$itemArr)
+    {
+        $answerList = AnswerAR::find()->select('zc_answer.*,zc_quality_inspection_item.title as title,zc_quality_inspection_item.standard as standard')->join('LEFT JOIN','zc_quality_inspection_item','zc_answer.quality_item_id = zc_quality_inspection_item.id')->where(['zc_answer.task_id' => $taskId, 'zc_answer.quality_item_id' => $itemArr])->asArray()->all();
+        return $answerList;
+    }
+
+    /**
+     * 获取执行结果
+     * @param $taskId
+     * @param $groupId
+     * @author: liuFangShuo
+     */
+    public function getTaskExeRecord($taskId,$groupId)
+    {
+        $exeRecord = TaskExecuteRecordAR::find()->select('zc_task_execute_record.*,zc_user.name as doname')->join('LEFT JOIN','zc_user','zc_task_execute_record.user_id = zc_user.id')->where(['zc_task_execute_record.task_id'=>$taskId, 'zc_task_execute_record.quality_inspection_group_id' => $groupId])->asArray()->all();
+        return $exeRecord;
+    }
 }

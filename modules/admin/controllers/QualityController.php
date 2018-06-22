@@ -1258,14 +1258,217 @@ class QualityController extends BaseController
     /**
      * @author: liuFangShuo
      */
-    public function getTaskInfoDetail()
+    public function actionTaskInfoDetail()
     {
+        //入场检定员 group_type=1 process_id task_id 找user_id
         if (Yii::$app->request->isAjax) {
             $taskId = Yii::$app->request->post('taskId', null);
             $groupId = Yii::$app->request->post('groupId', null);
+            $isSplit = Yii::$app->request->post('isSplit', 0);  //是否是分解
+            $type = Yii::$app->request->post('type', null);  //是否是分解
 
 
-            return $this->renderAjax('task-detail');
+            //获取质检结果
+            $model = new QualityModel();
+            $itemList = $model->getQualityItemByGroupId($groupId);
+            $itemArr = array_column($itemList,'item_id');
+
+            $answerList = $model->getAnswer($taskId,$itemArr);
+
+            $list = [];
+            $view = 'task-detail';
+
+            //获取相关的结果
+            switch ($type){
+                case QUALITY_ITEM_TYPE_BEGIN:   //入场检定
+                    $view = 'task-detail-begin';
+                    $answerReturn = [];
+                    $userList = [];
+
+                    foreach ($answerList as $k => $v) {
+
+                        $item = [];
+                        $item['name'] = $v['title'];
+                        $item['standard'] = json_decode($v['standard'],true);
+
+                        //根据不同题型获取对应
+                        switch ($v['quality_item_type']) {
+                            case QUALITY_TYPE_JUDGE:    //判断题
+
+                                    $item['answer'] = $v['choose_content'];
+
+                                    //如果备注不为空
+                                    if (!empty($v['content'])) {
+                                        $bz = json_decode($v['content'], true);
+                                        $bzVal = '';
+
+                                        if (count($bz) > 0) {
+                                            foreach ($bz as $m) {
+                                                if ($m['key'] == '备注') {
+                                                    $bzArr[] = $m['value'];
+                                                }
+                                            }
+                                            if (!empty($bzArr)) {
+                                                $bzVal = implode(';', $bzArr);
+                                            }
+                                        }
+
+                                        $item['answer'] .= "[备注：{$bzVal}]";
+                                    }
+
+                                break;
+                            case QUALITY_TYPE_CHOOSE:   //选择题
+                                if (empty($v['process_id'])) {
+                                    $item['answer'] = $v['choose_content'];
+
+                                    //如果备注不为空
+                                    if (!empty($v['content'])) {
+                                        $bz = json_decode($v['content'], true);
+                                        $bzVal = '';
+
+                                        if (count($bz) > 0) {
+                                            foreach ($bz as $m) {
+                                                if ($m['key'] == '备注') {
+                                                    $bzArr[] = $m['value'];
+                                                }
+                                            }
+                                            if (!empty($bzArr)) {
+                                                $bzVal = implode(';', $bzArr);
+                                            }
+                                        }
+
+                                        $item['answer'] .= "[备注：{$bzVal}]";
+                                    }
+                                } elseif ($v['process_id'] == 3) {  //专检
+                                    $item['answer_computer'][] = $v['choose_content'];
+                                } elseif ($v['process_id'] == 4) {  //监造
+                                    $item['answer_computer_re'][] = $v['choose_content'];
+                                }
+                                break;
+                            case QUALITY_TYPE_FILL:     //填空题
+                                $item['answer'] = '';
+
+                                if (!empty($v['content'])) {
+                                    $bz = json_decode($v['content'], true);
+                                    $bzVal = '';
+
+                                    if (count($bz) > 0) {
+                                        foreach ($bz as $m) {
+
+                                            if ($m['key'] == '测量结果') {
+                                                $item['answer'] = $m['value'];
+                                            } elseif ($m['key'] == '备注') {
+                                                $bzArr[] = $m['value'];
+                                            }
+
+                                        }
+
+                                        if (!empty($bzArr)) {
+                                            $bzVal = implode(';', $bzArr);
+                                        }
+                                    }
+
+                                    $item['answer'] .= "[备注：{$bzVal}]";
+                                }
+
+                                break;
+                            case QUALITY_TYPE_SELECT:   //多选题
+                                $item['answer'] = $v['choose_content'];
+
+                                if (!empty($v['content'])) {
+                                    $bz = json_decode($v['content'], true);
+                                    $bzVal = '';
+
+                                    if (count($bz) > 0) {
+                                        foreach ($bz as $m) {
+                                            if ($m['key'] == '备注') {
+                                                $bzArr[] = $m['value'];
+                                            }
+                                        }
+
+                                        if (!empty($bzArr)) {
+                                            $bzVal = implode(';', $bzArr);
+                                        }
+                                    }
+
+                                    $item['answer'] .= "[备注：{$bzVal}]";
+                                }
+
+
+                                break;
+                            case QUALITY_TYPE_COMB:     //混合题
+                                $item['answer'] = $v['choose_content'];
+
+                                if (!empty($v['content'])) {
+                                    $bz = json_decode($v['content'], true);
+                                    $bzVal = '';
+
+                                    if (count($bz) > 0) {
+                                        foreach ($bz as $m) {
+
+                                            if ($m['key'] == '测量结果') {
+                                                $item['answer'] .= '数值：' . $m['value'];
+                                            } elseif ($m['key'] == '备注') {
+                                                $bzArr[] = $m['value'];
+                                            }
+
+                                        }
+
+                                        if (!empty($bzArr)) {
+                                            $bzVal = implode(';', $bzArr);
+                                        }
+                                    }
+
+                                    $item['answer'] .= "[备注：{$bzVal}]";
+                                }
+
+                                break;
+                        }
+
+                        $item['type'] = $v['quality_item_type'];
+
+                        $answerReturn[$v['quality_item_id']] = isset($answerReturn[$v['quality_item_id']]) ? array_merge($answerReturn[$v['quality_item_id']],$item) : $item;
+
+                    }
+
+                    $list['answer'] = $answerReturn;
+
+                    //获取监造|专检|录入人员
+                    $exeRecord = $model->getTaskExeRecord($taskId,$groupId);
+
+                    if (!empty($exeRecord)) {
+                        foreach ($exeRecord as $y => $z){
+                            if (empty($z['process_id'])) {
+
+                                $userList['do_name'] = $z['doname'];
+                            } elseif ($z['process_id'] == 3) {    //专检
+
+                                $userList['do_computer'] = $z['doname'];
+                            } elseif ($z['process_id'] == 4) {    //监造
+
+                                $userList['do_computer_re'] = $z['doname'];
+                            }
+                        }
+                    }
+
+
+                    $list['user'] = $userList;
+
+                    break;
+                case QUALITY_ITEM_TYPE_DURING:  //在工位
+
+
+                    break;
+                case QUALITY_ITEM_TYPE_OVER:    //整车质检
+                    break;
+                default:
+                    break;
+
+            }
+
+            //var_dump($answerReturn);exit;
+            return $this->renderAjax($view, ['list' => $list]);
+
         }
 
         return false;

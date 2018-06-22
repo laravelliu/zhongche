@@ -1,26 +1,38 @@
 var task = function () {
+
+    var taskId = null;
+
     var init = function (obj) {
-        
+        taskId = obj.taskId;
+
+        $('.item-group').each(function () {
+            var groupId = $(this).attr('data-group');
+            var isFJ = $(this).attr('data-split');
+            var itemType = $(this).attr('data-type');
+
+            getTaskInfo(groupId,isFJ,itemType);
+        });
     };
 
-    var getTaskInfo = function (taskId) {
+
+    var getTaskInfo = function (groupId,isFJ,itemType) {
+        var $html = $(".item-group[data-group="+groupId+"]").find('.box-body');
+
         $.ajax({
-            'url' : 'admin/quality/task-info-detail',
-            'data' : {'taskId':taskId},
-            'type' : 'post',
-            'dataType' : 'json',
-            'success' : function (data) {
-                if(data.code == 0){
-                    alert(data.message);
-                }
+            url : 'task-info-detail',
+            data : {'taskId':taskId,'groupId':groupId,'isSplit':isFJ,'type':itemType},
+            type : 'post',
+            dataType : 'html',
+            success : function (data) {
+                $html.html(data);
             }
         });
     };
 
     return {
-        init : function () {
-            alert('123');
-            //init(obj);
+        init : function (obj) {
+
+            init(JSON.parse(obj));
         }
     }
 }();
