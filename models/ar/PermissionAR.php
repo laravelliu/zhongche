@@ -45,8 +45,8 @@ class PermissionAR extends \app\models\ar\BaseAR
         return [
             [['level', 'parent_id'], 'integer', 'on' => 'default'],
             [['parent_id'], 'required', 'on' => 'default'],
-            [['name'], 'string', 'max' => 32, 'on' => 'default'],
-            [['display_name'], 'string', 'max' => 255, 'on' => 'default'],
+            [['name'], 'string', 'max' => 255, 'on' => 'default'],
+            [['display_name'], 'string', 'max' => 32, 'on' => 'default'],
             [['name', 'display_name', 'parent_id'], 'required', 'message' => '不能为空', 'on' => ['create', 'update']],
         ];
     }

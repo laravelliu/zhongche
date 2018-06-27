@@ -2,6 +2,7 @@
 
 namespace app\modules\admin\controllers;
 
+use app\common\filters\PermissionFilter;
 use app\models\ar\RoleAR;
 use app\models\StaffModel;
 use Yii;
@@ -10,6 +11,16 @@ use yii\helpers\Url;
 
 class RoleController extends BaseController
 {
+    public function appendBehaviors()
+    {
+        return [
+            'permission' => [
+                'class' => PermissionFilter::className(),
+                'failUrl' => '/login'
+            ],
+        ];
+    }
+
     /**
      * 角色管理
      * @return string

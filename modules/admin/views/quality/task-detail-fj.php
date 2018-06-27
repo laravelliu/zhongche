@@ -8,9 +8,9 @@
 
 $first = current($list['answer']);
 
-$zj = $jz = 0;
+$count=9;
 
-$count=7;
+$zj = $jz = 0;
 
 if (isset($first['answer_computer'])) {
     $zj = 1;
@@ -23,13 +23,19 @@ if (isset($first['answer_computer_re'])) {
 }
 
 if ($jz && $zj) {
-    $zjCount = ceil($count/2);
-    $jzCount = $count-$zjCount;
+    $fjCoount = ceil($count/3);
+    $zjCount = ceil(($count-$fjCoount)/2);
+    $jzCount = $count-$zjCount-$fjCoount;
 }elseif ($jz){
-    $jzCount = $count;
+    $fjCoount = ceil($count/2);
+    $jzCount = $count-$fjCoount;
 }elseif ($zj){
-    $zjCount = $count;
+    $fjCoount = ceil($count/2);
+    $zjCount = $count-$fjCoount;
+}else{
+    $fjCoount = $count;
 }
+
 
 ?>
 
@@ -39,17 +45,19 @@ if ($jz && $zj) {
         <th>#</th>
         <th>质检项点</th>
         <th>质检标准</th>
+        <th>分解检查结果</th>
+        <th>分解处理方法</th>
         <th>自检结果</th>
         <th>自检员工</th>
         <th>互检结果</th>
         <th>互检员工</th>
 
         <?php if($zj):?>
-        <th>专检结果</th>
+            <th>专检员检查结果</th>
         <?php endif;?>
 
         <?php if($jz):?>
-        <th>监造结果</th>
+            <th>监造员检查结果</th>
         <?php endif;?>
     </tr>
     </thead>
@@ -59,21 +67,19 @@ if ($jz && $zj) {
             <td><?=$k?></td>
             <td><?=$v['name']?></td>
             <td><?= implode("、",$v['standard'])?></td>
+            <td><?=$v['answer_fj']?></td>
+            <td><?=$v['answer_fj_do']?></td>
             <td><?=$v['answer']?></td>
             <td><?=$v['answer_name']?></td>
-            <td><?=isset($v['answer_each'])?$v['answer_each']:'无互检'?></td>
-            <td><?=isset($v['answer_each_name'])?$v['answer_each_name']:'无互检人'?></td>
-
-            <?php if(isset($v['answer_computer'])):?>
+            <td><?=$v['answer_each']?></td>
+            <td><?=$v['answer_each_name']?></td>
             <td><?=$v['answer_computer'][0]?></td>
-            <?php endif;?>
-
-            <?php if(isset($v['answer_computer_re'])):?>
             <td><?=$v['answer_computer_re'][0]?></td>
-            <?php endif;?>
         </tr>
     <?php endforeach;?>
     <tr>
+        <td colspan="<?=$fjCoount?>"><h5>分解员：<span style="color: red"><?=isset($list['user']['do_name']) ? $list['user']['do_name'] : ''?></span></h5></td>
+
         <?php if($zj):?>
         <td colspan="<?=$zjCount?>"><h5>专检员：<span style="color: red"><?=isset($list['user']['do_computer']) ? $list['user']['do_computer'] : ''?></span></h5></td>
         <?php endif;?>
@@ -85,4 +91,3 @@ if ($jz && $zj) {
     </tr>
     </tbody>
 </table>
-

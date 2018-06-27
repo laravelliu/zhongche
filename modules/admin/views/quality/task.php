@@ -104,7 +104,7 @@ $this->params['breadcrumbs'][] = $this->title;
             {data: "update_time"},
             {
                 render:function (data,type,full) {
-                    if (full['finish'] == 0) {
+                    if (full['finish'] == 1) {
                         return '<a href="task-info?id=' + full['id'] + '">查看信息</a>';
                     }else{
                         return null;

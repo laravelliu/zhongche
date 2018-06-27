@@ -2,6 +2,7 @@
 
 namespace app\modules\admin\controllers;
 
+use app\common\filters\PermissionFilter;
 use app\models\ar\DepartmentAR;
 use app\models\StaffModel;
 use Yii;
@@ -9,6 +10,16 @@ use yii\helpers\Url;
 
 class DepartmentController extends BaseController
 {
+    public function appendBehaviors()
+    {
+        return [
+            'permission' => [
+                'class' => PermissionFilter::className(),
+                'failUrl' => '/login'
+            ],
+        ];
+    }
+
     /**
      * 部门管理
      * @return string

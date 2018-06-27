@@ -2,6 +2,7 @@
 
 namespace app\modules\admin\controllers;
 
+use app\common\filters\PermissionFilter;
 use app\common\helpers\WebHelper;
 use app\models\ar\JobStationAR;
 use app\models\ar\JobStationRelateStationAR;
@@ -25,6 +26,16 @@ use yii\web\NotFoundHttpException;
 
 class QualityController extends BaseController
 {
+    public function appendBehaviors()
+    {
+        return [
+            'permission' => [
+                'class' => PermissionFilter::className(),
+                'failUrl' => '/login'
+            ],
+        ];
+    }
+
     /**
      * 质检列表
      * @return string
@@ -1295,7 +1306,7 @@ class QualityController extends BaseController
                         switch ($v['quality_item_type']) {
                             case QUALITY_TYPE_JUDGE:    //判断题
 
-                                    $item['answer'] = $v['choose_content'];
+                                    $item['answer'] = !empty($v['choose_content']) ? $v['choose_content']:'';
 
                                     //如果备注不为空
                                     if (!empty($v['content'])) {
@@ -1317,9 +1328,9 @@ class QualityController extends BaseController
                                     }
 
                                 break;
-                            case QUALITY_TYPE_CHOOSE:   //选择题
+                            case QUALITY_TYPE_CHOOSE:   //选择题  (监造和专检只有选择题)
                                 if (empty($v['process_id'])) {
-                                    $item['answer'] = $v['choose_content'];
+                                    $item['answer'] = !empty($v['choose_content'])?$v['choose_content']:'';
 
                                     //如果备注不为空
                                     if (!empty($v['content'])) {
@@ -1373,7 +1384,7 @@ class QualityController extends BaseController
 
                                 break;
                             case QUALITY_TYPE_SELECT:   //多选题
-                                $item['answer'] = $v['choose_content'];
+                                $item['answer'] = !empty($v['choose_content'])?$v['choose_content']:'';
 
                                 if (!empty($v['content'])) {
                                     $bz = json_decode($v['content'], true);
@@ -1397,7 +1408,7 @@ class QualityController extends BaseController
 
                                 break;
                             case QUALITY_TYPE_COMB:     //混合题
-                                $item['answer'] = $v['choose_content'];
+                                $item['answer'] = !empty($v['choose_content'])?$v['choose_content']:'';
 
                                 if (!empty($v['content'])) {
                                     $bz = json_decode($v['content'], true);
@@ -1456,17 +1467,884 @@ class QualityController extends BaseController
 
                     break;
                 case QUALITY_ITEM_TYPE_DURING:  //在工位
+                    $view = 'task-detail';
+                    $answerReturn = [];
+                    $userList = [];
 
+                    //不需要分解
+                    if (!$isSplit) {
+
+                        foreach ($answerList as $k => $v) {
+
+                            $item = [];
+                            $item['name'] = $v['title'];
+                            $item['standard'] = json_decode($v['standard'],true);
+
+                            //根据不同题型获取对应
+                            switch ($v['quality_item_type']) {
+                                case QUALITY_TYPE_JUDGE:    //判断题
+
+                                    switch ($v['process_id']) {
+                                        case 1:             //自检
+                                            $item['answer'] = !empty($v['choose_content']) ? $v['choose_content']:'';
+                                            $item['answer_name'] = $v['name'];
+
+                                            //如果备注不为空
+                                            if (!empty($v['content'])) {
+                                                $bz = json_decode($v['content'], true);
+                                                $bzVal = '';
+
+                                                if (count($bz) > 0) {
+                                                    foreach ($bz as $m) {
+                                                        if ($m['key'] == '备注') {
+                                                            $bzArr[] = $m['value'];
+                                                        }
+                                                    }
+                                                    if (!empty($bzArr)) {
+                                                        $bzVal = implode(';', $bzArr);
+                                                    }
+                                                }
+
+                                                $item['answer'] .= "[备注：{$bzVal}]";
+                                            }
+
+                                            break;
+                                        case 2:             //互检
+                                            $item['answer_each'] = !empty($v['choose_content']) ? $v['choose_content']:'';
+                                            $item['answer_each_name'] = $v['name'];
+
+                                            //如果备注不为空
+                                            if (!empty($v['content'])) {
+                                                $bz = json_decode($v['content'], true);
+                                                $bzVal = '';
+
+                                                if (count($bz) > 0) {
+                                                    foreach ($bz as $m) {
+                                                        if ($m['key'] == '备注') {
+                                                            $bzArr[] = $m['value'];
+                                                        }
+                                                    }
+                                                    if (!empty($bzArr)) {
+                                                        $bzVal = implode(';', $bzArr);
+                                                    }
+                                                }
+
+                                                $item['answer_each'] .= "[备注：{$bzVal}]";
+                                            }
+                                            break;
+                                        default:
+                                            break;
+                                    }
+
+                                    break;
+                                case QUALITY_TYPE_CHOOSE:   //选择题  (监造和专检只有选择题)
+
+                                    switch ($v['process_id']) {
+                                        case 1:
+                                            $item['answer'] = !empty($v['choose_content'])?$v['choose_content']:'';
+                                            $item['answer_name'] = $v['name'];
+
+                                            //如果备注不为空
+                                            if (!empty($v['content'])) {
+                                                $bz = json_decode($v['content'], true);
+                                                $bzVal = '';
+
+                                                if (count($bz) > 0) {
+                                                    foreach ($bz as $m) {
+                                                        if ($m['key'] == '备注') {
+                                                            $bzArr[] = $m['value'];
+                                                        }
+                                                    }
+                                                    if (!empty($bzArr)) {
+                                                        $bzVal = implode(';', $bzArr);
+                                                    }
+                                                }
+
+                                                $item['answer'] .= "[备注：{$bzVal}]";
+                                            }
+
+                                            break;
+                                        case 2:
+                                            $item['answer_each'] = !empty($v['choose_content'])?$v['choose_content']:'';
+                                            $item['answer_each_name'] = $v['name'];
+
+                                            //如果备注不为空
+                                            if (!empty($v['content'])) {
+                                                $bz = json_decode($v['content'], true);
+                                                $bzVal = '';
+
+                                                if (count($bz) > 0) {
+                                                    foreach ($bz as $m) {
+                                                        if ($m['key'] == '备注') {
+                                                            $bzArr[] = $m['value'];
+                                                        }
+                                                    }
+                                                    if (!empty($bzArr)) {
+                                                        $bzVal = implode(';', $bzArr);
+                                                    }
+                                                }
+
+                                                $item['answer_each'] .= "[备注：{$bzVal}]";
+                                            }
+                                            break;
+                                        case 3:
+                                            $item['answer_computer'][] = $v['choose_content'];
+                                            break;
+                                        case 4:
+                                            $item['answer_computer_re'][] = $v['choose_content'];
+                                            break;
+                                        default:
+                                            break;
+
+                                    }
+
+                                    break;
+                                case QUALITY_TYPE_FILL:     //填空题
+
+                                    switch ($v['process_id']) {
+                                        case 1:
+                                            $item['answer'] = '';
+                                            $item['answer_name'] = $v['name'];
+
+                                            if (!empty($v['content'])) {
+                                                $bz = json_decode($v['content'], true);
+                                                $bzVal = '';
+
+                                                if (count($bz) > 0) {
+                                                    foreach ($bz as $m) {
+
+                                                        if ($m['key'] == '测量结果') {
+                                                            $item['answer'] = $m['value'];
+                                                        } elseif ($m['key'] == '备注') {
+                                                            $bzArr[] = $m['value'];
+                                                        }
+
+                                                    }
+
+                                                    if (!empty($bzArr)) {
+                                                        $bzVal = implode(';', $bzArr);
+                                                    }
+                                                }
+
+                                                $item['answer'] .= "[备注：{$bzVal}]";
+                                            }
+                                            break;
+                                        case 2:
+                                            $item['answer_each'] = '';
+                                            $item['answer_each_name'] = $v['name'];
+
+                                            if (!empty($v['content'])) {
+                                                $bz = json_decode($v['content'], true);
+                                                $bzVal = '';
+
+                                                if (count($bz) > 0) {
+                                                    foreach ($bz as $m) {
+
+                                                        if ($m['key'] == '测量结果') {
+                                                            $item['answer_each'] = $m['value'];
+                                                        } elseif ($m['key'] == '备注') {
+                                                            $bzArr[] = $m['value'];
+                                                        }
+
+                                                    }
+
+                                                    if (!empty($bzArr)) {
+                                                        $bzVal = implode(';', $bzArr);
+                                                    }
+                                                }
+
+                                                $item['answer_each'] .= "[备注：{$bzVal}]";
+                                            }
+                                            break;
+                                        default:
+                                            break;
+                                    }
+
+                                    break;
+                                case QUALITY_TYPE_SELECT:   //多选题
+
+                                    switch ($v['process_id']) {
+                                        case 1:
+                                            $item['answer'] = !empty($v['choose_content'])?$v['choose_content']:'';
+                                            $item['answer_name'] = $v['name'];
+
+                                            if (!empty($v['content'])) {
+                                                $bz = json_decode($v['content'], true);
+                                                $bzVal = '';
+
+                                                if (count($bz) > 0) {
+                                                    foreach ($bz as $m) {
+                                                        if ($m['key'] == '备注') {
+                                                            $bzArr[] = $m['value'];
+                                                        }
+                                                    }
+
+                                                    if (!empty($bzArr)) {
+                                                        $bzVal = implode(';', $bzArr);
+                                                    }
+                                                }
+
+                                                $item['answer'] .= "[备注：{$bzVal}]";
+                                            }
+                                            break;
+                                        case 2:
+                                            $item['answer_each'] = !empty($v['choose_content'])?$v['choose_content']:'';
+                                            $item['answer_each_name'] = $v['name'];
+
+                                            if (!empty($v['content'])) {
+                                                $bz = json_decode($v['content'], true);
+                                                $bzVal = '';
+
+                                                if (count($bz) > 0) {
+                                                    foreach ($bz as $m) {
+                                                        if ($m['key'] == '备注') {
+                                                            $bzArr[] = $m['value'];
+                                                        }
+                                                    }
+
+                                                    if (!empty($bzArr)) {
+                                                        $bzVal = implode(';', $bzArr);
+                                                    }
+                                                }
+
+                                                $item['answer_each'] .= "[备注：{$bzVal}]";
+                                            }
+                                            break;
+                                        default:
+                                            break;
+                                    }
+
+                                    break;
+                                case QUALITY_TYPE_COMB:     //混合题
+
+                                    switch ($v['process_id']) {
+                                        case 1:
+                                            $item['answer'] = !empty($v['choose_content'])?$v['choose_content']:'';
+                                            $item['answer_name'] = $v['name'];
+
+                                            if (!empty($v['content'])) {
+                                                $bz = json_decode($v['content'], true);
+                                                $bzVal = '';
+
+                                                if (count($bz) > 0) {
+                                                    foreach ($bz as $m) {
+
+                                                        if ($m['key'] == '测量结果') {
+                                                            $item['answer'] .= '数值：' . $m['value'];
+                                                        } elseif ($m['key'] == '备注') {
+                                                            $bzArr[] = $m['value'];
+                                                        }
+
+                                                    }
+
+                                                    if (!empty($bzArr)) {
+                                                        $bzVal = implode(';', $bzArr);
+                                                    }
+                                                }
+
+                                                $item['answer'] .= "[备注：{$bzVal}]";
+                                            }
+
+                                            break;
+                                        case 2:
+                                            $item['answer_each'] = !empty($v['choose_content'])?$v['choose_content']:'';
+                                            $item['answer_each_name'] = $v['name'];
+
+                                            if (!empty($v['content'])) {
+                                                $bz = json_decode($v['content'], true);
+                                                $bzVal = '';
+
+                                                if (count($bz) > 0) {
+                                                    foreach ($bz as $m) {
+
+                                                        if ($m['key'] == '测量结果') {
+                                                            $item['answer_each'] .= '数值：' . $m['value'];
+                                                        } elseif ($m['key'] == '备注') {
+                                                            $bzArr[] = $m['value'];
+                                                        }
+
+                                                    }
+
+                                                    if (!empty($bzArr)) {
+                                                        $bzVal = implode(';', $bzArr);
+                                                    }
+                                                }
+
+                                                $item['answer_each'] .= "[备注：{$bzVal}]";
+                                            }
+
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                    break;
+                            }
+
+                            $item['type'] = $v['quality_item_type'];
+
+                            $answerReturn[$v['quality_item_id']] = isset($answerReturn[$v['quality_item_id']]) ? array_merge($answerReturn[$v['quality_item_id']],$item) : $item;
+
+                        }
+
+                        //获取监造|专检|录入人员
+                        $exeRecord = $model->getTaskExeRecord($taskId,$groupId);
+
+                        if (!empty($exeRecord)) {
+                            foreach ($exeRecord as $y => $z){
+
+                                if ($z['process_id'] == 3) {    //专检
+                                    $userList['do_computer'] = $z['doname'];
+                                } elseif ($z['process_id'] == 4) {    //监造
+                                    $userList['do_computer_re'] = $z['doname'];
+                                }
+                            }
+                        }
+
+                        $list['user'] = $userList;
+
+                    } else {
+                        $view = 'task-detail-fj';
+
+                        foreach ($answerList as $k => $v) {
+
+                            $item = [];
+                            $item['name'] = $v['title'];
+                            $item['standard'] = json_decode($v['standard'],true);
+
+                            //根据不同题型获取对应
+                            switch ($v['quality_item_type']) {
+                                case QUALITY_TYPE_JUDGE:    //判断题
+
+                                    switch ($v['process_id']) {
+                                        case 1:             //自检
+                                            $item['answer'] = !empty($v['choose_content']) ? $v['choose_content']:'';
+                                            $item['answer_name'] = $v['name'];
+
+                                            //如果备注不为空
+                                            if (!empty($v['content'])) {
+                                                $bz = json_decode($v['content'], true);
+                                                $bzVal = '';
+
+                                                if (count($bz) > 0) {
+                                                    foreach ($bz as $m) {
+                                                        if ($m['key'] == '备注') {
+                                                            $bzArr[] = $m['value'];
+                                                        }
+                                                    }
+                                                    if (!empty($bzArr)) {
+                                                        $bzVal = implode(';', $bzArr);
+                                                    }
+                                                }
+
+                                                $item['answer'] .= "[备注：{$bzVal}]";
+                                            }
+
+                                            break;
+                                        case 2:             //互检
+                                            $item['answer_each'] = !empty($v['choose_content']) ? $v['choose_content']:'';
+                                            $item['answer_each_name'] = $v['name'];
+
+                                            //如果备注不为空
+                                            if (!empty($v['content'])) {
+                                                $bz = json_decode($v['content'], true);
+                                                $bzVal = '';
+
+                                                if (count($bz) > 0) {
+                                                    foreach ($bz as $m) {
+                                                        if ($m['key'] == '备注') {
+                                                            $bzArr[] = $m['value'];
+                                                        }
+                                                    }
+                                                    if (!empty($bzArr)) {
+                                                        $bzVal = implode(';', $bzArr);
+                                                    }
+                                                }
+
+                                                $item['answer_each'] .= "[备注：{$bzVal}]";
+                                            }
+
+                                        default:
+                                            break;
+                                    }
+
+                                    break;
+                                case QUALITY_TYPE_CHOOSE:   //选择题  (监造和专检只有选择题)
+
+                                    switch ($v['process_id']) {
+                                        case 1:
+                                            $item['answer'] = !empty($v['choose_content'])?$v['choose_content']:'';
+                                            $item['answer_name'] = $v['name'];
+
+                                            //如果备注不为空
+                                            if (!empty($v['content'])) {
+                                                $bz = json_decode($v['content'], true);
+                                                $bzVal = '';
+
+                                                if (count($bz) > 0) {
+                                                    foreach ($bz as $m) {
+                                                        if ($m['key'] == '备注') {
+                                                            $bzArr[] = $m['value'];
+                                                        }
+                                                    }
+                                                    if (!empty($bzArr)) {
+                                                        $bzVal = implode(';', $bzArr);
+                                                    }
+                                                }
+
+                                                $item['answer'] .= "[备注：{$bzVal}]";
+                                            }
+
+                                            break;
+                                        case 2:
+                                            $item['answer_each'] = !empty($v['choose_content'])?$v['choose_content']:'';
+                                            $item['answer_each_name'] = $v['name'];
+
+                                            //如果备注不为空
+                                            if (!empty($v['content'])) {
+                                                $bz = json_decode($v['content'], true);
+                                                $bzVal = '';
+
+                                                if (count($bz) > 0) {
+                                                    foreach ($bz as $m) {
+                                                        if ($m['key'] == '备注') {
+                                                            $bzArr[] = $m['value'];
+                                                        }
+                                                    }
+                                                    if (!empty($bzArr)) {
+                                                        $bzVal = implode(';', $bzArr);
+                                                    }
+                                                }
+
+                                                $item['answer_each'] .= "[备注：{$bzVal}]";
+                                            }
+                                            break;
+                                        case 3:
+                                            $item['answer_computer'][] = $v['choose_content'];
+                                            break;
+                                        case 4:
+                                            $item['answer_computer_re'][] = $v['choose_content'];
+                                            break;
+                                        default:
+                                            break;
+
+                                    }
+
+                                    break;
+                                case QUALITY_TYPE_FILL:     //填空题
+
+                                    switch ($v['process_id']) {
+                                        case 1:
+                                            $item['answer'] = '';
+                                            $item['answer_name'] = $v['name'];
+
+                                            if (!empty($v['content'])) {
+                                                $bz = json_decode($v['content'], true);
+                                                $bzVal = '';
+
+                                                if (count($bz) > 0) {
+                                                    foreach ($bz as $m) {
+
+                                                        if ($m['key'] == '测量结果') {
+                                                            $item['answer'] = $m['value'];
+                                                        } elseif ($m['key'] == '备注') {
+                                                            $bzArr[] = $m['value'];
+                                                        }
+
+                                                    }
+
+                                                    if (!empty($bzArr)) {
+                                                        $bzVal = implode(';', $bzArr);
+                                                    }
+                                                }
+
+                                                $item['answer'] .= "[备注：{$bzVal}]";
+                                            }
+                                            break;
+                                        case 2:
+                                            $item['answer_each'] = '';
+                                            $item['answer_each_name'] = $v['name'];
+
+                                            if (!empty($v['content'])) {
+                                                $bz = json_decode($v['content'], true);
+                                                $bzVal = '';
+
+                                                if (count($bz) > 0) {
+                                                    foreach ($bz as $m) {
+
+                                                        if ($m['key'] == '测量结果') {
+                                                            $item['answer_each'] = $m['value'];
+                                                        } elseif ($m['key'] == '备注') {
+                                                            $bzArr[] = $m['value'];
+                                                        }
+
+                                                    }
+
+                                                    if (!empty($bzArr)) {
+                                                        $bzVal = implode(';', $bzArr);
+                                                    }
+                                                }
+
+                                                $item['answer_each'] .= "[备注：{$bzVal}]";
+                                            }
+                                            break;
+                                        default:
+                                            break;
+                                    }
+
+                                    break;
+                                case QUALITY_TYPE_SELECT:   //多选题
+
+                                    switch ($v['process_id']) {
+                                        case 1:
+                                            $item['answer'] = !empty($v['choose_content'])?$v['choose_content']:'';
+                                            $item['answer_name'] = $v['name'];
+
+                                            if (!empty($v['content'])) {
+                                                $bz = json_decode($v['content'], true);
+                                                $bzVal = '';
+
+                                                if (count($bz) > 0) {
+                                                    foreach ($bz as $m) {
+                                                        if ($m['key'] == '备注') {
+                                                            $bzArr[] = $m['value'];
+                                                        }
+                                                    }
+
+                                                    if (!empty($bzArr)) {
+                                                        $bzVal = implode(';', $bzArr);
+                                                    }
+                                                }
+
+                                                $item['answer'] .= "[备注：{$bzVal}]";
+                                            }
+                                            break;
+                                        case 2:
+                                            $item['answer_each'] = !empty($v['choose_content'])?$v['choose_content']:'';
+                                            $item['answer_each_name'] = $v['name'];
+
+                                            if (!empty($v['content'])) {
+                                                $bz = json_decode($v['content'], true);
+                                                $bzVal = '';
+
+                                                if (count($bz) > 0) {
+                                                    foreach ($bz as $m) {
+                                                        if ($m['key'] == '备注') {
+                                                            $bzArr[] = $m['value'];
+                                                        }
+                                                    }
+
+                                                    if (!empty($bzArr)) {
+                                                        $bzVal = implode(';', $bzArr);
+                                                    }
+                                                }
+
+                                                $item['answer_each'] .= "[备注：{$bzVal}]";
+                                            }
+                                            break;
+                                        default:
+                                            break;
+                                    }
+
+                                    break;
+                                case QUALITY_TYPE_COMB:     //混合题 分解都是混合题
+
+                                    switch ($v['process_id']) {
+                                        case 1:
+                                            $item['answer'] = !empty($v['choose_content'])?$v['choose_content']:'';
+                                            $item['answer_name'] = $v['name'];
+
+                                            if (!empty($v['content'])) {
+                                                $bz = json_decode($v['content'], true);
+                                                $bzVal = '';
+
+                                                if (count($bz) > 0) {
+                                                    foreach ($bz as $m) {
+
+                                                        if ($m['key'] == '测量结果') {
+                                                            $item['answer'] .= '数值：' . $m['value'];
+                                                        } elseif ($m['key'] == '备注') {
+                                                            $bzArr[] = $m['value'];
+                                                        }
+
+                                                    }
+
+                                                    if (!empty($bzArr)) {
+                                                        $bzVal = implode(';', $bzArr);
+                                                    }
+                                                }
+
+                                                $item['answer'] .= "[备注：{$bzVal}]";
+                                            }
+
+                                            break;
+                                        case 2:
+                                            $item['answer_each'] = !empty($v['choose_content'])?$v['choose_content']:'';
+                                            $item['answer_each_name'] = $v['name'];
+
+                                            if (!empty($v['content'])) {
+                                                $bz = json_decode($v['content'], true);
+                                                $bzVal = '';
+
+                                                if (count($bz) > 0) {
+                                                    foreach ($bz as $m) {
+
+                                                        if ($m['key'] == '测量结果') {
+                                                            $item['answer_each'] .= '数值：' . $m['value'];
+                                                        } elseif ($m['key'] == '备注') {
+                                                            $bzArr[] = $m['value'];
+                                                        }
+
+                                                    }
+
+                                                    if (!empty($bzArr)) {
+                                                        $bzVal = implode(';', $bzArr);
+                                                    }
+                                                }
+
+                                                $item['answer_each'] .= "[备注：{$bzVal}]";
+                                            }
+
+                                            break;
+
+                                        case 5:     //分解 （只有混合题）
+                                            $item['answer_fj'] = !empty($v['choose_content']) ? $v['choose_content']:'合格';//默认合格
+                                            $item['answer_fj_do'] = '';
+
+                                            //分解人员签名
+                                            $userList['do_name'] = isset($userList['do_name'])?$userList['do_name']:$v['name'];
+
+                                            //如果备注不为空
+                                            if (!empty($v['content']) && !empty($v['choose_content']) && $v['choose_content'] == '不合格') {
+                                                $bz = json_decode($v['content'], true);
+
+                                                if (count($bz) > 0) {
+                                                    foreach ($bz as $m) {
+                                                        if ($m['key'] == '检查结果') {
+                                                            $item['answer_fj'] = $m['value'];
+                                                        }
+                                                        elseif ($m['key'] == '处理方法') {
+                                                            $item['answer_fj_do'] = $m['value'];
+                                                        }
+                                                    }
+
+                                                }
+
+                                            }
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                    break;
+                            }
+
+                            $item['type'] = $v['quality_item_type'];
+
+                            $answerReturn[$v['quality_item_id']] = isset($answerReturn[$v['quality_item_id']]) ? array_merge($answerReturn[$v['quality_item_id']],$item) : $item;
+
+                        }
+
+                        //var_dump($answerReturn);exit;
+
+                        //获取监造|专检|录入人员
+                        $exeRecord = $model->getTaskExeRecord($taskId,$groupId);
+
+                        if (!empty($exeRecord)) {
+                            foreach ($exeRecord as $y => $z){
+
+                                if ($z['process_id'] == 3) {    //专检
+                                    $userList['do_computer'] = $z['doname'];
+                                } elseif ($z['process_id'] == 4) {    //监造
+                                    $userList['do_computer_re'] = $z['doname'];
+                                }
+                            }
+                        }
+
+                        $list['user'] = $userList;
+
+                    }
+
+                    $list['answer'] = $answerReturn;
 
                     break;
-                case QUALITY_ITEM_TYPE_OVER:    //整车质检
+                case QUALITY_ITEM_TYPE_OVER:    //整车质检(只有专检和监造)
+                    $view = 'task-detail-end';
+                    $answerReturn = [];
+                    $userList = [];
+
+                    foreach ($answerList as $k => $v) {
+
+                        $item = [];
+                        $item['name'] = $v['title'];
+                        $item['standard'] = json_decode($v['standard'],true);
+
+                        //根据不同题型获取对应
+                        switch ($v['quality_item_type']) {
+                            case QUALITY_TYPE_JUDGE:    //判断题
+
+                                $item['answer'] = !empty($v['choose_content'])?$v['choose_content']:'';
+
+                                //如果备注不为空
+                                if (!empty($v['content'])) {
+                                    $bz = json_decode($v['content'], true);
+                                    $bzVal = '';
+
+                                    if (count($bz) > 0) {
+                                        foreach ($bz as $m) {
+                                            if ($m['key'] == '备注') {
+                                                $bzArr[] = $m['value'];
+                                            }
+                                        }
+                                        if (!empty($bzArr)) {
+                                            $bzVal = implode(';', $bzArr);
+                                        }
+                                    }
+
+                                    $item['answer'] .= "[备注：{$bzVal}]";
+                                }
+
+                                break;
+                            case QUALITY_TYPE_CHOOSE:   //选择题  (监造和专检只有选择题)
+                                if (empty($v['process_id'])) {
+                                    $item['answer'] = !empty($v['choose_content'])?$v['choose_content']:'';
+
+                                    //如果备注不为空
+                                    if (!empty($v['content'])) {
+                                        $bz = json_decode($v['content'], true);
+                                        $bzVal = '';
+
+                                        if (count($bz) > 0) {
+                                            foreach ($bz as $m) {
+                                                if ($m['key'] == '备注') {
+                                                    $bzArr[] = $m['value'];
+                                                }
+                                            }
+                                            if (!empty($bzArr)) {
+                                                $bzVal = implode(';', $bzArr);
+                                            }
+                                        }
+
+                                        $item['answer'] .= "[备注：{$bzVal}]";
+                                    }
+                                } elseif ($v['process_id'] == 3) {  //专检
+                                    $item['answer_computer'][] = $v['choose_content'];
+                                } elseif ($v['process_id'] == 4) {  //监造
+                                    $item['answer_computer_re'][] = $v['choose_content'];
+                                }
+
+                                break;
+                            case QUALITY_TYPE_FILL:     //填空题
+                                $item['answer'] = '';
+
+                                if (!empty($v['content'])) {
+                                    $bz = json_decode($v['content'], true);
+                                    $bzVal = '';
+
+                                    if (count($bz) > 0) {
+                                        foreach ($bz as $m) {
+
+                                            if ($m['key'] == '测量结果') {
+                                                $item['answer'] = $m['value'];
+                                            } elseif ($m['key'] == '备注') {
+                                                $bzArr[] = $m['value'];
+                                            }
+
+                                        }
+
+                                        if (!empty($bzArr)) {
+                                            $bzVal = implode(';', $bzArr);
+                                        }
+                                    }
+
+                                    $item['answer'] .= "[备注：{$bzVal}]";
+                                }
+
+                                break;
+                            case QUALITY_TYPE_SELECT:   //多选题
+                                $item['answer'] = !empty($v['choose_content'])?$v['choose_content']:'';
+
+                                if (!empty($v['content'])) {
+                                    $bz = json_decode($v['content'], true);
+                                    $bzVal = '';
+
+                                    if (count($bz) > 0) {
+                                        foreach ($bz as $m) {
+                                            if ($m['key'] == '备注') {
+                                                $bzArr[] = $m['value'];
+                                            }
+                                        }
+
+                                        if (!empty($bzArr)) {
+                                            $bzVal = implode(';', $bzArr);
+                                        }
+                                    }
+
+                                    $item['answer'] .= "[备注：{$bzVal}]";
+                                }
+
+
+                                break;
+                            case QUALITY_TYPE_COMB:     //混合题
+                                $item['answer'] = !empty($v['choose_content'])?$v['choose_content']:'';
+
+                                if (!empty($v['content'])) {
+                                    $bz = json_decode($v['content'], true);
+                                    $bzVal = '';
+
+                                    if (count($bz) > 0) {
+                                        foreach ($bz as $m) {
+
+                                            if ($m['key'] == '测量结果') {
+                                                $item['answer'] .= '数值：' . $m['value'];
+                                            } elseif ($m['key'] == '备注') {
+                                                $bzArr[] = $m['value'];
+                                            }
+
+                                        }
+
+                                        if (!empty($bzArr)) {
+                                            $bzVal = implode(';', $bzArr);
+                                        }
+                                    }
+
+                                    $item['answer'] .= "[备注：{$bzVal}]";
+                                }
+
+                                break;
+                        }
+
+                        $item['type'] = $v['quality_item_type'];
+
+                        $answerReturn[$v['quality_item_id']] = isset($answerReturn[$v['quality_item_id']]) ? array_merge($answerReturn[$v['quality_item_id']],$item) : $item;
+
+                    }
+
+                    $list['answer'] = $answerReturn;
+
+                    //获取监造|专检|录入人员
+                    $exeRecord = $model->getTaskExeRecord($taskId,$groupId);
+
+                    if (!empty($exeRecord)) {
+                        foreach ($exeRecord as $y => $z){
+                            if (empty($z['process_id'])) {
+
+                                $userList['do_name'] = $z['doname'];
+                            } elseif ($z['process_id'] == 3) {    //专检
+
+                                $userList['do_computer'] = $z['doname'];
+                            } elseif ($z['process_id'] == 4) {    //监造
+
+                                $userList['do_computer_re'] = $z['doname'];
+                            }
+                        }
+                    }
+
+                    $list['user'] = $userList;
                     break;
                 default:
                     break;
 
             }
 
-            //var_dump($answerReturn);exit;
             return $this->renderAjax($view, ['list' => $list]);
 
         }

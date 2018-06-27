@@ -2,6 +2,7 @@
 
 namespace app\modules\admin\controllers;
 
+use app\common\filters\PermissionFilter;
 use app\models\ar\DepartmentAR;
 use app\models\ar\RoleAR;
 use app\models\ar\UserAR;
@@ -10,6 +11,17 @@ use app\models\ar\UserRoleAR;
 
 class UserInfoController extends BaseController
 {
+    public function appendBehaviors()
+    {
+        return [
+            'permission' => [
+                'class' => PermissionFilter::className(),
+                'except' => ['index'],
+                'failUrl' => '/login'
+            ],
+        ];
+    }
+
     public function actionIndex()
     {
         //获取用户角色

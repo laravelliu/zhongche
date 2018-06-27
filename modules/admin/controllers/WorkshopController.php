@@ -2,6 +2,7 @@
 
 namespace app\modules\admin\controllers;
 
+use app\common\filters\PermissionFilter;
 use app\models\ar\StationAR;
 use app\models\ar\WorkAreaAR;
 use app\models\ar\WorkshopAR;
@@ -13,6 +14,16 @@ use yii\helpers\Url;
 
 class WorkshopController extends BaseController
 {
+    public function appendBehaviors()
+    {
+        return [
+            'permission' => [
+                'class' => PermissionFilter::className(),
+                'failUrl' => '/login'
+            ],
+        ];
+    }
+
     /**
      * 车间管理
      * @return string

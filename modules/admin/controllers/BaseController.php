@@ -36,10 +36,11 @@ class BaseController extends \yii\web\Controller
                 'class' => LoginFilter::className(),
                 'failUrl' => '/login'
             ],
-            /*'permission' => [
+            'permission' => [
                 'class' => PermissionFilter::className(),
+                'except' => ['login', 'admin', 'admin/index/index'],
                 'failUrl' => '/login'
-            ],*/
+            ],
         ];
 
         $append = $this->appendBehaviors();

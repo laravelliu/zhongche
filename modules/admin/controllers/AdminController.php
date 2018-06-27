@@ -15,14 +15,15 @@ use yii\helpers\Url;
  */
 class AdminController extends BaseController
 {
-    /*public function appendBehaviors()
+    public function appendBehaviors()
     {
         return [
             'permission' => [
                 'class' => PermissionFilter::className(),
-            ]
+                'failUrl' => '/login'
+            ],
         ];
-    }*/
+    }
 
     /**
      * Renders the index view for the module
@@ -231,10 +232,5 @@ class AdminController extends BaseController
         return $this->render('edit-user', ['group' => $groupList, 'department' => $departmentList, 'workshop' => $workshopArr, 'model' => $model, 'isStaff' => $isStaff, 'isNeedWorkshop' => $isNeedWorkshop]);
     }
 
-
-    public function actionUserList()
-    {
-        return $this->render('test');
-    }
 
 }

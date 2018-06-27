@@ -2,6 +2,7 @@
 
 namespace app\modules\admin\controllers;
 
+use app\common\filters\PermissionFilter;
 use app\models\ar\UserGroupAR;
 use app\models\StaffModel;
 use app\models\WorkshopModel;
@@ -11,14 +12,14 @@ use Yii;
 
 class StaffController extends BaseController
 {
-    /**
-     * 员工信息
-     * @return string
-     * @author: liuFangShuo
-     */
-    public function actionIndex()
+    public function appendBehaviors()
     {
-        return $this->render('index');
+        return [
+            'permission' => [
+                'class' => PermissionFilter::className(),
+                'failUrl' => '/login'
+            ],
+        ];
     }
 
     /**

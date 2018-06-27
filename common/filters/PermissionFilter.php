@@ -28,6 +28,11 @@ class PermissionFilter extends BaseFilter
 
         $this->_user = Yii::$app->user->identity;
 
+        //ajax不做过滤
+        if(Yii::$app->request->isAjax){
+            return true;
+        }
+
         //超管
         if($this->_user->isSuperAdmin()){
             return true;

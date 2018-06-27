@@ -2,6 +2,7 @@
 
 namespace app\modules\admin\controllers;
 
+use app\common\filters\PermissionFilter;
 use app\models\ar\PermissionAR;
 use app\models\ar\ProcessAR;
 use app\models\StaffModel;
@@ -11,6 +12,16 @@ use yii\helpers\Url;
 
 class PermissionController extends BaseController
 {
+    public function appendBehaviors()
+    {
+        return [
+            'permission' => [
+                'class' => PermissionFilter::className(),
+                'failUrl' => '/login'
+            ],
+        ];
+    }
+
     public function actionIndex()
     {
         return $this->render('index');

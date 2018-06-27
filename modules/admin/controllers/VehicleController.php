@@ -2,6 +2,7 @@
 
 namespace app\modules\admin\controllers;
 
+use app\common\filters\PermissionFilter;
 use app\models\ar\VehicleModelAR;
 use app\models\ar\VehicleTypeAR;
 use app\models\QualityModel;
@@ -12,6 +13,16 @@ use yii\helpers\Url;
 
 class VehicleController extends BaseController
 {
+    public function appendBehaviors()
+    {
+        return [
+            'permission' => [
+                'class' => PermissionFilter::className(),
+                'failUrl' => '/login'
+            ],
+        ];
+    }
+
     /**
      * 车辆首页
      * @return string
