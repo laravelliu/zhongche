@@ -8,6 +8,7 @@ use app\models\ar\JobStationAR;
 use app\models\ar\JobStationRelateStationAR;
 use app\models\ar\ProcessAR;
 use app\models\ar\QualityInspectionGroupAR;
+use app\models\ar\QualityInspectionGroupItemAR;
 use app\models\ar\QualityInspectionItemAR;
 use app\models\ar\StationAR;
 use app\models\ar\TaskAR;
@@ -979,26 +980,51 @@ class QualityController extends BaseController
 
         //获取质检项组
         $group = $model->getQualityGroupByTypeId($jobStation->type_id);
-        $groupList = [0 => '全部质检项组'] + ArrayHelper::map($group, 'id', 'name');
+
+        //只取是工位的质检项组
+        $groupF = [];
+        $groupUn = [];
+
+        foreach ($group as $q => $w){
+            if($w['item_type'] == 2){
+                $groupF[] = $w;
+            }else{
+                $groupUn[] = $w;
+            }
+        }
+
+        $unItemGroup = array_column($groupUn,'id');
+
+        $filterItem = QualityInspectionGroupItemAR::find()->where(['group_id'=>$unItemGroup])->asArray()->all();
+
+        $filterIds = array_unique(array_column($filterItem, 'item_id'));
+
+        $groupList = [0 => '全部工位质检项组'] + ArrayHelper::map($groupF, 'id', 'name');
 
         //获取同一种质检流程 其他职能工位已分配的问题
         //$otherItem = $model->getOtherSelectItem($jobStation);
 
-        /*$all = [];
-        if (!empty($otherItem)) {
-            $otherItemIds = array_column($otherItem, 'item_id');
-
-            foreach ($itemList as $k => $v){
-
-                if (in_array($v['id'],$otherItemIds)) {
-                    continue;
-                }
-
-                $all[$v['id']] = $v['title'];
+        $all = [];
+        foreach ($itemList as $j => $i){
+            if(!in_array($i['id'],$filterIds)){
+                $all[$i['id']] = $i['title'];
             }
-        } else {*/
+        }
+
+        /*if (!empty($otherItem)) {
+           $otherItemIds = array_column($otherItem, 'item_id');
+
+           foreach ($itemList as $k => $v){
+
+               if (in_array($v['id'],$otherItemIds)) {
+                   continue;
+               }
+
+               $all[$v['id']] = $v['title'];
+           }
+       } else {
             $all = ArrayHelper::map($itemList,'id','title');
-        /*}*/
+        }*/
 
         //获取已选择的质检流程
         $selectedItems = $model->getItemByJob($id);

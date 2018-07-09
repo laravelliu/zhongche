@@ -9,7 +9,7 @@
 use yii\helpers\Url;
 
 $user = $this->params['userInfo'];
-$url = Yii::$app->request->getUrl();
+$url = '/'.Yii::$app->request->getPathInfo();
 
 $a = [
     '/admin/staff/staff-group',
@@ -93,7 +93,9 @@ $d = [
 
     '/admin/quality/group-distribution-process',
     '/admin/quality/distribution-area',
-    '/admin/quality/relate-station'
+    '/admin/quality/relate-station',
+
+    '/admin/quality/distribution-area'
 
 ];
 $f = [

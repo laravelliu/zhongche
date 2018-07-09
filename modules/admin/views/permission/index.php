@@ -18,12 +18,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box box-info">
                     <div class="box-header with-border">
                         <h3 class="box-title"></h3>
-                        <div class="box-tools">
-                            <a href="<?=Url::to(['permission/add-permission'])?>" class="btn btn-default btn-sm">
-                                <i class="fa fa-play"></i>添加权限
-                            </a>
-
-                        </div>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
@@ -37,7 +31,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <th>层级</th>
                                 <th>创建时间</th>
                                 <th>更新时间</th>
-                                <th>操作</th>
                             </tr>
                             </thead>
                         </table>
@@ -101,11 +94,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 {data: "level"},
                 {data: "create_time"},
                 {data: "update_time"},
-                {
-                    render:function (data,type,full) {
-                        return '<a href="edit-permission?id=' + full['id'] + '">编辑</a>';
-                    }
-                }
             ]
         })
     </script>

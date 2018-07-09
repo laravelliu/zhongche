@@ -47,7 +47,7 @@ class PermissionFilter extends BaseFilter
         }
 
         //获取当前url
-        $path = Yii::$app->request->getUrl();
+        $path = '/'.Yii::$app->request->getPathInfo();
 
         if (!in_array($path, $pathArr)) {
             $this->fail();

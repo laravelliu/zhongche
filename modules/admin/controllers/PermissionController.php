@@ -57,6 +57,7 @@ class PermissionController extends BaseController
      */
     public function actionAddPermission()
     {
+        return false;
         $model = new PermissionAR();
         $model->setScenario('create');
 
@@ -87,6 +88,8 @@ class PermissionController extends BaseController
      */
     public function actionEditPermission()
     {
+        return false;
+
         $id = Yii::$app->request->get('id', null);
         $model = PermissionAR::findOne(['id' => $id, 'is_deleted' => STATUS_FALSE]);
 
