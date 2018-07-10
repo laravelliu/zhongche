@@ -3,6 +3,7 @@
 namespace app\modules\admin\controllers;
 
 use app\common\filters\PermissionFilter;
+use app\models\ar\UserAR;
 use app\models\StaffModel;
 use app\models\UserModel;
 use app\models\WorkshopModel;
@@ -33,6 +34,40 @@ class AdminController extends BaseController
     {
         return $this->render('index');
     }
+
+    /**
+     * 添加用户，只有超管可以添加
+     * @return string|\yii\web\Response
+     * @author: liuFangShuo
+     */
+    public function actionAddUser()
+    {
+        if(!Yii::$app->user->identity->isSuperAdmin()){
+            return $this->render(Url::to(['admin/index']));
+        }
+
+        $model = new UserAR();
+        $model->setScenario('create');
+
+        if(Yii::$app->request->isPost){
+
+            if($model->load($post = Yii::$app->request->post()) && $model->validate()){
+                $model->password_hash = md5($model->password_hash);
+                $model->admin_photo = '/images/admin/user4-128x128.jpg';
+                if ($model->save()) {
+
+                    //成功跳转
+                    return $this->redirect(Url::to(['admin/index']));
+                }
+            }
+
+            $model->getErrors();
+
+        }
+
+        return $this->render('add-user',['model'=>$model]);
+    }
+
 
     /**
      * 获取用户列表

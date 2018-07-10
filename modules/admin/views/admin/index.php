@@ -8,12 +8,26 @@ $this->title = '人员列表';
 //面包屑
 $this->params['breadcrumbs'][] = '人员管理';
 $this->params['breadcrumbs'][] = $this->title;
+
+$userInfo = $this->params['userInfo'];
+
 ?>
+
 <!-- Main content -->
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
             <div class="box box-info">
+                <?php if($userInfo->isSuperAdmin()):?>
+                <div class="box-header with-border">
+                    <h3 class="box-title"></h3>
+                    <div class="box-tools">
+                        <a href="<?=Url::to(['admin/add-user'])?>" class="btn btn-default btn-sm">
+                            <i class="fa fa-play"></i>添加人员
+                        </a>
+                    </div>
+                </div>
+                <?php endif;?>
                 <!-- /.box-header -->
                 <div class="box-body">
                     <table id="user-table" class="table table-bordered table-striped">

@@ -40,6 +40,7 @@ class UserAR extends BaseAR implements IdentityInterface
     {
         $parent = parent::scenarios();
         $self = [
+            'create' => ['username', 'password_hash', 'name', 'email', 'is_admin', 'admin_photo', 'phone'],
             'update' => ['name', 'department_id', 'is_admin'],
             'updateWithGroup' => ['name', 'department_id', 'is_admin', 'group_id'],
             'updateWithWorkshop' => ['name', 'department_id', 'is_admin','workshop_id'],
@@ -66,7 +67,9 @@ class UserAR extends BaseAR implements IdentityInterface
             [['name', 'department_id', 'is_admin'], 'required', 'message' => '不能为空', 'on' => ['update','updateWithWorkshop','updateWithGroup']],
             [['group_id'], 'required', 'message' => '不能为空', 'on' =>'updateWithGroup'],
             [['workshop_id'], 'required', 'message' => '不能为空', 'on' =>'updateWithWorkshop'],
-            [['email', 'phone'], 'required', 'message' => '不能为空', 'on' => 'updateInfo']
+            [['email', 'phone'], 'required', 'message' => '不能为空', 'on' => 'updateInfo'],
+            [['username', 'name','phone', 'password_hash', 'email', 'is_admin'], 'required', 'message' => '不能为空', 'on' => 'create'],
+            ['username', 'unique', 'message'=>'用户已存在', 'on'=>['create']]
         ];
     }
 
@@ -256,4 +259,5 @@ class UserAR extends BaseAR implements IdentityInterface
 
         return $pathArr;
     }
+
 }
