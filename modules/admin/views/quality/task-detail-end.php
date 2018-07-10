@@ -23,7 +23,7 @@
         <tr>
             <td><?=$k?></td>
             <td><?=$v['name']?></td>
-            <td><?= implode("、",$v['standard'])?></td>
+            <td><?= empty($v['standard']) ? '': implode("、",$v['standard'])?></td>
             <td><?=$v['answer']?></td>
             <td><?=$v['answer_computer'][0]?></td>
             <td><?=$v['answer_computer_re'][0]?></td>

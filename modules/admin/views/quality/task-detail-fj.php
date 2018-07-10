@@ -73,8 +73,12 @@ if ($jz && $zj) {
             <td><?=$v['answer_name']?></td>
             <td><?=$v['answer_each']?></td>
             <td><?=$v['answer_each_name']?></td>
-            <td><?=$v['answer_computer'][0]?></td>
-            <td><?=$v['answer_computer_re'][0]?></td>
+            <?php if($zj):?>
+            <td><?=isset($v['answer_computer'])?$v['answer_computer'][0]:''?></td>
+            <?php endif;?>
+            <?php if($jz):?>
+            <td><?=isset($v['answer_computer_re'])?$v['answer_computer_re'][0]:''?></td>
+            <?php endif;?>
         </tr>
     <?php endforeach;?>
     <tr>

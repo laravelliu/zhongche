@@ -472,7 +472,7 @@ class QualityController extends BaseController
     {
         $taskId = Yii::$app->request->get('id');
         //根据task 获取质检项组
-        $taskInfo = TaskAR::findOne(['id' => $taskId/*, 'finish' => STATUS_TRUE*/]);
+        $taskInfo = TaskAR::findOne(['id' => $taskId, 'finish' => STATUS_TRUE]);
 
         if(empty($taskInfo)){
             return $this->redirect(Url::to(['quality/task']));
@@ -482,7 +482,7 @@ class QualityController extends BaseController
         $itemGroupList = $model->getQualityGroupByTypeId($taskInfo->type_id);
 
 
-        return $this->render('task-info',['group' => $itemGroupList, 'task' => $taskInfo]);
+        return $this->render('task-info', ['group' => $itemGroupList, 'task' => $taskInfo]);
     }
 
     /**

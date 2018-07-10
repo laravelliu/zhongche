@@ -58,7 +58,7 @@ if ($jz && $zj) {
         <tr>
             <td><?=$k?></td>
             <td><?=$v['name']?></td>
-            <td><?= implode("、",$v['standard'])?></td>
+            <td><?= empty($v['standard'])?$v['standard']:implode("、",$v['standard'])?></td>
             <td><?=$v['answer']?></td>
             <td><?=$v['answer_name']?></td>
             <td><?=isset($v['answer_each'])?$v['answer_each']:'无互检'?></td>

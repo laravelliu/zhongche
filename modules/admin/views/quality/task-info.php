@@ -22,7 +22,7 @@ $arr = json_encode(['taskId' => $task->id]);
 ?>
 
 <section class="content">
-    <?php for($i=0;$i<=$row; $i++):?>
+    <?php for($i=0; $i<$row; $i++):?>
     <div class="row">
         <div class="col-md-12 item-group" data-group="<?=$group[$i*2]['id']?>" data-split="<?=$group[$i*2]['is_split']?>" data-type="<?=$group[$i*2]['item_type']?>">
             <div class="box box-default">

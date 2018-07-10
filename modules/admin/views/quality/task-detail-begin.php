@@ -5,6 +5,7 @@
  * Date: 2018/6/13
  * Time: 17:17
  */
+
 ?>
 
 <table class="table table-bordered" width="100%" border="1" cellpadding="0" cellspacing="0" style="table-layout: fixed;">
@@ -24,7 +25,7 @@
         <td><?=$k?></td>
         <td><?=$v['name']?></td>
 
-        <td><?= implode("、",$v['standard'])?></td>
+        <td><?= empty($v['standard'])?$v['standard']:implode("、",$v['standard'])?></td>
 
         <td><?=$v['answer']?></td>
         <td><?=$v['answer_computer'][0]?></td>

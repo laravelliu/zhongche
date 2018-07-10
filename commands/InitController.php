@@ -136,6 +136,16 @@ class InitController extends Controller
         }
 
         Yii::$app->db->createCommand()->batchInsert(PermissionAR::tableName(), ['name','display_name','create_time', 'update_time'], $data)->execute();
+
+        //将所有权限分配给超级管理员
+        $permissionList = PermissionAR::find()->select('id')->asArray()->all();
+        $perArr = [];
+        foreach ($permissionList as $m){
+            $perArr[] = [$m['id'],'1',time(),time()];
+        }
+
+        Yii::$app->db->createCommand()->batchInsert(RolePermissionAR::tableName(), ['permission_id','role_id','create_time', 'update_time'], $perArr)->execute();
+
         return 'ok';
     }
 }
