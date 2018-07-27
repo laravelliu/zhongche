@@ -457,12 +457,40 @@ class QualityController extends BaseController
                 $taskList[$k]['create_time'] = date('Y-m-d H:i:s',$v['create_time']);
                 $taskList[$k]['update_time'] = date('Y-m-d H:i:s',$v['update_time']);
                 $taskList[$k]['vehicle_info'] = "车辆牌照：{$vehicleInfo[$v['vehicle_id']]['plate']}<br>自重：{$v['vehicle_weight']}吨<br>载重：{$v['vehicle_full_weight']}吨";
+                $taskList[$k]['is_admin'] = Yii::$app->user->identity->isSuperAdmin();
             }
 
 
         }
 
         return $this->ajaxReturn($taskList);
+    }
+
+    /**
+     * @author: liuFangShuo
+     */
+    public function actionDelTask()
+    {
+        if (Yii::$app->request->isAjax) {
+            $id = Yii::$app->request->post('id',null);
+
+            $taskInfo = TaskAR::findOne(['id' => $id]);
+
+            if (empty($taskInfo)) {
+                return $this->ajaxReturn('',1,'任务不存在');
+            }
+
+            $taskInfo->finish = 2;
+
+            if($taskInfo->save(false)){
+                return $this->ajaxReturn('',0,'任务终止成功');
+            }
+
+            return $this->ajaxReturn('',1,'任务终止失败');
+
+        }
+
+        return false;
     }
 
     /**

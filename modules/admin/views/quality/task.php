@@ -14,6 +14,9 @@ $this->title = '质检任务列表';
 //面包屑
 $this->params['breadcrumbs'][] = '质检任务管理';
 $this->params['breadcrumbs'][] = $this->title;
+
+$user = $this->params['userInfo'];
+
 ?>
 
 <!-- Main content -->
@@ -94,11 +97,21 @@ $this->params['breadcrumbs'][] = $this->title;
             {data: "type"},
             {data: "vehicle_info"},
             {data: "finish",render:function (data,type,full) {
-                if(data == 1){
-                    return '已结束';
-                } else {
-                    return '正在进行';
+                switch (data){
+                    case '0':
+                        return '正在进行';
+                        break;
+                    case '1':
+                        return '已结束';
+                        break;
+                    case '2':
+                        return '任务终止';
+                        break;
+                    default:
+                        return '数据异常';
+                        break;
                 }
+
             }},
             {data: "create_time"},
             {data: "update_time"},
@@ -107,11 +120,39 @@ $this->params['breadcrumbs'][] = $this->title;
                     if (full['finish'] == 1) {
                         return '<a href="task-info?id=' + full['id'] + '">查看信息</a>';
                     }else{
-                        return null;
+                        if(full['is_admin'] && full['finish'] == 0){
+                            return '<a href="javascript:void(0);" onclick="delTask('+full['id']+')">终止任务</a>';
+                        } else {
+                            return null;
+                        }
                     }
                 }
             }
         ]
-    })
+    });
+
+    <?php if($user->isSuperAdmin()):?>
+    function delTask($id) {
+        console.log($id);
+        $.ajax({
+            url:'/admin/quality/del-task',
+            data:{id:$id},
+            dataType:'json',
+            type:'POST',
+            success:function (data) {
+               if (0 == data.code){
+                   alert(data.message);
+                   $('#'+$id+' td').eq(3).text('任务终止');
+                   $('#'+$id+' td:last').text('');
+               }else{
+                   alert(data.message);
+               }
+
+            }
+        });
+    }
+    <?php endif;?>
+
+
 </script>
 <?php JsBlock::end();?>

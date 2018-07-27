@@ -72,6 +72,7 @@ class InitController extends Controller
         '/admin/quality/group-distribution-process' =>'质检项组分配质检流程',
         '/admin/quality/save-group-process' =>'保存质检项组分配质检流程',
         '/admin/quality/task-info-detail' =>'获取任务详情-ajax',
+        '/admin/quality/del-task' =>'终止任务',
 
         '/admin/role/index' =>'角色列表',
         '/admin/role/get-role' =>'获取角色-ajax',
@@ -91,6 +92,7 @@ class InitController extends Controller
 
         '/admin/vehicle/index' =>'车辆列表',
         '/admin/vehicle/get-vehicle-info' =>'获取车辆',
+        '/admin/vehicle/edit-vehicle-info' =>'编辑车辆',
         '/admin/vehicle/vehicle-model' =>'车辆型号列表',
         '/admin/vehicle/get-vehicle-model' =>'获取车辆型号',
         '/admin/vehicle/add-vehicle-model' =>'添加车辆型号',

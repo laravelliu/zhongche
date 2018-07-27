@@ -10,6 +10,8 @@ $this->title = '车辆列表';
 $this->params['breadcrumbs'][] = '车辆管理';
 $this->params['breadcrumbs'][] = $this->title;
 
+$user = $this->params['userInfo'];
+
 ?>
 
 <!-- Main content -->
@@ -32,7 +34,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             <th>车辆载重</th>
                             <th>创建时间</th>
                             <th>更新时间</th>
-                           <!-- <th>操作</th>-->
+                            <?php if($user->isSuperAdmin()):?>
+                            <th>操作</th>
+                            <?php endif;?>
                         </tr>
                         </thead>
 
@@ -101,12 +105,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 return data+'吨';
             }},
             {data: "create_time"},
-            {data: "update_time"}/*,
+            {data: "update_time"},
+            <?php if($user->isSuperAdmin()):?>
+
             {
                 render:function (data,type,full) {
-                    return '<a href="edit-vehicle-model?id=' + full['id'] + '">编辑</a>';
+                    return '<a href="edit-vehicle-info?id=' + full['id'] + '">编辑</a>';
                 }
-            }*/
+            }
+            <?php endif;?>
         ]
     })
 </script>

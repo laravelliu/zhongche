@@ -3,6 +3,7 @@
 namespace app\modules\admin\controllers;
 
 use app\common\filters\PermissionFilter;
+use app\models\ar\VehicleInfoAR;
 use app\models\ar\VehicleModelAR;
 use app\models\ar\VehicleTypeAR;
 use app\models\QualityModel;
@@ -34,6 +35,39 @@ class VehicleController extends BaseController
     }
 
     /**
+     * 编辑车辆型号
+     * @return string
+     * @author: liuFangShuo
+     */
+    public function actionEditVehicleInfo()
+    {
+
+        if(!Yii::$app->user->identity->isSuperAdmin()){
+            return $this->redirect(Url::to(['vehicle/index']));
+        }
+
+        $id = Yii::$app->request->get('id');
+        $model = VehicleInfoAR::findOne(['id' => $id, 'is_deleted' => STATUS_FALSE]);
+
+        if (empty($id) || empty($model)) {
+            return $this->redirect(Url::to(['vehicle/index']));
+        }
+
+        if (Yii::$app->request->isPost) {
+            if ($model->load($post = Yii::$app->request->post()) && $model->save()) {
+
+                return $this->redirect(Url::to(['vehicle/index']));
+
+            }
+            $model->getErrors();
+        }
+
+        return $this->render('edit-info',['model'=>$model]);
+
+    }
+
+
+        /**
      * 获取车辆信息
      * @author: liuFangShuo
      */

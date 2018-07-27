@@ -110,6 +110,7 @@ $g = [
     '/admin/vehicle/vehicle-type',
     '/admin/vehicle/add-vehicle-type',
     '/admin/vehicle/edit-vehicle-type',
+    '/admin/vehicle/edit-vehicle-info'
 ];
 
 
@@ -288,7 +289,7 @@ $pathArr = $user->getUserPermission();
                 </a>
                 <ul class="treeview-menu">
                     <?php if(in_array('/admin/vehicle/index', $pathArr)):?>
-                    <li <?php if(in_array($url,['/admin/vehicle/index'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['vehicle/index'])?>"><i class="fa fa-circle-o"></i>车辆信息列表</a></li>
+                    <li <?php if(in_array($url,['/admin/vehicle/index','/admin/vehicle/edit-vehicle-info'])):?>class="active"<?php endif;?>><a href="<?=Url::to(['vehicle/index'])?>"><i class="fa fa-circle-o"></i>车辆信息列表</a></li>
                     <?php endif;?>
 
                     <?php if(in_array('/admin/vehicle/vehicle-type', $pathArr)):?>
