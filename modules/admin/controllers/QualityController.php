@@ -12,6 +12,8 @@ use app\models\ar\QualityInspectionGroupItemAR;
 use app\models\ar\QualityInspectionItemAR;
 use app\models\ar\StationAR;
 use app\models\ar\TaskAR;
+use app\models\ar\TaskExecuteRecordAR;
+use app\models\ar\TaskExecuteRecordDeprecatedAR;
 use app\models\ar\TypeAR;
 use app\models\ar\TypeWorkAreaAR;
 use app\models\ar\WorkAreaAR;
@@ -467,6 +469,7 @@ class QualityController extends BaseController
     }
 
     /**
+     * 终止任务
      * @author: liuFangShuo
      */
     public function actionDelTask()
@@ -481,8 +484,44 @@ class QualityController extends BaseController
             }
 
             $taskInfo->finish = 2;
+            $taskInfo->user_id=$this->_user->id;
+            $taskInfo->deprecated_time=time();
 
             if($taskInfo->save(false)){
+
+                //查询task流程表
+                $taskExe = TaskExecuteRecordAR::findAll(['task_id'=>$taskInfo->id]);
+
+                $insertData = [];
+
+                if(!empty($taskExe)){
+                    foreach ($taskExe as $v){
+                        $itemData['task_id']=$v->task_id;
+                        $itemData['workshop_id']=$v->workshop_id;
+                        $itemData['work_area_id']=$v->work_area_id;
+                        $itemData['job_station_id']=$v->job_station_id;
+                        $itemData['type_id']=$v->type_id;
+                        $itemData['quality_inspection_group_id']=$v->quality_inspection_group_id;
+                        $itemData['quality_inspection_group_type']=$v->quality_inspection_group_type;
+                        $itemData['process_id']=$v->process_id;
+                        $itemData['user_id']=$v->user_id;
+                        $itemData['user_check_id']=$v->user_check_id;
+                        $itemData['default_work_area']=$v->default_work_area;
+                        $itemData['execute_status']=$v->execute_status;
+                        $itemData['is_doing_random_inspection']=$v->is_doing_random_inspection;
+                        $itemData['mark']=$v->mark;
+                        $itemData['create_time']=$v->create_time;
+                        $itemData['update_time']=$v->update_time;
+
+                        $insertData[] = $itemData;
+                    }
+                }
+
+
+                $res = Yii::$app->db->createCommand()->batchInsert(TaskExecuteRecordDeprecatedAR::tableName(),['task_id','workshop_id','work_area_id','job_station_id','type_id','quality_inspection_group_id','quality_inspection_group_type','process_id','user_id','user_check_id','default_work_area','execute_status','is_doing_random_inspection','mark','create_time','update_time'], $insertData)->execute();
+                $resT = TaskExecuteRecordAR::deleteAll(['task_id'=>$taskInfo->id]);
+
+
                 return $this->ajaxReturn('',0,'任务终止成功');
             }
 

@@ -15,7 +15,9 @@ use Yii;
  * @property int $create_time 创建时间
  * @property int $update_time 更新时间
  * @property int $vehicle_model_id 车辆型号id
- * @property int $finish 任务是否完结0：未完结，1：完结
+ * @property int $finish 任务是否完结0：未完结，1：完结，2为终止
+ * @property int $user_id 废除人用户ID
+ * @property int $deprecated_time 删除时间
  */
 class TaskAR extends \app\models\ar\BaseAR
 {
@@ -34,8 +36,9 @@ class TaskAR extends \app\models\ar\BaseAR
     {
         return [
             [['vehicle_id', 'type_id', 'vehicle_weight', 'vehicle_full_weight', 'vehicle_model_id'], 'required'],
-            [['vehicle_id', 'type_id', 'create_time', 'update_time', 'vehicle_model_id', 'finish'], 'integer'],
+            [['vehicle_id', 'type_id', 'create_time', 'update_time', 'user_id', 'deprecated_time', 'vehicle_model_id', 'finish'], 'integer'],
             [['vehicle_weight', 'vehicle_full_weight'], 'number'],
+
         ];
     }
 
@@ -54,6 +57,8 @@ class TaskAR extends \app\models\ar\BaseAR
             'update_time' => 'Update Time',
             'vehicle_model_id' => 'Vehicle Model ID',
             'finish' => 'Finish',
+            'user_id' => 'User ID',
+            'deprecated_time' => 'Deprecated Time',
         ];
     }
 }
