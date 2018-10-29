@@ -69,10 +69,10 @@ if ($jz && $zj) {
             <td><?= implode("、",$v['standard'])?></td>
             <td><?=$v['answer_fj']?></td>
             <td><?=$v['answer_fj_do']?></td>
-            <td><?=$v['answer']?></td>
-            <td><?=$v['answer_name']?></td>
-            <td><?=$v['answer_each']?></td>
-            <td><?=$v['answer_each_name']?></td>
+            <td><?=isset($v['answer'])?$v['answer']:''?></td>
+            <td><?=isset($v['answer_name'])?$v['answer_name']:''?></td>
+            <td><?=isset($v['answer_each'])?$v['answer_each']:''?></td>
+            <td><?=isset($v['answer_each_name'])?$v['answer_each_name']:''?></td>
             <?php if($zj):?>
             <td><?=isset($v['answer_computer'])?$v['answer_computer'][0]:''?></td>
             <?php endif;?>

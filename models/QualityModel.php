@@ -656,7 +656,7 @@ class QualityModel extends Model
      */
     public  function getAnswer($taskId,$itemArr)
     {
-        $answerList = AnswerAR::find()->select('zc_answer.*,zc_quality_inspection_item.title as title,zc_quality_inspection_item.standard as standard')->join('LEFT JOIN','zc_quality_inspection_item','zc_answer.quality_item_id = zc_quality_inspection_item.id')->where(['zc_answer.task_id' => $taskId, 'zc_answer.quality_item_id' => $itemArr])->asArray()->all();
+        $answerList = AnswerAR::find()->select('zc_answer.*,zc_quality_inspection_item.title as title,zc_quality_inspection_item.standard as standard')->join('LEFT JOIN','zc_quality_inspection_item','zc_answer.quality_item_id = zc_quality_inspection_item.id')->where(['zc_answer.task_id' => $taskId, 'zc_answer.quality_item_id' => $itemArr])->orderBy(['zc_answer.create_time' => SORT_ASC])->asArray()->all();
         return $answerList;
     }
 

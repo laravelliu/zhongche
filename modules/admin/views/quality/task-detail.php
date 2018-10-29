@@ -65,11 +65,24 @@ if ($jz && $zj) {
             <td><?=isset($v['answer_each_name'])?$v['answer_each_name']:'无互检人'?></td>
 
             <?php if(isset($v['answer_computer'])):?>
-            <td><?=$v['answer_computer'][0]?></td>
+            <td>
+
+                <?php
+                foreach ($v['answer_computer'] as $m => $n){
+                    echo ($m+1).'.'.$n.'<br>';
+                }
+                ?>
+
+            </td>
             <?php endif;?>
 
             <?php if(isset($v['answer_computer_re'])):?>
-            <td><?=$v['answer_computer_re'][0]?></td>
+
+            <td><?php
+                foreach ($v['answer_computer_re'] as $ma => $na){
+                    echo ($ma+1).'.'.$na.'<br>';
+                }
+                ?></td>
             <?php endif;?>
         </tr>
     <?php endforeach;?>

@@ -485,6 +485,7 @@ class QualityController extends BaseController
 
             $taskInfo->finish = 2;
             $taskInfo->user_id=$this->_user->id;
+            $taskInfo->user_name=$this->_user->name;
             $taskInfo->deprecated_time=time();
 
             if($taskInfo->save(false)){
@@ -1633,7 +1634,7 @@ class QualityController extends BaseController
                                 case QUALITY_TYPE_CHOOSE:   //选择题  (监造和专检只有选择题)
 
                                     switch ($v['process_id']) {
-                                        case 1:
+                                        case 1: //自检
                                             $item['answer'] = !empty($v['choose_content'])?$v['choose_content']:'';
                                             $item['answer_name'] = $v['name'];
 
@@ -1657,7 +1658,7 @@ class QualityController extends BaseController
                                             }
 
                                             break;
-                                        case 2:
+                                        case 2: //互检
                                             $item['answer_each'] = !empty($v['choose_content'])?$v['choose_content']:'';
                                             $item['answer_each_name'] = $v['name'];
 
@@ -1680,11 +1681,11 @@ class QualityController extends BaseController
                                                 $item['answer_each'] .= "[备注：{$bzVal}]";
                                             }
                                             break;
-                                        case 3:
-                                            $item['answer_computer'][] = $v['choose_content'];
+                                        case 3: //专检
+                                            $item['answer_computer'] = $v['choose_content'];
                                             break;
-                                        case 4:
-                                            $item['answer_computer_re'][] = $v['choose_content'];
+                                        case 4: //监造
+                                            $item['answer_computer_re'] = $v['choose_content'];
                                             break;
                                         default:
                                             break;
@@ -1875,8 +1876,16 @@ class QualityController extends BaseController
 
                             $item['type'] = $v['quality_item_type'];
 
-                            $answerReturn[$v['quality_item_id']] = isset($answerReturn[$v['quality_item_id']]) ? array_merge($answerReturn[$v['quality_item_id']],$item) : $item;
+                            //专检和监造可以多次提交
+                            if ($v['process_id'] == 3 && isset($answerReturn[$v['quality_item_id']])) {
 
+                                $answerReturn[$v['quality_item_id']]['answer_computer'][] = $item['answer_computer'];
+                            } elseif ($v['process_id'] == 4 && isset($answerReturn[$v['quality_item_id']])) {
+                                $answerReturn[$v['quality_item_id']]['answer_computer_re'][] = $item['answer_computer_re'];
+                            } else {
+                                $answerReturn[$v['quality_item_id']] = isset($answerReturn[$v['quality_item_id']]) ? array_merge($answerReturn[$v['quality_item_id']],$item) : $item;
+
+                            }
                         }
 
                         //获取监造|专检|录入人员
